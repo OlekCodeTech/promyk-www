@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "20"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "21"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -1167,7 +1167,7 @@ def product_page(slug, meta):
         intro_html = f'<p>{intro}</p>' if intro else ""
         media = f'<div><img src="assets/img/{img}.jpg" alt="{title}" loading="lazy"></div>'
         sub = SUB_SLUGS.get((slug, k))
-        sub_link = f' <a class="btn btn--outline btn--sm" href="{sub}.html">Więcej o tym rozwiązaniu</a>' if sub else ""
+        sub_link = f' <a class="btn btn--more btn--sm" href="{sub}.html">Więcej o tym rozwiązaniu {I["arrow"]}</a>' if sub else ""
         text = f"""<div class="subrow__text">
         <h2><a href="{sub}.html">{title}</a></h2>
         {intro_html}

@@ -103,6 +103,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 .btn--ghost:hover { background: rgba(255,255,255,.25); }
 .btn--outline { background: transparent; color: var(--ink); border-color: var(--line); }
 .btn--outline:hover { border-color: var(--ink); }
+.btn--more { background: #fff; color: var(--accent-text); border-color: var(--accent-text); }
+.btn--more:hover { background: var(--accent-text); color: #fff; }
 .btn--sm { padding: 11px 18px; font-size: 14px; }
 
 /* ==========================================================================
