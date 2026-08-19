@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "17"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "18"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -77,6 +77,9 @@ PARTNERS = [
     ("setto", "Setto", "https://setto.pl"),
     ("wiked", "Wikęd", "https://wiked.pl"),
     ("dre", "DRE", "https://dre.pl"),
+    ("porta", "Porta", "https://www.porta.com.pl"),
+    ("erkado", "Erkado", "https://erkado.pl"),
+    ("avo", "AVO", "https://avogroup.eu"),
 ]
 
 GALLERY = [
@@ -535,6 +538,44 @@ def build_onas():
                "PROMYK to rodzinna firma z Wielunia działająca od 1997 roku. Od montażu żaluzji po kompleksową stolarkę otworową i nowoczesny showroom.")
           + nav("o-nas") + body + footer())
 
+MODELS_2026 = [
+    ("veka", "VEKA — okna PVC", "okna.html", [
+        "SOFTLINE 82 MD: profil kl. A (ścianka 3 mm, DIN EN 12608), Uf do 1,0, Uw do 0,74 W/m²K",
+        "Uszczelnienie środkowe MD, odporność RC2 wg DIN EN 1627",
+        "VEKAMOTION 82 (HST): Ud do 0,76 W/m²K, rama skrzydła stałego 86 mm",
+        "Powierzchnie: folie VEKA (60+ dekorów), VEKA Spectral ultramat, panele alu"]),
+    ("wiked", "Wikęd — drzwi zewnętrzne", "drzwi-zewnetrzne.html", [
+        "Kolekcje 2026: Rustik (Masterline/Woodline), 3D, Softline, Future Inox, Glass, Royal, Klasyk",
+        "Linie technologiczne: Prima, Optimum, Termo Prestige, Alu Hybrid",
+        "Drzwi na wymiar: szerokość 70–100 cm co 1 cm",
+        "Przeszklenia Glass Frame, klamki RC, naświetla i dostawki"]),
+    ("erkado", "Erkado — drzwi stalowe i wewnętrzne", "drzwi-zewnetrzne.html", [
+        "Stalowe: konstrukcje Thermo 64 / 78 / Thermo Hot 78 / 88 mm",
+        "Serie: Horn, Langen, Trebur, Wels, Bazylea, Arendal, Lahti",
+        "Okleina PVC odporna na UV z wieloletnią gwarancją",
+        "Wewnętrzne Stile: Werbena, Jasmin, Laurencja, Frezja — przylgowe, bezprzylgowe i rewersyjne"]),
+    ("dre", "DRE — drzwi wewnętrzne", "drzwi-wewnetrzne.html", [
+        "Laminaty akrylowe: Ilis, Nella, Vetro D2, Silia (połysk / super mat)",
+        "Ramowe: Vetro E Synchro, Estra, Nestor, Auri, Reva, Fosca",
+        "Ościeżnica DRE WaterProof — odporna na stały kontakt z wodą",
+        "Okleiny: Finish, 3D, DRE-Cell, CPL 0,15–0,7 mm"]),
+    ("porta", "Porta — drzwi wewnętrzne", "drzwi-wewnetrzne.html", [
+        "10 linii wzorniczych w katalogu 2026",
+        "Rozwiązania: drzwi akustyczne, wilgocioodporne, ukryte (zlicowane ze ścianą)",
+        "Nr 1 w Polsce i Europie Środkowo-Wschodniej — 1,7 mln produktów rocznie",
+        "Badania w 21 laboratoriach w kraju i za granicą"]),
+    ("avo", "AVO — bramy garażowe", "bramy-garazowe.html", [
+        "Modele: Base Line, Base Trend, Base Elegant, Line, Trend, Elegant, Elegant ISO 60",
+        "Powierzchnie Woodgrain i Silk; dekory Woodec, Winchester, Złoty Dąb",
+        "Automatyka ADO / ADO PRO: 24 V, LED w prowadnicy, sterowanie KUBE (Bluetooth) + Wi-Fi",
+        "Lakierowanie: 205 kolorów RAL, 1950 kolorów NCS"]),
+    ("nice", "Nice — napędy do bram", "bramy-garazowe.html", [
+        "Spider 1200N: silnik bezszczotkowy, do 150 cykli/dobę, bramy do 16,9 m² (uchylne 19,5 m²)",
+        "Wbudowane Wi-Fi, oświetlenie LED i system antywłamaniowy",
+        "Spido 600N: otwarcie w ok. 10 s, cyfrowe wyłączniki krańcowe",
+        "Integracja: Yubii Home / CORE, Alexa, Google Assistant, Siri"]),
+]
+
 # ================================================================ OFERTA ----
 def build_oferta():
     tiles = ""
@@ -545,10 +586,15 @@ def build_oferta():
         <div class="tile__bottom"><h3>{title}</h3><span class="tile__arrow">{I['arrowUR']}</span></div>
       </a>"""
     catalogs = [
-        ("Katalog VEKA", "Systemy profili PVC klasy A", "katalog-veka.pdf"),
-        ("Katalog Aluprof", "Rolety, bramy i systemy aluminiowe", "katalog-aluprof.pdf"),
-        ("Katalog Wikęd", "Drzwi zewnętrzne Premium i Termo Prestige", "katalog-wiked.pdf"),
-        ("Katalog DRE", "Drzwi wewnętrzne i ościeżnice", "katalog-dre.pdf"),
+        ("VEKA SOFTLINE 82 MD", "Okna PVC klasy A — profil 82 mm, Uw do 0,74 W/m²K", "katalog-veka-softline82.pdf"),
+        ("VEKA VEKAMOTION 82", "Drzwi podnoszono-przesuwne HST — Ud do 0,76 W/m²K", "katalog-veka-vekamotion82.pdf"),
+        ("Wikęd — drzwi do domu 2026", "Kolekcje Rustik, 3D, Softline, Glass, Royal; linie Prima–Alu Hybrid", "katalog-wiked.pdf"),
+        ("Erkado — drzwi stalowe 2026", "Konstrukcje Thermo 64–88 mm, serie Horn, Langen, Trebur, Arendal", "katalog-erkado-stalowe.pdf"),
+        ("Erkado — drzwi wewnętrzne 2026", "Ramiakowe Stile: Werbena, Jasmin, Laurencja i inne", "katalog-erkado-wewnetrzne.pdf"),
+        ("DRE — katalog 2026", "Kolekcje Estra, Nestor, Vetro, Ilis; ościeżnica WaterProof", "katalog-dre.pdf"),
+        ("Porta — katalog 2026", "10 linii wzorniczych, drzwi akustyczne i wilgocioodporne", "katalog-porta.pdf"),
+        ("AVO — bramy garażowe 2026", "Bramy segmentowe Base Line – Elegant ISO 60, automatyka ADO", "katalog-avo-bramy.pdf"),
+        ("Nice — napędy Spider i Spido", "Siłowniki do bram segmentowych i uchylnych, Wi-Fi, Yubii", "katalog-nice-napedy.pdf"),
         ("Katalog Selt", "Pergole, markizy i żaluzje fasadowe", "katalog-selt.pdf"),
         ("Cennik orientacyjny PROMYK", "Ceny typowych rozwiązań", "cennik-promyk.pdf"),
     ]
@@ -569,6 +615,14 @@ def build_oferta():
       <span class="catalog__meta"><span class="tag">Wkrótce</span></span>
     </div>"""
 
+    models = "".join(
+        f'''<article class="card model-card">
+        <div class="model-card__head"><img src="assets/img/partners/{logo}.svg" alt=""><h3>{title}</h3></div>
+        <ul class="bullets">{"".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)}</ul>
+        <a class="card__more" href="{href}">Zobacz kategorię {I['arrow']}</a>
+      </article>'''
+        for logo, title, href, bullets in MODELS_2026)
+
     body = pagehero("al31_rol", "Kompleksowa stolarka otworowa",
                     "Okna, drzwi, bramy i osłony przeciwsłoneczne — wszystko w jednym miejscu, z jednym montażem i jedną gwarancją.", "Oferta")
     body += f"""<section class="section section--soft">
@@ -588,12 +642,26 @@ def build_oferta():
   <div class="container">
     <div class="section-header">
       <div class="section-header__left">
+        <span class="tag">Prosto z katalogów 2026</span>
+        <h2 class="h-sec">Modele i parametry naszych producentów</h2>
+        <p class="lead">Wyciąg techniczny z aktualnych katalogów — pełne wersje PDF do pobrania poniżej.</p>
+      </div>
+    </div>
+    <div class="grid-2">{models}</div>
+  </div>
+</section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-header__left">
         <span class="tag">Materiały informacyjne</span>
         <h2 class="h-sec">Katalogi do pobrania</h2>
         <p class="lead">Pobierz oficjalne katalogi naszych partnerów oraz orientacyjne cenniki, aby zapoznać się ze szczegółowymi specyfikacjami technicznymi.</p>
       </div>
     </div>
     <div class="stack">{cat}</div>
+    <p class="lead" style="margin-top:18px;font-size:13px">Katalogi producentów — wersje aktualne na rok 2026. Pliki otwierają się w przeglądarce; większe katalogi (Wikęd, Porta) mogą ładować się kilka sekund.</p>
   </div>
 </section>
 
@@ -1080,7 +1148,7 @@ PRODUCT_DATA = {
   hero="wiked22", h1="Drzwi zewnętrzne — Wikęd i Aluprof", title="Drzwi zewnętrzne Wikęd (Termo Prestige, Premium) i Aluprof | PROMYK",
   desc="Drzwi stalowe Wikęd Premium 54 i Termo Prestige 72, aluminiowe Aluprof MB-86 i panele HPL. Klasa RC2/RC3, Ud od 0,71 W/m²K. Wieluń.",
   intro="Linie Wikęd Premium i Termo Prestige oraz aluminiowe Aluprof — parametry potwierdzone badaniami, klasy RC2/RC3.",
-  producers=["wiked", "aluprof"],
+  producers=["wiked", "erkado", "aluprof"],
   adv=[("Bezpieczeństwo", "Klasa antywłamaniowa RC2 / RC3, zamki listwowe 3-punktowe", "lock"),
        ("Termoizolacja", "Ud od 0,71 W/m²K — spełnia wymogi programu Czyste Powietrze", "thermo"),
        ("Wzornictwo", "Ponad 100 wzorów przetłoczeń, przeszkleń i naświetli", "sparkle")],
@@ -1110,7 +1178,7 @@ PRODUCT_DATA = {
   hero="dre_saraeco2", h1="Drzwi wewnętrzne DRE", title="Drzwi wewnętrzne DRE — Nestor, Binito, Sara Eco, Estra | PROMYK",
   desc="Drzwi wewnętrzne DRE: przylgowe i bezprzylgowe (Nestor, Berge, Binito, Sara Eco 2), przesuwne (Estra 5, Enter Solid) i techniczne (Solid RC2, Forca).",
   intro="Pełna oferta polskiego lidera DRE — od klasyki po systemy bezprzylgowe i przesuwne. Pomiar i montaż naszymi ekipami.",
-  producers=["dre"],
+  producers=["dre", "porta", "erkado"],
   adv=[("Lider rynku", "DRE — największy polski producent drzwi wewnętrznych", "shield"),
        ("Wybór wzorów", "Kolekcje: Nestor, Binito, Estra, Vetro, Nova i inne", "palette"),
        ("Montaż", "Ościeżnice regulowane, montaż w tunelu lub na opasce", "ruler")],
@@ -1196,7 +1264,7 @@ PRODUCT_DATA = {
   hero="brama_antracyt_lampy", h1="Bramy garażowe segmentowe i roletowe", title="Bramy garażowe segmentowe (panel 40–60 mm) i roletowe, napędy Nice i Somfy | PROMYK",
   desc="Bramy segmentowe z panelem 40–60 mm z pianką PU, bramy roletowe aluminiowe, napędy Nice/Somfy, drzwi boczne w kolorze bramy.",
   intro="Bramy segmentowe (panel 40–60 mm z pianką PU) i roletowe, z napędami Nice / Somfy.",
-  producers=["nice", "somfy"],
+  producers=["avo", "nice", "somfy"],
   adv=[("Bezpieczeństwo", "Zabezpieczenie przed pęknięciem sprężyn i opadnięciem bramy", "lock"),
        ("Izolacja", "Panel 40–60 mm z pianką poliuretanową", "thermo"),
        ("Napędy", "Nice / Somfy: pasek kevlarowy, amperometryka, aplikacja", "cog")],
