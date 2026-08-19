@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 64">
+<text x="26" y="42" font-family='Arial, Helvetica, sans-serif' font-size="24" font-weight="800" letter-spacing="1" fill="#3E4247">WIKĘD</text>
+<g fill="none" stroke="#3E4247" stroke-width="3">
+ <path d="M126 44 V22 h12 v22"/>
+</g>
+<path d="M138 22 h5 v-5" fill="none" stroke="#EE7203" stroke-width="3"/>
+</svg>
