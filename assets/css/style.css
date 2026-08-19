@@ -233,6 +233,46 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 .crumbs { font-size: 13px; color: rgba(255,255,255,.7); }
 .crumbs a:hover { color: #fff; }
 
+/* ---------- baner opinii Google ---------- */
+.gbadge {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: #fff; border-radius: 30px; padding: 9px 18px 9px 12px;
+  box-shadow: 0 10px 26px rgba(9,4,2,.22);
+  color: var(--ink); margin-top: 6px;
+  transition: transform .18s ease;
+}
+.gbadge:hover { transform: translateY(-2px); }
+.gbadge__logo { width: 22px; height: 22px; display: grid; }
+.gbadge__logo svg { width: 100%; height: 100%; }
+.gbadge strong { font-family: var(--font-head); font-size: 17px; font-weight: 800; }
+.gbadge .stars svg { width: 13px; height: 13px; }
+.gbadge small { font-size: 12px; font-weight: 600; color: var(--muted); }
+@media (max-width: 780px) { .gbadge small { display: none; } }
+
+/* pół gwiazdki: złota lewa połowa na szarej podstawie */
+.halfstar { position: relative; display: inline-flex; }
+.halfstar svg:first-child { color: #d7dade; }
+.halfstar svg:last-child {
+  position: absolute; left: 0; top: 0; color: #eaa611;
+  clip-path: inset(0 50% 0 0);
+}
+
+/* ---------- pasek producentów na stronach produktowych ---------- */
+.producer-strip { background: #fff; border-bottom: 1px solid var(--line); }
+.producer-strip__inner {
+  display: flex; align-items: center; gap: 26px; padding-block: 14px; flex-wrap: wrap;
+}
+.producer-strip__inner span {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .04em; color: var(--muted);
+}
+.producer-strip__inner img { height: 34px; width: auto; }
+
+/* ---------- katalog jeszcze niedostarczony ---------- */
+.catalog--soon { cursor: default; opacity: .72; }
+.catalog--soon:hover { border-color: var(--line); }
+.catalog--soon .catalog__meta .tag { font-size: 10px; padding: 4px 10px; }
+
 /* ==========================================================================
    PASEK STATYSTYK
    ========================================================================== */
