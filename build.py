@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "18"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "19"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -1062,6 +1062,100 @@ def build_konfigurator():
           + nav("konfigurator") + body + footer())
 
 # ================================================================ PRODUKTY ----
+def product_extras_html(slug):
+    """Sekcje pogłębiające podstronę: specyfikacja, producenci, Warto wiedzieć, katalogi."""
+    ex = PRODUCT_EXTRAS.get(slug)
+    if not ex:
+        return ""
+    out = ""
+
+    spec = ex.get("specs")
+    if spec:
+        head = "".join(f"<th>{c}</th>" for c in spec["cols"])
+        rows = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in spec["rows"])
+        out += f"""<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left">
+      <span class="tag">Specyfikacja</span><h2 class="h-sec">{spec['title']}</h2>
+    </div></div>
+    <div class="spec-wrap"><table class="spec-table"><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>
+  </div>
+</section>
+"""
+
+    brands = ex.get("brands") or []
+    if brands:
+        cards = ""
+        for logo, name, bullets in brands:
+            li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+            cards += f"""<article class="card model-card">
+        <div class="model-card__head"><img src="assets/img/partners/{logo}.svg" alt="{name}"><h3>{name}</h3></div>
+        <ul class="bullets">{li}</ul>
+      </article>"""
+        out += f"""<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left">
+      <span class="tag">Prosto z katalogów 2026</span><h2 class="h-sec">Producenci i modele w tej kategorii</h2>
+    </div></div>
+    <div class="grid-{min(3, len(brands))}">{cards}</div>
+  </div>
+</section>
+"""
+
+    know = ex.get("know") or []
+    if know:
+        rows = ""
+        for k, (q, a) in enumerate(know):
+            cls = " is-open" if k == 0 else ""
+            sign = "–" if k == 0 else "+"
+            rows += f"""<div class="faq__row{cls}">
+      <button class="faq__q"><span>{q}</span><span>{sign}</span></button>
+      <div class="faq__a">{a}</div>
+    </div>"""
+        out += f"""<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left">
+      <span class="tag">Baza wiedzy</span><h2 class="h-sec">Warto wiedzieć przed zakupem</h2>
+    </div></div>
+    <div class="faq">{rows}</div>
+  </div>
+</section>
+"""
+
+    cat_names = {
+        "katalog-veka-softline82.pdf": ("VEKA SOFTLINE 82 MD", "Okna PVC klasy A"),
+        "katalog-veka-vekamotion82.pdf": ("VEKA VEKAMOTION 82", "Drzwi HST"),
+        "katalog-wiked.pdf": ("Wikęd — drzwi do domu 2026", "Kolekcje i linie technologiczne"),
+        "katalog-erkado-stalowe.pdf": ("Erkado — drzwi stalowe 2026", "Serie i konstrukcje Thermo"),
+        "katalog-erkado-wewnetrzne.pdf": ("Erkado — drzwi wewnętrzne 2026", "Kolekcja Stile"),
+        "katalog-dre.pdf": ("DRE — katalog 2026", "Kolekcje i WaterProof"),
+        "katalog-porta.pdf": ("Porta — katalog 2026", "10 linii wzorniczych"),
+        "katalog-avo-bramy.pdf": ("AVO — bramy garażowe 2026", "Modele i automatyka ADO"),
+        "katalog-nice-napedy.pdf": ("Nice — Spider i Spido", "Napędy do bram garażowych"),
+    }
+    cats = [c for c in (ex.get("cats") or []) if os.path.exists(os.path.join(ROOT, "assets", "katalogi", c))]
+    if cats:
+        items = ""
+        for c in cats:
+            t, sub = cat_names.get(c, (c, ""))
+            size_mb = os.path.getsize(os.path.join(ROOT, "assets", "katalogi", c)) / 1048576
+            items += f"""<a class="catalog" href="assets/katalogi/{c}" download>
+      <span class="catalog__icon">{I['pdf']}</span>
+      <span class="catalog__info"><strong>{t}</strong><span>{sub}</span></span>
+      <span class="catalog__meta">PDF • {size_mb:.1f} MB</span>
+    </a>"""
+        out += f"""<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left">
+      <span class="tag">Do pobrania</span><h2 class="h-sec">Katalogi tej kategorii</h2>
+    </div></div>
+    <div class="stack">{items}</div>
+  </div>
+</section>
+"""
+    return out
+
+
 def product_page(slug, meta):
     adv = "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
       <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in meta["adv"])
@@ -1094,12 +1188,15 @@ def product_page(slug, meta):
     producers_bar = (f'<div class="producer-strip"><div class="container producer-strip__inner">'
                      f'<span>Producenci w tej kategorii:</span>{prod_logos}</div></div>') if prod_logos else ""
 
+    extras_html = product_extras_html(slug)
+
     body = pagehero(meta["hero"], meta["h1"], meta["intro"], PROD_LABEL[slug])
     body += producers_bar
     body += f"""<section class="advantages"><div class="container advantages__inner">{adv}</div></section>
 
 <section class="section"><div class="container">{rows}</div></section>
 
+{extras_html}
 {cta("Darmowy pomiar i doradztwo", "Planujesz inwestycję budowlaną?",
      "Umów bezpłatną wizytę naszego eksperta na Twojej budowie. Precyzyjnie zmierzymy otwory, doradzimy technicznie i przygotujemy kalkulację cenową.")}
 
@@ -1410,6 +1507,301 @@ PRODUCT_DATA = {
           "Siatka zatrzymuje się w dowolnym położeniu",
           "Duże szerokości przy zabudowie dwustronnej"], "al25")],
   related=["okna", "rolety-zewnetrzne", "oslony-wewnetrzne"]),
+}
+
+
+# Rozszerzenia podstron produktowych: specs (tabela), brands (producenci+modele),
+# know (Warto wiedzieć — accordion), cats (katalogi PDF tej kategorii).
+PRODUCT_EXTRAS = {
+"okna": dict(
+  specs=dict(title="Porównanie systemów okiennych", cols=["System", "Materiał", "Głębokość", "Komory", "Uw od", "Zastosowanie"],
+    rows=[["VEKA SOFTLINE 82 MD", "PVC kl. A", "82 mm", "7", "0,67 W/m²K", "domy energooszczędne i pasywne"],
+          ["VEKA SOFTLINE 70 AD", "PVC kl. A", "70 mm", "5", "0,88 W/m²K", "budownictwo standardowe, wymiana stolarki"],
+          ["VEKAMOTION 82 (HST)", "PVC kl. A", "82 mm", "wielokomorowy", "0,76 W/m²K (Ud)", "przeszklenia tarasowe do 6,5 m"],
+          ["Aluprof MB-86N", "aluminium", "86 mm", "przekładka 34 mm", "0,72 W/m²K", "duże przeszklenia, dom nowoczesny"]]),
+  brands=[
+    ("veka", "VEKA", [
+      "Profile klasy A wg DIN EN 12608 — ścianka zewnętrzna 3 mm (±0,2)",
+      "SOFTLINE 82 MD: Uf do 1,0 W/m²K, RC2 wg DIN EN 1627",
+      "VEKAMOTION 82: rama skrzydła stałego tylko 86 mm, opcja napędu Max",
+      "Powierzchnie: 60+ folii dekoracyjnych, VEKA Spectral ultramat, panele alu"]),
+    ("aluprof", "Aluprof", [
+      "MB-86N — system okienno-drzwiowy z wkładami Aero",
+      "Konstrukcje do 2,9 m wysokości, opcja ukrytego skrzydła",
+      "Kolory: pełna paleta RAL, anody, dekory drewnopodobne"])],
+  know=[
+    ("Co oznaczają współczynniki Uw, Uf i Ug?",
+     "Uw opisuje izolacyjność całego okna, Uf — samej ramy, a Ug — pakietu szybowego. Im niższa wartość, tym cieplejsze okno. Warunki techniczne WT 2021 wymagają dla okien pionowych Uw ≤ 0,9 W/m²K — wszystkie oferowane przez nas systemy spełniają ten wymóg z zapasem."),
+    ("Czym różni się profil klasy A od klasy B?",
+     "Norma PN-EN 12608 dzieli profile PVC według grubości ścianek: klasa A to ścianki zewnętrzne ≥ 2,8 mm, klasa B — ≥ 2,5 mm. Grubsze ścianki oznaczają sztywniejsze konstrukcje, mocniejsze zgrzewy naroży i lepsze osadzenie okuć — dlatego montujemy wyłącznie profile klasy A."),
+    ("Pakiet 2-szybowy czy 3-szybowy?",
+     "Pakiet 3-szybowy (Ug 0,5–0,7) ogranicza straty ciepła o ok. 30–40% względem 2-szybowego (Ug 1,0) i poprawia komfort zimą przy dużych przeszkleniach. Do tego ciepła ramka dystansowa obniża współczynnik psi na krawędzi szyby i ryzyko wykraplania pary."),
+    ("Na czym polega ciepły montaż warstwowy?",
+     "To montaż z trzema warstwami uszczelnienia: taśma paroszczelna od wewnątrz, piana termoizolacyjna w środku i taśma paroprzepuszczalna od zewnątrz. Eliminuje mostki termiczne i przecieki. W ścianach ocieplonych stosujemy też wysunięcie okna w warstwę ocieplenia na konsolach."),
+    ("Co daje odporność RC2?",
+     "Okno w standardzie RC2 ma okucia z zaczepami antywyważeniowymi (grzybkowymi), klamkę z kluczykiem i szybę laminowaną P4. Konstrukcja wytrzymuje próbę włamania narzędziami przez min. 3 minuty — to standard rekomendowany dla parterów i domów jednorodzinnych."),
+    ("Czy potrzebuję nawiewników?",
+     "Przy wentylacji grawitacyjnej szczelne okna wymagają nawiewników (ciśnieniowych lub higrosterowanych), aby zapewnić dopływ świeżego powietrza. Przy rekuperacji nawiewniki są zbędne. Dobieramy je na etapie zamówienia — montaż fabryczny w ramie."),
+  ],
+  cats=["katalog-veka-softline82.pdf", "katalog-veka-vekamotion82.pdf"]),
+
+"drzwi-zewnetrzne": dict(
+  specs=dict(title="Linie technologiczne drzwi stalowych Wikęd", cols=["Linia", "Charakterystyka", "Dla kogo"],
+    rows=[["Prima", "ekonomiczna konstrukcja stalowa, zamek listwowy", "budżetowa wymiana drzwi"],
+          ["Optimum", "grubsze skrzydło, lepsze wypełnienie PU", "standard w nowym domu"],
+          ["Termo Prestige", "Ud od 0,71 W/m²K, ciepła ościeżnica i próg", "domy energooszczędne, Czyste Powietrze"],
+          ["Alu Hybrid", "skrzydło aluminiowe, panel zlicowany", "architektura premium"]]),
+  brands=[
+    ("wiked", "Wikęd", [
+      "Kolekcje 2026: Rustik (Masterline/Woodline), 3D, Softline, Future Inox, Glass, Royal, Klasyk",
+      "Drzwi na wymiar — szerokość 70–100 cm co 1 cm",
+      "Przeszklenia Glass Frame, ramki Black/Inox, klamki RC",
+      "Naświetla boczne i górne, drzwi dwuskrzydłowe"]),
+    ("erkado", "Erkado — drzwi stalowe", [
+      "Konstrukcje Thermo 64 / Thermo 78 / Thermo Hot 78 / Thermo Hot 88 (mm)",
+      "Serie: Horn, Langen, Trebur, Wels, Bazylea, Arendal, Lahti",
+      "Okleina PVC odporna na UV z wieloletnią gwarancją",
+      "Panele ozdobne inox, przeszklenia reflex, lustro weneckie"]),
+    ("aluprof", "Aluprof", [
+      "MB-86 — drzwi aluminiowe z panelem zlicowanym",
+      "Pochwyty do 1,8 m, czytnik linii papilarnych, Smart Home",
+      "Konstrukcje ponadwymiarowe do 2,4 m wysokości"])],
+  know=[
+    ("Ud — jak ciepłe powinny być drzwi wejściowe?",
+     "Warunki techniczne wymagają Ud ≤ 1,3 W/m²K. Linie premium (Wikęd Termo Prestige, Erkado Thermo Hot 88) osiągają Ud od 0,71 W/m²K — takie drzwi kwalifikują się do dofinansowania w programie Czyste Powietrze i realnie obniżają straty ciepła w wiatrołapie."),
+    ("Klasa RC2 i RC3 w drzwiach — co oznacza?",
+     "RC określa odporność na włamanie wg PN-EN 1627. RC2 wytrzymuje próbę wyważenia narzędziami prostymi (ok. 3 min), RC3 — łomem (ok. 5 min). Składają się na to: zamki listwowe wielopunktowe, bolce antywyważeniowe, wkładki kl. C i szyby P4."),
+    ("Jak dobrać szerokość drzwi?",
+     "Standard w nowych domach to „dziewięćdziesiątka” — 90 cm w świetle przejścia. Przy wymianie mierzy się światło ościeżnicy istniejącej. Wikęd wykonuje skrzydła na wymiar co 1 cm (70–100 cm), więc niestandardowy otwór nie jest problemem."),
+    ("Lewe czy prawe?",
+     "Patrząc na drzwi od strony zawiasów: zawiasy po lewej = drzwi lewe, po prawej = prawe. Kierunek określa się zawsze od strony, na którą drzwi się otwierają. Przy zamówieniu potwierdzamy kierunek na pomiarze — to wyklucza pomyłki."),
+    ("Stal, aluminium czy panel HPL?",
+     "Stal to najlepszy stosunek ceny do bezpieczeństwa i sztywności. Aluminium pozwala na skrzydła zlicowane i duże formaty przy niskiej wadze. Panel HPL (2 mm) to najwyższa odporność powłoki na słońce i zarysowania — polecany przy ekspozycji południowej i ciemnych kolorach."),
+    ("Czy drzwi wejściowe wymagają zadaszenia?",
+     "Producenci warunkują gwarancję powłok ochroną przed bezpośrednim działaniem opadów i słońca — wystarczy daszek lub podcień o odpowiednim wysięgu. Doradzimy minimalne wymiary zadaszenia przy pomiarze."),
+  ],
+  cats=["katalog-wiked.pdf", "katalog-erkado-stalowe.pdf"]),
+
+"drzwi-wewnetrzne": dict(
+  specs=dict(title="Rodzaje wykończeń skrzydeł", cols=["Wykończenie", "Odporność", "Zastosowanie"],
+    rows=[["Laminat CPL (0,15–0,7 mm)", "bardzo wysoka na ścieranie i uderzenia", "intensywny ruch, rodziny z dziećmi"],
+          ["Laminat akrylowy (0,7–0,8 mm)", "wysoka, głęboki mat lub połysk", "wnętrza premium"],
+          ["Folie 3D / DRE-Cell", "podwyższona, struktura drewna 3D", "sypialnie, salony"],
+          ["Ekoszpon / Greko", "standardowa, naturalny wygląd", "ekonomiczne aranżacje"],
+          ["Lakier UV", "wysoka, kolor bez połysku", "kuchnie i łazienki (AntiFinger)"]]),
+  brands=[
+    ("dre", "DRE", [
+      "Laminaty akrylowe: Ilis, Nella, Vetro D2, Silia",
+      "Ramowe: Vetro E Synchro, Estra, Nestor, Auri, Reva, Fosca",
+      "Ościeżnica DRE WaterProof — nie odkształca się w kontakcie z wodą",
+      "Okleiny Finish / 3D / DRE-Cell / CPL"]),
+    ("porta", "Porta", [
+      "10 linii wzorniczych w katalogu 2026",
+      "Specjalizacje: drzwi akustyczne, wilgocioodporne, ukryte w ścianie",
+      "Nr 1 w Polsce i Europie Środkowo-Wschodniej",
+      "Produkty testowane w 21 laboratoriach"]),
+    ("erkado", "Erkado", [
+      "Ramiakowe Stile: Werbena, Jasmin, Laurencja, Frezja, Peonia",
+      "Wersje przylgowe, bezprzylgowe i rewersyjne",
+      "Okleiny Greko / Premium / CPL z powłoką AntiFinger",
+      "Opcja uszczelki opadającej i szkła VSG"])],
+  know=[
+    ("Przylgowe czy bezprzylgowe?",
+     "Drzwi przylgowe mają widoczną felc (uskok) na krawędzi i klasyczne zawiasy — to rozwiązanie uniwersalne i tańsze. Bezprzylgowe licują się z ościeżnicą w jednej płaszczyźnie, mają ukryte zawiasy i zamek magnetyczny — wybierane do wnętrz minimalistycznych."),
+    ("Lewe czy prawe — jak określić?",
+     "Stań po stronie, na którą otwierają się drzwi: zawiasy po lewej ręce = drzwi lewe, po prawej = prawe. Ten sam standard stosują DRE, Porta i Erkado, więc raz określony kierunek działa dla każdego producenta."),
+    ("Jaką ościeżnicę wybrać?",
+     "Regulowana obejmuje mur w zakresie kilku centymetrów i maskuje krawędzie tynku — standard w nowych domach. Stała jest tańsza, ale wymaga idealnie równego muru. Do łazienek polecamy DRE WaterProof — testowana na długi kontakt z wodą."),
+    ("Jakie wymiary skrzydeł są dostępne?",
+     "Typowe szerokości to „60–100” co 10 cm, mierzone w świetle ościeżnicy (norma polska). Do salonu i kuchni rekomendujemy 80–90, do łazienki min. 70 z podcięciem lub tulejami wentylacyjnymi (wymóg WT), do garderoby wystarczy 60."),
+    ("Drzwi do łazienki — co jest wymagane?",
+     "Przepisy wymagają otworów wentylacyjnych o łącznym przekroju min. 220 cm² (podcięcie, tuleje) oraz skrzydła odpornego na wilgoć. Wybieramy okleiny CPL/lakier i ościeżnicę WaterProof — zestaw odporny na parę i chlapanie."),
+    ("Co wyciszy wnętrze?",
+     "Skrzydła pełne z wypełnieniem płytą wiórową pełną lub akustyczną (np. Porta akustyczne, Erkado z uszczelką opadającą) osiągają Rw ok. 27–32 dB. Uszczelka opadająca zamyka szczelinę progową — kluczowa przy gabinetach i sypialniach."),
+  ],
+  cats=["katalog-dre.pdf", "katalog-porta.pdf", "katalog-erkado-wewnetrzne.pdf"]),
+
+"rolety-zewnetrzne": dict(
+  specs=dict(title="Który system rolet wybrać?", cols=["System", "Etap montażu", "Skrzynka", "Uwagi"],
+    rows=[["Nadstawne (SKT Opoterm)", "budowa / wymiana okien", "na oknie, kryta od zewnątrz", "najlepsza termika, moskitiera w standardzie prowadnic"],
+          ["Podtynkowe (SP/SP-E)", "budowa (nadproże)", "niewidoczna pod tynkiem", "czysta elewacja, zero ingerencji w okno"],
+          ["Adaptacyjne (SK/SK45)", "budynek istniejący", "widoczna na elewacji / we wnęce", "montaż bez prac murarskich"]]),
+  brands=[
+    ("aluprof", "Aluprof", [
+      "SKT Opoterm — skrzynka z Neoporu, rewizja od dołu",
+      "SP / SP-E — systemy podtynkowe do budynków pasywnych",
+      "SK, SK45, SKO-P — pełna gama adaptacyjnych",
+      "Pancerze PA39 / PA45 z pianką poliuretanową"]),
+    ("somfy", "Somfy", [
+      "Napędy io-homecontrol z informacją zwrotną",
+      "Centrala TaHoma — aplikacja, scenariusze, geolokalizacja",
+      "Czujniki Sunis (słońce) i Eolis (wiatr)"]),
+    ("nice", "Nice", [
+      "Napędy Era z pilotami dwukierunkowymi",
+      "Centrala Yubii Home — Z-Wave i Wi-Fi w jednym"])],
+  know=[
+    ("Jak zbudowana jest roleta zewnętrzna?",
+     "Pancerz z lameli aluminiowych wypełnionych pianką PU zwija się na wał w skrzynce; boczne prowadnice z uszczelkami szczotkowymi tłumią pracę i doszczelniają zabudowę. Napęd rurowy siedzi w wale — od zewnątrz widać tylko pancerz i prowadnice."),
+    ("Ile ciepła realnie oszczędzają rolety?",
+     "Zamknięty pancerz tworzy poduszkę powietrzną przy szybie, ograniczając straty ciepła przez okno do ok. 30%. Latem działa odwrotnie — zatrzymuje promieniowanie słoneczne przed szybą, obniżając temperaturę w pomieszczeniu o kilka stopni bez klimatyzacji."),
+    ("Który system do jakiego domu?",
+     "Na etapie budowy najlepsze są nadstawne (integracja z oknem, świetna termika) lub podtynkowe (niewidoczne). W budynku wykończonym jedyną nieinwazyjną opcją są adaptacyjne — montowane na elewacji lub we wnęce w jeden dzień, bez tynkowania."),
+    ("Sterowanie: przewodowe, radiowe czy smart?",
+     "Przewodowe (przełącznik) jest najtańsze, ale wymaga instalacji przed tynkami. Radiowe (Somfy io / Nice Era) można dołożyć zawsze. Smart z centralą TaHoma/Yubii daje aplikację, harmonogramy i współpracę z czujnikami — rolety same reagują na słońce i wiatr."),
+    ("Czy roleta może mieć moskitierę?",
+     "Tak — w systemach nadstawnych moskitiera rolowana jest zintegrowana w tej samej skrzynce i prowadnicach (osobne prowadzenie), nie zabiera światła i nie wymaga dodatkowego montażu. W adaptacyjnych stosuje się prowadnice łączone."),
+  ],
+  cats=[]),
+
+"pergole": dict(
+  specs=None,
+  brands=[
+    ("selt", "Selt", [
+      "Pergole bioklimatyczne z lamelami 0–135°",
+      "Konstrukcje dostawne i wolnostojące, moduły ponad 30 m²",
+      "Screeny ZIP, przeszklenia, LED, promienniki"]),
+    ("somfy", "Somfy", [
+      "Napędy io z czujnikami deszczu i wiatru",
+      "Sterowanie pilotem Telis lub aplikacją TaHoma"])],
+  know=[
+    ("Pergola bioklimatyczna czy tarasowa?",
+     "Bioklimatyczna ma obrotowe lamele aluminiowe (0–135°): reguluje światło, wentyluje, a po zamknięciu tworzy szczelny dach. Tarasowa ma dach z tkaniny technicznej zwijany elektrycznie — jest lżejsza optycznie i tańsza, ale nie daje pełnej szczelności zimą."),
+    ("Co z wodą podczas deszczu?",
+     "W pergolach bioklimatycznych woda spływa z lameli do rynien zintegrowanych w obwodzie dachu i dalej pionami ukrytymi w słupach — taras zostaje suchy, a instalacji nie widać."),
+    ("Jakiego fundamentu wymaga pergola?",
+     "Konstrukcje dostawne kotwi się chemicznie do płyty tarasu; wolnostojące wymagają stóp fundamentowych pod słupami. Obciążenia (wiatr, śnieg na lamelach) przenoszą słupy — przygotowanie podłoża omawiamy na pomiarze."),
+    ("Czy z pergoli można korzystać wiosną i jesienią?",
+     "Tak — po doposażeniu w screeny ZIP (osłona przed wiatrem), promienniki podczerwieni i oświetlenie LED pergola działa jak całoroczny pokój zewnętrzny. Elementy można dokładać etapami."),
+  ],
+  cats=[]),
+
+"bramy-garazowe": dict(
+  specs=dict(title="Modele bram segmentowych AVO", cols=["Model", "Powierzchnia", "Charakter"],
+    rows=[["AVO Base Line / Base Trend / Base Elegant", "Woodgrain", "ekonomiczne, struktura drewna"],
+          ["AVO Line", "Woodgrain", "klasyczne przetłoczenia"],
+          ["AVO Trend / Elegant", "Silk (gładka)", "nowoczesne elewacje"],
+          ["AVO Elegant ISO 60", "Silk", "panel 60 mm — najwyższa termika"]]),
+  brands=[
+    ("avo", "AVO", [
+      "Panele Woodgrain i Silk; dekory Woodec, Winchester, Złoty Dąb",
+      "Lakierowanie: 205 kolorów RAL i 1950 NCS",
+      "Automatyka ADO / ADO PRO: 24 V, LED w prowadnicy, KUBE Bluetooth",
+      "Prowadzenie także przy bardzo krótkich podjazdach"]),
+    ("nice", "Nice", [
+      "Spider 1200N: bezszczotkowy, 150 cykli/dobę, bramy do 16,9 m²",
+      "Wbudowane Wi-Fi, LED i system antywłamaniowy",
+      "Spido 600N: otwarcie w ok. 10 s",
+      "Yubii Home / CORE — Alexa, Google Assistant, Siri"]),
+    ("somfy", "Somfy", [
+      "Napędy Dexxo z paskiem — cicha praca",
+      "TaHoma: aplikacja i scenariusze smart home"])],
+  know=[
+    ("Segmentowa czy roletowa?",
+     "Segmentowa (panele chowane pod sufit) daje najlepszą termikę i wygląd, wymaga ok. 10–20 cm nadproża i wolnego sufitu. Roletowa zwija się do skrzynki nad otworem — ratuje garaże z niskim nadprożem lub sufitem zajętym przez instalacje."),
+    ("Woodgrain czy Silk?",
+     "Woodgrain to tłoczona struktura słojów drewna — maskuje drobne ślady eksploatacji. Silk to powierzchnia idealnie gładka, efektowna w kolorach matowych i dekorach Woodec — wybierana do nowoczesnych elewacji."),
+    ("Jak dobrać napęd do bramy?",
+     "Liczy się powierzchnia bramy i intensywność użytkowania: do typowej bramy do ok. 10 m² wystarczy Spido 600N lub ADO; przy większych i podwójnych — Spider 800/1200N (do 16,9 m²). Przy kilkunastu cyklach dziennie wybieramy silnik bezszczotkowy (Spider 1200 BLW)."),
+    ("Co zabezpiecza bramę przed wypadkiem?",
+     "Standard to zabezpieczenie przed pęknięciem sprężyny (blokada opadnięcia skrzydła), amperometryczne wykrywanie przeszkód w napędzie i opcjonalne fotokomórki. Brama zatrzyma się i cofnie po napotkaniu oporu."),
+    ("Jakie wymiary podać do wyceny?",
+     "Wystarczą: szerokość i wysokość otworu w murze, wysokość nadproża, szerokości przestrzeni bocznych i głębokość garażu. Resztę doprecyzuje bezpłatny pomiar — bramy AVO produkowane są na wymiar."),
+  ],
+  cats=["katalog-avo-bramy.pdf", "katalog-nice-napedy.pdf"]),
+
+"markizy": dict(
+  specs=None,
+  brands=[
+    ("selt", "Selt", [
+      "Markizy tarasowe w pełnej kasecie — wysięg do 4 m",
+      "Szerokości do 7 m (sprzęgane do 12 m)",
+      "Ponad 100 tkanin akrylowych 300 g/m²"]),
+    ("somfy", "Somfy", [
+      "Napędy radiowe io w standardzie",
+      "Czujniki Eolis (wiatr) i Sunis (słońce)"])],
+  know=[
+    ("Kaseta pełna, półkaseta czy markiza otwarta?",
+     "Pełna kaseta chroni tkaninę i ramiona całkowicie po zwinięciu — najdłuższa żywotność poszycia. Półkaseta osłania tkaninę od góry, jest lżejsza i tańsza. Otwarta sprawdza się pod zadaszeniem, gdzie poszycie nie moknie."),
+    ("Akryl czy screen?",
+     "Tkanina akrylowa 300 g/m² daje głęboki kolor, pełny cień i wysoką odporność na płowienie — klasyka markiz. Screen przepuszcza część widoku i światła, mniej faluje na wietrze — częściej używany w markizach pionowych."),
+    ("Jak duży taras zacieni markiza?",
+     "Wysięg ramion do 4 m i szerokość do 7 m pozwalają zacienić ok. 25 m² jedną markizą; większe tarasy obsługują markizy sprzęgane na wspólnym napędzie. Kąt nachylenia reguluje się w zakresie 5–40°."),
+    ("Czy markiza wytrzyma wiatr?",
+     "Tkanina rozwinięta ma określoną klasę wiatrową — dlatego montujemy czujnik Eolis, który zwija markizę automatycznie po przekroczeniu progu. To warunek bezpiecznej pracy i utrzymania gwarancji przy silniejszych podmuchach."),
+  ],
+  cats=[]),
+
+"oslony-wewnetrzne": dict(
+  specs=dict(title="Którą osłonę wybrać do pomieszczenia?", cols=["Pomieszczenie", "Rekomendacja", "Dlaczego"],
+    rows=[["Sypialnia", "roleta blackout w kasecie / plisa blackout", "pełne zaciemnienie bez prześwitów"],
+          ["Salon z HST", "plisy dwukierunkowe / verticale", "obsługa dużych przeszkleń"],
+          ["Kuchnia, łazienka", "żaluzja aluminiowa / plisa", "odporność na wilgoć, łatwe czyszczenie"],
+          ["Gabinet", "żaluzja drewniana / dzień-noc", "praca przy świetle bez olśnienia"],
+          ["Okno dachowe", "plisa w prowadnicach", "trzyma się połaci pod kątem"]]),
+  brands=[
+    ("setto", "Setto", [
+      "Produkcja krajowa na wymiar — krótkie terminy",
+      "Żaluzje 25/50 mm, plisy, rolety, verticale",
+      "Tkaniny: transparentne, dzień-noc, blackout, trudnopalne"])],
+  know=[
+    ("Plisa czy roleta — co wybrać?",
+     "Plisa zasłania dowolny fragment szyby (system góra-dół) i pasuje do nietypowych kształtów — także okien dachowych i trapezów. Roleta jest szybsza w obsłudze i tańsza przy dużych prostokątnych oknach; w wersji kasetowej z prowadnicami daje pełny blackout."),
+    ("Czym różni się blackout od tkaniny przyciemniającej?",
+     "Blackout ma powłokę nieprzepuszczającą światła (100% zaciemnienia w tkaninie); przyciemniająca tłumi światło, ale nie eliminuje go całkowicie. Do sypialni polecamy blackout w kasecie z prowadnicami — bez smug światła przy krawędziach."),
+    ("Czy montaż niszczy okno?",
+     "Nie — standardem jest montaż bezinwazyjny: uchwyty zaciskane na skrzydle lub taśma montażowa systemowa. Okno zachowuje gwarancję, a osłonę można zdemontować bez śladów."),
+    ("Jak mierzyć okno pod osłony?",
+     "Przy montażu we wnęce podaje się szerokość i wysokość wnęki (my odejmujemy luzy); przy montażu na skrzydle — wymiary szyby z listwami. Najbezpieczniej zostawić pomiar nam — przy zamówieniu z montażem pomiar jest bezpłatny."),
+  ],
+  cats=[]),
+
+"oslony-zewnetrzne": dict(
+  specs=None,
+  brands=[
+    ("selt", "Selt", [
+      "Refleksole screen z prowadnicami ZIP — do 6 m szerokości",
+      "Tkaniny serge o różnym stopniu otwarcia (1–5%)",
+      "Kasety 85–150 mm, kolory RAL"]),
+    ("aluprof", "Aluprof", [
+      "Żaluzje fasadowe C-80 / Z-90",
+      "Prowadzenie linkowe lub szynowe, zabudowa podtynkowa"]),
+    ("somfy", "Somfy", [
+      "Automatyka io z czujnikiem nasłonecznienia",
+      "Scenariusze pogodowe w TaHoma"])],
+  know=[
+    ("Dlaczego osłona zewnętrzna chłodzi lepiej niż wewnętrzna?",
+     "Zatrzymuje promieniowanie słoneczne PRZED szybą — energia nie wnika do środka. Osłona wewnętrzna działa dopiero, gdy ciepło już przeszło przez szkło. Różnica temperatury w pomieszczeniu latem sięga kilku stopni."),
+    ("Co oznacza stopień otwarcia tkaniny screen?",
+     "To procent mikrootworów w splocie (najczęściej 1–5%). Niższy = mocniejsze zaciemnienie i lepsza prywatność; wyższy = więcej światła i wyraźniejszy widok na zewnątrz. Do sypialni wybiera się 1%, do salonu 3–5%."),
+    ("Refleksol czy żaluzja fasadowa?",
+     "Refleksol (tkanina) zaciemnia płynnie i zachowuje widok — jest lżejszy wizualnie i tańszy. Żaluzja fasadowa (lamele aluminiowe) pozwala kierować światło pod dowolnym kątem i mocniej zaznacza architekturę — standard w biurowcach, coraz częstsza w domach premium."),
+    ("Jak osłony znoszą wiatr?",
+     "Prowadnice ZIP trzymają tkaninę naprężoną na całym obwodzie — refleksole pracują przy silnym wietrze bez łopotania. Żaluzje fasadowe przy bardzo silnych podmuchach automatycznie się podnoszą (czujnik wiatru) — to standardowe zabezpieczenie systemowe."),
+  ],
+  cats=[]),
+
+"moskitiery": dict(
+  specs=dict(title="Dobór moskitiery do stolarki", cols=["Typ", "Do czego", "Cechy"],
+    rows=[["Ramkowa", "okna rozwierne i uchylne", "montaż bez wiercenia, demontaż na zimę"],
+          ["Drzwiowa", "balkon, taras, wejście boczne", "zawiasy, samozamykacz, magnesy"],
+          ["Rolowana", "okna często otwierane, okna dachowe", "kaseta, chowana gdy niepotrzebna"],
+          ["Plisowana", "HST i duże przeszklenia", "niski próg 5 mm, zatrzymuje się w dowolnym punkcie"]]),
+  brands=[
+    ("aluprof", "Aluprof", [
+      "Systemy ramkowe i rolowane zintegrowane z roletami",
+      "Profile aluminiowe malowane w kolorach stolarki"]),
+    ("setto", "Setto", [
+      "Moskitiery na wymiar — także kształty nietypowe",
+      "Siatki: fiberglass, aluminiowa, pet screen"])],
+  know=[
+    ("Jaką siatkę wybrać?",
+     "Standardem jest fiberglass (włókno szklane) — trwały i mało widoczny. Siatka aluminiowa jest sztywniejsza, a pet screen (wzmocniony poliester) wytrzymuje pazury psów i kotów. Oczko 1,2×1,2 mm zatrzymuje także drobne owady."),
+    ("Czy moskitiera ogranicza światło i widok?",
+     "Nieznacznie — dobrej klasy siatka odbiera kilka procent światła. W moskitierach rolowanych i plisowanych siatkę chowa się, gdy nie jest potrzebna, więc zimą i w dni bez owadów okno pozostaje całkowicie odsłonięte."),
+    ("Jak czyścić moskitiery?",
+     "Wystarczy odkurzacz z miękką końcówką lub przemycie wodą z płynem. Ramkowe zdejmuje się na zimę jednym ruchem (uchwyty obrotowe), rolowane czyści się w miejscu montażu."),
+  ],
+  cats=[]),
 }
 
 # ---------------------------------------------------------------------------
