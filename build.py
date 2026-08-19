@@ -4,10 +4,10 @@ Generator statycznej strony PROMYK (Wieluń) — odwzorowanie projektu Figma.
 Uruchomienie:  python build.py
 Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 """
-import os, io, html
+import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "19"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "20"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -1166,11 +1166,13 @@ def product_page(slug, meta):
         li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
         intro_html = f'<p>{intro}</p>' if intro else ""
         media = f'<div><img src="assets/img/{img}.jpg" alt="{title}" loading="lazy"></div>'
+        sub = SUB_SLUGS.get((slug, k))
+        sub_link = f' <a class="btn btn--outline btn--sm" href="{sub}.html">Więcej o tym rozwiązaniu</a>' if sub else ""
         text = f"""<div class="subrow__text">
-        <h2>{title}</h2>
+        <h2><a href="{sub}.html">{title}</a></h2>
         {intro_html}
         <ul class="bullets">{li}</ul>
-        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o darmową wycenę {I['arrow']}</a>
+        <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o darmową wycenę {I['arrow']}</a>{sub_link}</div>
       </div>"""
         rows += f'<div class="subrow{" subrow--flip" if k % 2 else ""}">{media if k % 2 == 0 else text}{text if k % 2 == 0 else media}</div>'
 
@@ -1804,6 +1806,185 @@ PRODUCT_EXTRAS = {
   cats=[]),
 }
 
+
+# Teksty techniczne podstron 3. poziomu — klucz: slug kategorii, wartość: lista
+# akapitów per wiersz rows[] (kolejność zgodna z PRODUCT_DATA).
+SUB_DETAILS = {
+"okna": [
+ ["SOFTLINE 82 MD to flagowy system PVC firmy VEKA o głębokości zabudowy 82 mm i 7 komorach w ramie. Uszczelka środkowa (MD) tworzy trzecią, ciągłą płaszczyznę uszczelnienia — komora przed okuciem pozostaje sucha, co przekłada się na lepszą termikę węzła i trwałość okuć. Profil klasy A (ścianka zewnętrzna 3 mm ±0,2 wg DIN EN 12608) zapewnia sztywne zgrzewy i mocne osadzenie wkrętów okuć.",
+  "System przyjmuje pakiety szybowe 2- i 3-szybowe do dużych grubości, w tym szkło bezpieczne P4 i akustyczne. Z pakietem Ug = 0,5 W/m²K i ciepłą ramką okno osiąga Uw do 0,74 W/m²K — wynik odpowiedni dla domów pasywnych. Wzmocnienia stalowe w ramie i skrzydle pozwalają na konstrukcje balkonowe i witryny bez utraty statyki."],
+ ["SOFTLINE 70 AD to sprawdzony, 5-komorowy system o głębokości 70 mm z dwiema uszczelkami odbojowymi. Konstrukcyjnie lżejszy od SOFTLINE 82, zachowuje pełną klasę A profili — to rozsądny wybór, gdy budżet jest istotny, a parametry mają pozostać solidne (Uw od 0,88 W/m²K przy pakiecie Ug = 1,0).",
+  "Mniejsza głębokość zabudowy ułatwia wymianę stolarki w istniejących murach — profil dobrze współpracuje z typowymi ościeżami bez skuwania tynków. Dostępna pełna paleta oklein VEKA oraz nawiewniki montowane fabrycznie."],
+ ["VEKAMOTION 82 to system drzwi podnoszono-przesuwnych (HST), w którym skrzydło po przekręceniu klamki unosi się na wózkach i przesuwa bez oporu — także przy wadze kilkuset kilogramów. Wózki przenoszą skrzydła do 400 kg, a całe konstrukcje sięgają 6,5 m szerokości przy wysokości do 2,6 m.",
+  "Rama skrzydła stałego ma tylko 86 mm wysokości, więc podział przeszklenia jest minimalny. Próg 0 mm (bezbarierowy) łączy podłogę z tarasem bez uskoku. Wielostopniowy system uszczelnień daje Ud do 0,76 W/m²K; opcjonalny napęd VEKAMOTION 82 Max otwiera skrzydło przyciskiem lub z aplikacji."],
+ ["MB-86N to aluminiowy system okienno-drzwiowy Aluprof z przekładką termiczną 34 mm i wkładami Aero w komorach izolacyjnych. Aluminium pozwala na smukłe kształtowniki przy dużej sztywności — konstrukcje sięgają 2,9 m wysokości bez pośrednich wzmocnień.",
+  "Uw od 0,72 W/m²K plasuje system w czołówce ciepłego aluminium. Wersje ST/SI/Aero różnicują izolacyjność do potrzeb inwestycji, a wariant z ukrytym skrzydłem daje elewacji jednolity, szklany wygląd. Kolory: pełny RAL, anody i okleiny drewnopodobne — również dwustronnie różne."]],
+"drzwi-zewnetrzne": [
+ ["Termo Prestige 72 to najcieplejsza stalowa linia Wikęd: skrzydło 72 mm wypełnione pianą poliuretanową, ościeżnica z przegrodą termiczną i ciepły próg z uszczelką EPDM. Ud od 0,71 W/m²K spełnia wymogi programu Czyste Powietrze z zapasem (wymagane ≤ 1,3).",
+  "Linia obejmuje wszystkie kolekcje wzornicze 2026 — od Rustik po Royal — z aplikacjami inox, pochwytami i przeszkleniami z szybą P4. Maksymalna szerokość skrzydła 95 cm; wykonanie na wymiar co 1 cm."],
+ ["Premium 54 to podstawowa linia stalowa Wikęd: skrzydło 54 mm z blachy ocynkowanej malowanej proszkowo, zamek listwowy 3-punktowy i wkładki klasy C w standardzie. Ud od 1,1 W/m²K wystarcza w budynkach z wiatrołapem.",
+  "To najczęściej wybierany kompromis ceny i bezpieczeństwa — konstrukcja odporna na odkształcenia, pełna paleta przetłoczeń i oklein drewnopodobnych, opcja doposażenia w naświetla."],
+ ["Drzwi aluminiowe na bazie systemu Aluprof MB-86 mają panel zlicowany obustronnie — skrzydło tworzy z ościeżnicą jedną płaszczyznę, bez widocznych ram. Przegrody termiczne dają Ud od 0,9 W/m²K przy konstrukcjach do 2,4 m wysokości.",
+  "Wyposażenie premium: pochwyty do 1,8 m, czytnik linii papilarnych, kontrola dostępu i integracja ze Smart Home. Aluminium nie pracuje pod wpływem słońca, więc ciemne kolory i duże formaty są bezpieczne konstrukcyjnie."],
+ ["Panel HPL (High Pressure Laminate) to okładzina z żywic utwardzanych o grubości 2 mm naklejana na skrzydło. Powłoka jest odporna na promieniowanie UV, wilgoć i zarysowania — parametry nieosiągalne dla klasycznych oklein PVC.",
+  "HPL rekomendujemy przy ekspozycji południowej i ciemnych kolorach, gdzie temperatura powierzchni sięga 70°C. Dekory drewnopodobne i jednolite, także struktury szczotkowane; czyszczenie zwykłymi detergentami."]],
+"drzwi-wewnetrzne": [
+ ["Drzwi przylgowe mają klasyczną felc na krawędzi skrzydła i widoczne zawiasy czopowe — to najpopularniejsza, uniwersalna konstrukcja, łatwa w regulacji i najtańsza w zakupie. Bezprzylgowe licują się z ościeżnicą w jednej płaszczyźnie: zawiasy są ukryte (chowane w skrzydle), a zamek magnetyczny domyka drzwi bezgłośnie.",
+  "W obu konstrukcjach dostępne są te same kolekcje DRE, Porty i Erkado — różnica dotyczy wyłącznie krawędzi skrzydła, zawiasów i ościeżnicy. Bezprzylga wymaga dedykowanej ościeżnicy i precyzyjnego montażu — wykonujemy go we własnym zakresie."],
+ ["Kolekcje dekoracyjne to skrzydła z frezowaniami, intarsjami i przeszkleniami: DRE City 2 ze złotymi intarsjami, Vetro E ze szkłem hartowanym na całej wysokości, Estra 13 z ryflowaniem czy Hampton w stylu angielskim. Struktury synchroniczne odwzorowują usłojenie wyczuwalne pod palcami.",
+  "Skrzydła wykonywane są w wysokościach do 2,2 m (Modern 30 — zmienna wysokość), co pozwala prowadzić linię drzwi do sufitu. Szyby: hartowane mleczne, przezierne lub VSG matowe i czarne."],
+ ["Systemy przesuwne prowadzą skrzydło na szynie górnej — naściennie (z maskownicą) albo w kasecie chowanej w ścianę, która znika całkowicie po otwarciu. DRE oferuje dedykowane zestawy Estra 5 przesuwne i Enter Solid 23 z Galerią 50.",
+  "Mechanizmy mają cichy domyk soft-close w standardzie, a skrzydła do 100 cm szerokości dzielą przestrzeń bez pola otwierania — zyskuje się ok. 1 m² podłogi względem drzwi rozwiernych."],
+ ["Drzwi techniczne to skrzydła o podwyższonych parametrach: Solid RC2 z certyfikatem antywłamaniowym (wejścia do mieszkań), Forca z izolacyjnością akustyczną Rw do 32 dB oraz wersje wzmocnione o podwyższonej odporności na wilgoć do kotłowni i łazienek.",
+  "Wypełnienie płytą wiórową pełną, wzmocnione ramiaki i uszczelki obwodowe (opcjonalnie uszczelka opadająca) odpowiadają za akustykę i stabilność. Dobór konstrukcji zależy od pomieszczenia — doradzimy przy pomiarze."]],
+"rolety-zewnetrzne": [
+ ["System nadstawny SKT Opoterm montuje się bezpośrednio na oknie — skrzynka ze spienionego Neoporu staje się częścią nadproża i po ociepleniu znika w elewacji. To rozwiązanie o najlepszej termice: skrzynka nie tworzy mostka, a rewizja od dołu daje łatwy serwis.",
+  "W prowadnicach można zintegrować moskitierę rolowaną — jedna zabudowa obsługuje roletę i siatkę. Pancerz PA39/PA45 z pianką PU; sterowanie ręczne lub napęd rurowy."],
+ ["Rolety podtynkowe SP/SP-E montuje się w nadprożu na etapie budowy — skrzynka jest kryta tynkiem i całkowicie niewidoczna, a okno zachowuje pełny prześwit. System nie ingeruje w profil okienny, więc parametry stolarki pozostają bez zmian.",
+  "To standard w domach energooszczędnych i pasywnych: brak mostka termicznego i czysta elewacja. Dostęp serwisowy przez klapę rewizyjną od zewnątrz."],
+ ["Rolety adaptacyjne SK, SK45 i SKO-P projektowano do budynków istniejących: skrzynka montowana jest na elewacji lub we wnęce okiennej bez prac murarskich — montaż w jeden dzień. Kształty skrzynek (proste, ścięte 45°, półokrągłe) pozwalają dopasować zabudowę do elewacji.",
+  "Pancerz aluminiowy z pianką PU i prowadnice z uszczelką szczotkową zapewniają cichą pracę. Kolory RAL i okleiny drewnopodobne spójne z istniejącą stolarką."],
+ ["Napędy Somfy io i Nice Era montowane w wale rolety obsługują sterowanie ścienne, pilotem lub aplikacją. Technologia io-homecontrol daje informację zwrotną o położeniu rolety, a centrale TaHoma/Yubii łączą rolety z bramą, oświetleniem i czujnikami.",
+  "Automatyka pogodowa działa bez udziału domownika: czujnik słońca opuszcza rolety latem, czujnik temperatury reaguje na mróz, a harmonogramy symulują obecność podczas wyjazdu."]],
+"pergole": [
+ ["Pergola bioklimatyczna ma dach z obrotowych lameli aluminiowych (0–135°): ustawione pod kątem dozują światło i wentylują taras, zamknięte tworzą szczelny dach odprowadzający wodę rynnami w słupach. Konstrukcja z ekstrudowanego aluminium przenosi obciążenia wiatru i śniegu.",
+  "Moduły łączy się w zadaszenia ponad 30 m². Sterowanie elektryczne z pilota lub aplikacji; doposażenie: LED w lamelach, promienniki, screeny ZIP i przesuwne przeszklenia."],
+ ["Pergola tarasowa ma dach z tkaniny technicznej rozpinanej na prowadnicach — zwijany elektrycznie, z odwodnieniem w profilach. Tkanina odporna na UV i wysoką temperaturę pozwala całkowicie odsłonić niebo w pogodne dni.",
+  "Konstrukcja dostawna do ściany lub wolnostojąca, kolory RAL strukturalne. To lżejsza i tańsza alternatywa dla dachu lamelowego, chętnie wybierana przy mniejszych tarasach."],
+ ["Pergole wolnostojące mają samonośną konstrukcję na czterech lub więcej słupach — stają w ogrodzie, przy basenie lub jako zadaszenie strefy lounge, niezależnie od budynku.",
+  "Kotwienie chemiczne do płyty albo stopy fundamentowe pod słupami; duże rozpiętości bez podpór pośrednich i możliwość szeregowego łączenia modułów."],
+ ["Wyposażenie przekształca pergolę w całoroczny pokój zewnętrzny: oświetlenie LED w lamelach i słupach (ściemnialne), promienniki podczerwieni 1,5–2 kW, boczne screeny ZIP z tkaniny serge oraz przesuwne panele szklane.",
+  "Całość spina automatyka Somfy io — pilot, aplikacja TaHoma i czujniki pogodowe (deszcz zamyka lamele automatycznie). Elementy można dokładać etapami, zaczynając od samej konstrukcji."]],
+"bramy-garazowe": [
+ ["Brama segmentowa otwiera się pionowo — panele wjeżdżają na prowadnicach pod sufit, więc przed garażem i w środku nie potrzeba miejsca na skrzydło. Panele stalowe 40 lub 60 mm z pianką poliuretanową dają bramie izolacyjność odpowiednią do garaży ogrzewanych.",
+  "Powierzchnie Woodgrain i Silk, przetłoczenia od klasycznych po gładkie, dekory drewnopodobne Woodec. Uszczelnienie obwodowe i próg EPDM ograniczają przewiewy; opcje: przeszklenia, drzwi przejściowe, kratki wentylacyjne."],
+ ["Brama roletowa zwija pancerz z profili aluminiowych do skrzynki nad otworem — zabudowa od 205 mm ratuje garaże z niskim nadprożem albo sufitem zajętym przez instalacje. Pancerz wypełniony pianką PU pracuje w prowadnicach z uszczelką szczotkową.",
+  "Napęd rurowy z awaryjnym otwieraniem korbą jest standardem. Brama nie ogranicza światła wjazdu na boki — prowadnice zajmują tylko kilka centymetrów."],
+ ["Napędy dobiera się do powierzchni i intensywności pracy bramy: Nice Spido 600N obsługuje bramy do ok. 9,6 m² i otwiera je w ok. 10 s; Spider 800/1200N — do 16,9 m², a wersja 1200 BLW z silnikiem bezszczotkowym wytrzymuje 150 cykli dziennie.",
+  "Zabezpieczenia: amperometryczne wykrywanie przeszkód, fotokomórki, system antywłamaniowy w Spiderze. Sterowanie: piloty z kodem dynamicznym, Wi-Fi w standardzie (Spider), centrale Yubii/CORE i komendy głosowe Alexa/Google/Siri."],
+ ["Drzwi boczne wykonuje się z tych samych paneli co bramę — przetłoczenia, struktura i kolor są identyczne, więc elewacja garażu pozostaje spójna. Ciepła ościeżnica aluminiowa z przegrodą termiczną eliminuje przemarzanie.",
+  "Zamek wielopunktowy i opcjonalny samozamykacz czynią z nich pełnoprawne wejście techniczne do garażu — wygodniejsze niż otwieranie całej bramy."]],
+"markizy": [
+ ["Markiza tarasowa w pełnej kasecie chowa poszycie i ramiona w zamkniętym profilu aluminiowym — tkanina nie moknie i nie kurzy się poza sezonem, co wydłuża jej żywotność o lata. Wysięg ramion do 4 m i szerokości do 7 m (sprzęgane do 12 m) zacieniają ponad 25 m² tarasu.",
+  "Kąt nachylenia reguluje się w zakresie 5–40°. Napęd Somfy w standardzie; opcja listwy LED w kasecie zamienia markizę w oświetlenie tarasu."],
+ ["Markizy balkonowe i półkasetowe to lżejsze konstrukcje do mniejszych przestrzeni: montaż ścienny lub sufitowy, wysięg do 2,5 m, obsługa korbą albo napędem. Półkaseta osłania zwiniętą tkaninę od góry.",
+  "Kolekcja ponad 100 tkanin akrylowych pozwala dopasować markizę do elewacji także we wspólnotach z określoną kolorystyką."],
+ ["Markiza pionowa (przyścienna) opuszcza tkaninę wzdłuż krawędzi tarasu — zatrzymuje nisko świecące słońce i wiatr, których markiza pozioma nie blokuje. Prowadzenie linkowe lub w prowadnicach utrzymuje naprężenie.",
+  "Tkaniny akrylowe pełne albo screen z okienkiem widokowym; funkcja kurtyny prywatności bez trwałej zabudowy tarasu."],
+ ["Automatyka Somfy chroni markizę i zwalnia z obsługi: czujnik wiatru Eolis zwija poszycie po przekroczeniu progu (warunek gwarancji przy silnym wietrze), a czujnik słońca Sunis rozwija markizę, gdy taras się nagrzewa.",
+  "Sterowanie pilotem Telis lub aplikacją TaHoma; markizę można wpiąć w sceny wspólne z roletami i pergolą."]],
+"oslony-wewnetrzne": [
+ ["Żaluzje aluminiowe mają lamele 25 mm (klasyka) lub 50 mm (styl loftowy) obracane pokrętłem albo łańcuszkiem — płynnie dozują światło bez zasłaniania widoku. Aluminium nie chłonie wilgoci, więc sprawdza się w kuchni i łazience.",
+  "Kolory: matowe, perforowane (przepuszczają zarys światła po zamknięciu) i metaliczne. Opcja napędu elektrycznego przy trudno dostępnych oknach."],
+ ["Plisa porusza się w dwóch kierunkach (góra-dół), więc zasłania dowolny pas szyby — np. tylko dół dla prywatności, z pozostawionym światłem u góry. Prowadzenie żyłkowe trzyma tkaninę przy szybie także w oknach uchylonych i dachowych.",
+  "Tkaniny: transparentne, przyciemniające i blackout z powłoką perłową odbijającą ciepło. Montaż bezinwazyjny na skrzydle — bez wiercenia w profilu."],
+ ["Roleta materiałowa w kasecie z prowadnicami domyka tkaninę przy krawędziach — z tkaniną blackout daje pełne zaciemnienie sypialni. Wersja wolnowisząca jest ekonomiczną alternatywą przy mniejszych wymaganiach.",
+  "Kasety w kolorach stolarki (biel, antracyt, złoty dąb) zlewają się z oknem; tkaniny od transparentnych po dekoracyjne struktury."],
+ ["Roleta dzień-noc przesuwa naprzemienne pasy tkaniny transparentnej i zaciemniającej względem siebie — od pełnego prześwitu, przez miękkie rozproszenie, po zaciemnienie, bez podnoszenia całej rolety.",
+  "To najczęściej wybierana osłona do salonów i pokoi dziennych: reguluje prywatność przy zachowaniu kontaktu z otoczeniem."],
+ ["Roleta rzymska podnosi tkaninę w miękkich, poziomych fałdach — działa jak zasłona, ale zajmuje tyle miejsca co roleta. Tkaniny naturalne (len, bawełna, welur) szyjemy na wymiar.",
+  "Tkaninę zdejmuje się z taśm do prania — praktyczne w kuchni i jadalni."],
+ ["Żaluzje pionowe (verticale) obracają pasy tkaniny 89 lub 127 mm wokół osi — sterują światłem na dużych przeszkleniach i w biurach, gdzie poziome lamele byłyby zbyt ciężkie.",
+  "Tkaniny trudnopalne z atestem do obiektów; prowadzenie po łuku obsługuje wykusze."],
+ ["Żaluzje drewniane (lamele 25/50 mm) i bambusowe wnoszą naturalny materiał do wnętrz klasycznych i gabinetów. Bambus jest lżejszy, więc sprawdza się na większych oknach.",
+  "Wykończenia: naturalne barwienia i bejce, taśmy drabinkowe w kontrastowych kolorach jako detal aranżacyjny."]],
+"oslony-zewnetrzne": [
+ ["Refleksol to zewnętrzna roleta z tkaniny screen prowadzonej w systemie ZIP: zgrzewany brzeg tkaniny biegnie w prowadnicy, utrzymując pełne naprężenie — osłona pracuje przy silnym wietrze bez łopotania i szczelnie domyka światło przy krawędziach.",
+  "Tkanina serge o stopniu otwarcia 1–5% zatrzymuje promieniowanie przed szybą, zachowując widok na zewnątrz. Kasety 85–150 mm, szerokości do 6 m, kolory RAL; szczelne prowadzenie pełni też rolę moskitiery."],
+ ["Żaluzja fasadowa to zewnętrzne lamele aluminiowe o przekroju C-80 lub Z-90 (Z domyka się szczelniej), lakierowane proszkowo. Regulacja kąta obrotu steruje światłem jak żaluzja wewnętrzna — ale zatrzymuje ciepło przed elewacją.",
+  "Prowadzenie linkowe lub szynowe, zabudowa natynkowa albo kryta w elewacji. Standard biurowców klasy A, coraz częściej stosowany w domach o nowoczesnej architekturze."],
+ ["Sunbreaker (łamacz światła) to stałe lub obrotowe lamele wielkogabarytowe montowane przed elewacją — pionowo lub poziomo. Przekrój eliptyczny i duże rozpiętości czynią z nich element architektoniczny budynku.",
+  "Wersje ruchome obracają lamele do 90°, śledząc słońce; stałe projektuje się pod kąt padania promieni w danej orientacji elewacji."],
+ ["Moskitiera plisowana do dużych przeszkleń składa siatkę w harmonijkę prowadzoną w profilach — prowadnica dolna ma tylko 5 mm, więc przejście na taras pozostaje bez progu. Siatka zatrzymuje się w dowolnym punkcie (brak sprężyny).",
+  "Zabudowa jedno- lub dwustronna obsługuje otwory do ok. 4 m — naturalny wybór do drzwi HST. Pełna oferta moskitier znajduje się w osobnej kategorii."]],
+"moskitiery": [
+ ["Moskitiera ramkowa to aluminiowa rama z siatką dopasowana do wymiaru okna, mocowana uchwytami obrotowymi na obrzeżu skrzydła — bez wiercenia w profilu, więc gwarancja stolarki pozostaje nienaruszona.",
+  "Na zimę ramę zdejmuje się jednym ruchem. Siatka fiberglass w standardzie; dla właścicieli zwierząt polecamy pet screen o wielokrotnie wyższej wytrzymałości."],
+ ["Moskitiera drzwiowa pracuje na zawiasach jak drugie skrzydło: własna ościeżnica, samozamykacz i magnesy domykające utrzymują ją w pozycji zamkniętej. Uszczelka szczotkowa na obwodzie odcina drogę drobnym owadom.",
+  "To rozwiązanie do wyjść balkonowych i tarasowych używanych wielokrotnie w ciągu dnia — otwiera się łokciem przy zajętych rękach."],
+ ["Moskitiera rolowana chowa siatkę do kasety 42–50 mm nad oknem — rozwijana tylko wtedy, gdy jest potrzebna, zimą znika całkowicie. Prowadnice ze szczotką doszczelniają krawędzie, hamulec spowalnia zwijanie.",
+  "Wersja pozioma obsługuje okna dachowe. W systemach nadstawnych Aluprof kaseta moskitiery integruje się ze skrzynką rolety."],
+ ["Moskitiera plisowana składa siatkę w harmonijkę przesuwaną w prowadnicach — dolna ma zaledwie 5 mm, dzięki czemu przejście przez drzwi HST pozostaje bezprogowe. Brak sprężyny: siatka zatrzymuje się w dowolnym położeniu.",
+  "Zabudowa dwustronna obsługuje otwory do ok. 4 m szerokości. To standard do dużych przeszkleń tarasowych, gdzie klasyczne rozwiązania nie sięgają."]],
+}
+
+def _subslug(parent, title):
+    t = title.lower()
+    for a, b in [("ą","a"),("ć","c"),("ę","e"),("ł","l"),("ń","n"),("ó","o"),("ś","s"),("ż","z"),("ź","z")]:
+        t = t.replace(a, b)
+    t = re.sub(r"[^a-z0-9]+", "-", t).strip("-")
+    t = re.sub(r"-(i|w|z|do|na|the)-", "-", t)
+    return f"{parent}--{t[:48].rstrip('-')}"
+
+SUB_SLUGS = {}
+for _p, _meta in PRODUCT_DATA.items():
+    for _k, _r in enumerate(_meta["rows"]):
+        SUB_SLUGS[(_p, _k)] = _subslug(_p, _r[0])
+
+
+def build_subpages():
+    """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
+    for parent, meta in PRODUCT_DATA.items():
+        details = SUB_DETAILS.get(parent, [])
+        for k, row in enumerate(meta["rows"]):
+            title, intro, bullets, img = row
+            slug = SUB_SLUGS[(parent, k)]
+            paras = details[k] if k < len(details) else []
+            lead = intro or (paras[0].split(". ")[0] + "." if paras else "")
+            li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+            ptxt = "".join(f"<p>{p}</p>" for p in paras)
+
+            siblings = ""
+            for j, r2 in enumerate(meta["rows"]):
+                if j == k: continue
+                siblings += f"""<a href="{SUB_SLUGS[(parent, j)]}.html"><article class="card">
+        <img src="assets/img/{r2[3]}.jpg" alt="{r2[0]}" style="height:130px;object-fit:cover;border-radius:var(--r-md)" loading="lazy">
+        <div><h3 style="font-size:16px">{r2[0]}</h3></div>
+        <span class="card__more">Czytaj więcej {I['arrow']}</span>
+      </article></a>"""
+
+    # producenci kategorii
+            prod_logos = "".join(
+                f'<img src="assets/img/partners/{p}.svg" alt="{p}">'
+                for p in meta.get("producers", []))
+            producers_bar = (f'<div class="producer-strip"><div class="container producer-strip__inner">'
+                             f'<span>Producenci w tej kategorii:</span>{prod_logos}</div></div>') if prod_logos else ""
+
+            crumb = f'<a href="{parent}.html">{PROD_LABEL[parent]}</a> &nbsp;/&nbsp; {title}'
+            body = pagehero(img, title, lead, crumb)
+            body += producers_bar
+            body += f"""<section class="section">
+  <div class="container split" style="align-items:start">
+    <div class="prose">{ptxt}
+      <a class="btn btn--primary" href="kontakt.html">Zapytaj o darmową wycenę {I['arrow']}</a>
+    </div>
+    <aside class="card card--soft" style="gap:14px">
+      <h3>Najważniejsze parametry</h3>
+      <ul class="bullets">{li}</ul>
+      <a class="card__more" href="{parent}.html">Wróć do kategorii: {PROD_LABEL[parent]} {I['arrow']}</a>
+    </aside>
+  </div>
+</section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left">
+      <span class="tag">{PROD_LABEL[parent]}</span>
+      <h2 class="h-sec">Pozostałe rozwiązania w tej kategorii</h2>
+    </div></div>
+    <div class="grid-3">{siblings}</div>
+  </div>
+</section>
+
+{cta("Darmowy pomiar i doradztwo", "Chcesz zobaczyć to rozwiązanie na żywo?",
+     "Umów bezpłatny pomiar lub odwiedź nasz showroom w Wieluniu — pokażemy przekroje, próbniki kolorów i działające ekspozycje.")}
+"""
+            first_b = bullets[0].rstrip(".") if bullets else ""
+            write(f"{slug}.html",
+                  head(f"{title} — {PROD_LABEL[parent]} | PROMYK Wieluń",
+                       f"{title}: {first_b}. Doradztwo, pomiar i montaż — PROMYK Wieluń.")
+                  + nav(parent) + body + footer())
+
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     print("Generuję strony PROMYK...")
@@ -1816,4 +1997,5 @@ if __name__ == "__main__":
     build_kontakt()
     for slug, meta in PRODUCT_DATA.items():
         product_page(slug, meta)
+    build_subpages()
     print("Gotowe.")
