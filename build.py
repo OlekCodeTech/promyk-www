@@ -7,11 +7,13 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "21"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "22"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
 MAIL = "info@promyk.wielun.pl"
+FB_URL = "https://www.facebook.com/PromykWielun"
+IG_URL = "https://www.instagram.com/Promyk_Wielun"
 ADDR1 = "ul. M. Wołodyjowskiego 15"
 ADDR2 = "98-300 Wieluń"
 
@@ -28,6 +30,7 @@ I = {
 "star": '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
 "cal": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18m-9 6 2 2 4-4"/></svg>',
 "fb": '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.45 2.89h-2.33v6.99A10 10 0 0 0 22 12z"/></svg>',
+"ig": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>',
 "menu": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
 "win": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18"/></svg>',
 "shield": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>',
@@ -50,15 +53,15 @@ I = {
 # ------------------------------------------------------------- produkty ----
 PRODUCTS = [
     ("okna",              "Okna",               "VEKA / Aluprof",     "al39"),
-    ("drzwi-zewnetrzne",  "Drzwi zewnętrzne",   "Wikęd / Aluprof",    "wiked30"),
-    ("drzwi-wewnetrzne",  "Drzwi wewnętrzne",   "DRE",                "dre_binito50"),
+    ("drzwi-zewnetrzne",  "Drzwi zewnętrzne",   "Wikęd / Erkado / HK Doors", "wiked30"),
+    ("drzwi-wewnetrzne",  "Drzwi wewnętrzne",   "DRE / Porta / Erkado", "dre_binito50"),
     ("rolety-zewnetrzne", "Rolety zewnętrzne",  "Aluprof",            "al30_rol"),
     ("pergole",           "Pergole",            "Selt",               "pergola1"),
-    ("bramy-garazowe",    "Bramy garażowe",     "Nice / Somfy",       "brama_antracyt"),
-    ("markizy",           "Markizy",            "Selt",               "al25"),
-    ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Setto",              "plisy"),
-    ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Selt / Aluprof",     "al27"),
-    ("moskitiery",        "Moskitiery",         "Aluprof / Setto",    "moskitiera_mrs"),
+    ("bramy-garazowe",    "Bramy garażowe",     "Nice / AVO / Aluprof", "brama_antracyt"),
+    ("markizy",           "Markizy",            "Selt",               "real/markiza-kasetowa"),
+    ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Produkcja własna",   "plisy"),
+    ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Selt / Aluprof",     "real/refleksole"),
+    ("moskitiery",        "Moskitiery",         "Produkcja własna",   "real/moskitiera-plisowana"),
 ]
 PROD_LABEL = {s: t for s, t, _b, _i in PRODUCTS}
 PROD_IMG = {s: i for s, _t, _b, i in PRODUCTS}
@@ -74,7 +77,7 @@ PARTNERS = [
     ("somfy", "Somfy", "https://www.somfy.pl"),
     ("nice", "Nice", "https://www.niceforyou.com/pl"),
     ("selt", "Selt", "https://selt.com"),
-    ("setto", "Setto", "https://setto.pl"),
+    ("hk-doors", "HK Doors", "https://hkdoors.pl"),
     ("wiked", "Wikęd", "https://wiked.pl"),
     ("dre", "DRE", "https://dre.pl"),
     ("porta", "Porta", "https://www.porta.com.pl"),
@@ -82,27 +85,27 @@ PARTNERS = [
     ("avo", "AVO", "https://avogroup.eu"),
 ]
 
-GALLERY = [
-    ("wiked62", "Drzwi zewnętrzne Wikęd — dąb naturalny", "drzwi"),
-    ("al31_rol", "Przeszklenia HST z roletami podtynkowymi", "okna"),
-    ("brama_antracyt", "Brama segmentowa antracyt + oświetlenie", "bramy"),
-    ("pergola1", "Pergola bioklimatyczna z oświetleniem LED", "pergole"),
-    ("wiked51", "Drzwi wejściowe w okleinie drewnopodobnej", "drzwi"),
-    ("al39", "Narożne przeszklenie aluminiowe", "okna"),
-    ("al30_rol", "Rolety nadstawne w elewacji drewnianej", "rolety"),
-    ("plisy", "Plisy okienne — salon", "oslony"),
-    ("wiked92", "Drzwi zewnętrzne z naświetlem bocznym", "drzwi"),
-    ("al25", "Drzwi podnoszono-przesuwne HST na taras", "okna"),
-    ("brama_avo_dom", "Brama garażowa w okleinie drewnopodobnej", "bramy"),
-    ("al27", "Refleksol zewnętrzny — ochrona przed słońcem", "oslony"),
-    ("wiked22", "Realizacja: dom jednorodzinny pod Wieluniem", "drzwi"),
-    ("al38", "Okno kuchenne PVC z ciepłym montażem", "okna"),
-    ("brama_4", "Brama roletowa — garaż o niskim nadprożu", "bramy"),
-    ("al35_rol", "Sterowanie osłonami — system Somfy", "rolety"),
-    ("wiked46", "Drzwi w kolorze szałwiowym", "drzwi"),
-    ("moskitiera_mrs", "Moskitiery ramkowe na wymiar", "oslony"),
-    ("wiked67", "Spójna kolorystyka bramy i drzwi", "bramy"),
-    ("dre_binito50", "Drzwi wewnętrzne DRE — Binito 50", "drzwi"),
+GALLERY = [  # wyłącznie realizacje PROMYK (zdjęcia ze zgodą klientów)
+    ("real/pergola", "Pergola z lamelami — strefa wypoczynku", "pergole"),
+    ("real/markiza-tarasowa", "Markiza tarasowa nad strefą wypoczynku", "oslony"),
+    ("real/drzwi-zew-drewno", "Drzwi zewnętrzne w okleinie drewnopodobnej", "drzwi"),
+    ("real/refleksole", "Refleksole ZIP na elewacji", "oslony"),
+    ("real/markiza-kasetowa", "Markiza kasetowa nad tarasem", "oslony"),
+    ("real/drzwi-zew-naswietle", "Drzwi wejściowe z naświetlem bocznym", "drzwi"),
+    ("real/brama-drzwi", "Brama segmentowa i drzwi — nowy dom", "bramy"),
+    ("real/rolety-zew", "Rolety zewnętrzne nadstawne", "rolety"),
+    ("real/zaluzje-kuchnia", "Żaluzje w kuchni", "oslony"),
+    ("real/okna-szczyt", "Przeszklenie szczytowe", "okna"),
+    ("real/zaluzje-fasadowe", "Żaluzje fasadowe", "oslony"),
+    ("real/drzwi-wew-czarne", "Drzwi wewnętrzne w czerni", "drzwi"),
+    ("real/brama-antracyt", "Brama garażowa antracyt", "bramy"),
+    ("real/okna-lukowe", "Okna łukowe ze szprosami", "okna"),
+    ("real/rolety-dzien-noc", "Rolety dzień-noc", "oslony"),
+    ("real/rolety-rzymskie", "Rolety rzymskie w kuchni", "oslony"),
+    ("real/moskitiera-plisowana", "Moskitiera plisowana do drzwi tarasowych", "oslony"),
+    ("real/rolety-budowa", "Rolety zewnętrzne — dom w budowie", "rolety"),
+    ("real/drzwi-wew-biale", "Drzwi wewnętrzne białe", "drzwi"),
+    ("real/rolety-taras", "Rolety zewnętrzne przy tarasie", "rolety"),
 ]
 
 # ---------------------------------------------------------------- szkielet ----
@@ -117,7 +120,7 @@ def head(title, desc, extra=""):
 <link rel="icon" href="assets/img/logo-promyk.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap&subset=latin-ext" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css?v={ASSET_VER}">
 {extra}</head>
 <body>
@@ -138,6 +141,7 @@ def nav(active=""):
     <div class="topbar__right">
       <span class="tb-hours">{I['clock']} Pn–Pt 8:00–17:00 &nbsp;•&nbsp; Sob 9:00–13:00</span>
       <span class="tb-addr">{I['pin']} {ADDR1}, {ADDR2}</span>
+      <span class="tb-social"><a href="{FB_URL}" target="_blank" rel="noopener" aria-label="Facebook">{I['fb']}</a><a href="{IG_URL}" target="_blank" rel="noopener" aria-label="Instagram">{I['ig']}</a></span>
     </div>
   </div>
 </div>
@@ -160,7 +164,7 @@ def nav(active=""):
     </nav>
     <div class="nav__right">
       <a class="nav__phone" href="tel:{PHONE_TEL}">{I['phone']}{PHONE}</a>
-      <a class="btn btn--primary btn--sm" href="kontakt.html">Umów pomiar {I['arrow']}</a>
+      <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
       <button class="nav__burger" aria-label="Menu">{I['menu']}</button>
     </div>
   </div>
@@ -174,7 +178,7 @@ def cta(tag, h2, p):
     <h2>{h2}</h2>
     <p>{p}</p>
     <div class="cta__btns">
-      <a class="btn btn--primary" href="kontakt.html">Umów bezpłatny pomiar {I['cal']}</a>
+      <a class="btn btn--primary" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
       <a class="btn btn--ghost" href="tel:{PHONE_TEL}">{I['phone']} Zadzwoń: {PHONE}</a>
     </div>
   </div>
@@ -192,7 +196,7 @@ def footer():
       <div class="footer__brand">
         <img src="assets/img/logo-promyk-white.png" alt="PROMYK">
         <p>Najwyższa jakość montażu okien, drzwi zewnętrznych i wewnętrznych, bram garażowych oraz systemów zaciemnienia. Rodzinne tradycje od 1997 roku w Wieluniu.</p>
-        <a class="fb" href="https://www.facebook.com/" target="_blank" rel="noopener">{I['fb']} Obserwuj nas na Facebooku</a>
+        <div class="footer__social"><a class="fb" href="{FB_URL}" target="_blank" rel="noopener">{I['fb']} Facebook</a><a class="fb" href="{IG_URL}" target="_blank" rel="noopener">{I['ig']} Instagram</a></div>
       </div>
       <div>
         <h4>Dane kontaktowe</h4>
@@ -229,34 +233,29 @@ def footer():
 """
 
 def pagehero(img, h1, p, crumb):
+    crumbs = f'<div class="crumbs"><a href="index.html">Strona główna</a> &nbsp;/&nbsp; {crumb}</div>' if crumb else ""
     return f"""<section class="pagehero">
   <img src="assets/img/{img}.jpg" alt="">
   <div class="container pagehero__body">
-    <div class="crumbs"><a href="index.html">Strona główna</a> &nbsp;/&nbsp; {crumb}</div>
+    {crumbs}
     <h1>{h1}</h1>
     <p>{p}</p>
   </div>
 </section>
 """
 
-def stats(three=False):
-    s3 = """
-      <div class="stats__div"></div>
-      <div class="stat">
-        <div class="stat__num">200 km</div>
-        <div><div class="stat__label">Zasięg działania</div><div class="stat__desc">Montujemy systemy w całym regionie łódzkim i sąsiednich</div></div>
-      </div>""" if three else ""
-    return f"""<section class="stats">
+def stats():
+    return """<section class="stats">
   <div class="container stats__inner">
     <div class="stat">
       <div class="stat__num">150 000+</div>
-      <div><div class="stat__label">zrealizowanych montaży</div><div class="stat__desc">Okna, rolety i bramy w domach naszych klientów</div></div>
+      <div class="stat__label">zrealizowanych montaży</div>
     </div>
     <div class="stats__div"></div>
     <div class="stat">
       <div class="stat__num">30 lat</div>
-      <div><div class="stat__label">doświadczenia na rynku</div><div class="stat__desc">Nieprzerwanie dbamy o komfort termiczny od 1997 roku</div></div>
-    </div>{s3}
+      <div class="stat__label">doświadczenia na rynku</div>
+    </div>
   </div>
 </section>
 """
@@ -277,7 +276,6 @@ def partners():
         for slug, name, url in PARTNERS)
     return f"""<section class="partners">
   <div class="container">
-    <span class="tag">Zaufani producenci</span>
     <h2>Pracujemy na produktach zaufanych producentów</h2>
     <p>Jesteśmy oficjalnym partnerem i autoryzowanym dystrybutorem marek premium — montujemy wyłącznie systemy, za które możemy ręczyć własną gwarancją.</p>
     <div class="partners__row">{row}</div>
@@ -297,7 +295,6 @@ def reviews():
   <div class="container">
     <div class="section-header">
       <div class="section-header__left">
-        <span class="tag">Opinie naszych klientów</span>
         <h2 class="h-sec">Zaufanie budowane przez dekady</h2>
       </div>
       <a class="rating" href="{GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener">
@@ -318,7 +315,7 @@ def write(name, content):
 # ================================================================ STRONA GŁÓWNA ----
 def build_index():
     slides = [
-        ("wiked07", ), ("al31_rol", ), ("pergola1", ),
+        ("real/taras-markiza", ), ("real/pergola", ), ("real/rolety-zew", ),
     ]
     sl = "".join(
         f'<div class="hero__slide{" is-active" if k == 0 else ""}"><img src="assets/img/{s[0]}.jpg" alt=""></div>'
@@ -333,29 +330,6 @@ def build_index():
         <div class="tile__bottom"><h3>{title}</h3><span class="tile__arrow">{I['arrowUR']}</span></div>
       </a>"""
 
-    systems = [
-        ("VEKA SOFTLINE 82 MD", "Niezawodne PVC klasy A",
-         [("Współczynnik Uw", "od 0,67 W/m²K"), ("Liczba komór", "7 komór profilu"),
-          ("System uszczelek", "3 (MD – środkowa)"), ("Klasa profilu", "Klasa A (najwyższa)")]),
-        ("VEKA SOFTLINE 70 AD", "Klasyczny design &amp; trwałość",
-         [("Współczynnik Uw", "od 0,88 W/m²K"), ("Liczba komór", "5 komór profilu"),
-          ("System uszczelek", "2 (AD – odbojowe)"), ("Klasa profilu", "Klasa A")]),
-        ("VEKAMOTION 82", "Drzwi przesuwne HST",
-         [("Współczynnik Uw", "od 0,83 W/m²K"), ("Próg bezbarierowy", "Tak (0 mm)"),
-          ("Głębokość zabudowy", "194 mm skrzydło"), ("Maks. gabaryty", "do 6,5 m szerokości")]),
-        ("Aluprof MB-86N", "Zaawansowane aluminium",
-         [("Współczynnik Uw", "od 0,72 W/m²K"), ("Izolacja termiczna", "Przekładki Aero"),
-          ("Konstrukcja", "Aluminiowa ciepła"), ("Estetyka", "Ukryte skrzydło (opcja)")]),
-    ]
-    syscards = ""
-    for name, sub, params in systems:
-        rows = "".join(f'<div class="param"><span>{a}</span><span>{b}</span></div>' for a, b in params)
-        syscards += f"""<article class="card">
-        <div><h3>{name}</h3><div class="card__sub">{sub}</div></div>
-        <div class="params">{rows}</div>
-        <a class="card__more" href="okna.html">Więcej szczegółów {I['arrow']}</a>
-      </article>"""
-
     gal = "".join(
         f'<a href="galeria.html"><img src="assets/img/{g[0]}.jpg" alt="{g[1]}"><figcaption>{g[1]}</figcaption></a>'
         for g in GALLERY[:4])
@@ -369,10 +343,9 @@ def build_index():
       <div class="hero__text">
         <span class="tag tag--solid">Rodzinna firma od 1997 roku</span>
         <h1>Okna, drzwi i osłony na całe lata</h1>
-        <p>Premium standard montażu w Wieluniu i okolicach. Wybierz jakość popartą 30-letnim doświadczeniem w branży stolarki otworowej.</p>
+        <p>Wybierz jakość popartą 30-letnim doświadczeniem w branży stolarki otworowej.</p>
         <div class="hero__ctas">
-          <a class="btn btn--primary" href="kontakt.html">Umów bezpłatny pomiar {I['arrow']}</a>
-          <a class="btn btn--ghost" href="galeria.html">Zobacz realizacje</a>
+          <a class="btn btn--primary" href="galeria.html">Zobacz realizacje {I['arrow']}</a>
         </div>
         {gbadge()}
       </div>
@@ -384,88 +357,48 @@ def build_index():
 
 {stats()}
 
+<section class="section">
+  <div class="container split">
+    <div class="split__text">
+      <h2 class="h-sec">Od montażu rolet do lidera stolarki premium w Wieluniu</h2>
+      <p class="lead">Jesteśmy rodzinnym przedsiębiorstwem działającym od 1997 roku. Nasze korzenie to montaż prostych osłon okiennych – dziś dostarczamy i instalujemy kompleksowe systemy okienne, drzwiowe oraz zaawansowane pergole bioklimatyczne. Działamy w promieniu 200 km od Wielunia. Gwarantujemy fachowe doradztwo techniczne i precyzyjny montaż z użyciem profesjonalnego sprzętu.</p>
+      <a class="btn btn--primary" href="o-nas.html">Poznaj nas bliżej {I['arrow']}</a>
+    </div>
+    <div class="split__media"><img class="about__img" src="assets/img/real/dom-markiza.jpg" alt="Realizacja PROMYK"></div>
+  </div>
+</section>
+
 <section class="section section--soft">
   <div class="container">
     <div class="section-header">
       <div class="section-header__left">
-        <span class="tag">Kompleksowa oferta</span>
-        <h2 class="h-sec">Wybierz systemy dopasowane do Twojego projektu</h2>
+        <h2 class="h-sec">Wybierz systemy dopasowane do Twojego domu</h2>
       </div>
-      <p class="section-header__right lead">Oferujemy najwyższej klasy okna, bezpieczne drzwi wejściowe, bramy garażowe oraz innowacyjne systemy zaciemnienia wnętrz.</p>
     </div>
     <div class="tiles">{tiles}</div>
   </div>
 </section>
 
-<section class="section">
-  <div class="container split">
-    <div class="split__media"><img src="assets/img/al38.jpg" alt="Konfigurator kolorów okien"></div>
-    <div class="split__text">
-      <span class="tag">Narzędzie online</span>
-      <h2 class="h-sec">Konfigurator kolorów okien</h2>
-      <p class="lead">Dobierz idealny kolor profili okiennych, dopasuj estetyczne klamki i klasyczne lub nowoczesne szprosy. Zobacz realistyczny efekt na żywo przed podjęciem ostatecznej decyzji.</p>
-      <ul class="bullets">
-        <li><span class="check">{I['check']}</span> Paleta ponad 50 kolorów drewnopodobnych i RAL</li>
-        <li><span class="check">{I['check']}</span> Szybki podgląd na różnych typach elewacji</li>
-        <li><span class="check">{I['check']}</span> Opcja bezpośredniego przesłania konfiguracji do wyceny</li>
-      </ul>
-      <a class="btn btn--primary" href="konfigurator.html">Otwórz konfigurator {I['win']}</a>
-    </div>
-  </div>
-</section>
-
-<section class="section section--soft">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-header__left">
-        <span class="tag">Rekomendowane profile</span>
-        <h2 class="h-sec">Systemy okienne o najwyższych parametrach</h2>
-      </div>
-      <p class="section-header__right lead">Wyselekcjonowane, certyfikowane profile VEKA oraz Aluprof gwarantujące doskonałą izolację termiczną, akustyczną oraz odporność na włamania.</p>
-    </div>
-    <div class="grid-4">{syscards}</div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container split">
-    <div class="split__text">
-      <span class="tag">O firmie Promyk</span>
-      <h2 class="h-sec">Od montażu rolet do lidera stolarki premium w Wieluniu</h2>
-      <p class="lead">Jesteśmy rodzinnym przedsiębiorstwem działającym od 1997 roku. Nasze korzenie to montaż prostych osłon okiennych – dziś dostarczamy i instalujemy kompleksowe systemy okienne, drzwiowe oraz zaawansowane pergole bioklimatyczne.</p>
-      <p class="lead">Działamy w promieniu 200 km od Wielunia. Gwarantujemy fachowe doradztwo techniczne i precyzyjny montaż z użyciem profesjonalnego sprzętu.</p>
-      <div class="feature-row">
-        <div class="feature"><h4>Wieluń i okolice</h4><p>Szybki dojazd, lokalny serwis gwarancyjny i pogwarancyjny.</p></div>
-        <div class="feature"><h4>Ciepły montaż</h4><p>Instalacja zgodnie z rygorystycznymi wytycznymi producentów.</p></div>
-      </div>
-      <a class="btn btn--primary" href="o-nas.html">Poznaj nas bliżej {I['arrow']}</a>
-    </div>
-    <div class="split__media"><img class="about__img" src="assets/img/wiked22.jpg" alt="Realizacja Promyk"></div>
-  </div>
-</section>
-
-{partners()}
 {reviews()}
+{partners()}
 
 <section class="section section--soft">
   <div class="container">
     <div class="section-header">
       <div class="section-header__left">
-        <span class="tag">Ostatnie realizacje</span>
         <h2 class="h-sec">Nasze realizacje mówią same za siebie</h2>
       </div>
-      <a class="btn btn--primary" href="galeria.html">Zobacz więcej realizacji {I['arrow']}</a>
     </div>
     <div class="gallery gallery--home">{gal}</div>
+    <div style="text-align:center;margin-top:40px">
+      <a class="btn btn--primary" href="galeria.html">Zobacz więcej realizacji {I['arrow']}</a>
+    </div>
   </div>
 </section>
-
-{cta("Darmowy pomiar i doradztwo", "Planujesz budowę lub wymianę okien?",
-     "Umów bezpłatny pomiar na Twojej budowie. Przyjedziemy, doradzimy, dobierzemy odpowiednie rozwiązania i przygotujemy niezobowiązującą wycenę.")}
 """
     write("index.html",
           head("PROMYK Wieluń — okna, drzwi, bramy garażowe i osłony | Montaż od 1997 r.",
-               "Rodzinna firma z Wielunia od 1997 r. Okna VEKA i Aluprof, drzwi Wikęd i DRE, bramy garażowe, rolety, pergole i moskitiery. Bezpłatny pomiar i ciepły montaż.")
+               "Rodzinna firma z Wielunia od 1997 r. Okna VEKA i Aluprof, drzwi Wikęd i DRE, bramy garażowe, rolety, pergole i moskitiery. Doradztwo i ciepły montaż.")
           + nav("index") + body + footer())
 
 # ================================================================ O NAS ----
@@ -473,22 +406,21 @@ def build_onas():
     why = [
         ("30 lat doświadczenia", "Znamy branżę od podszewki i montujemy wyłącznie sprawdzone systemy klas premium.", "shield"),
         ("Kompleksowość", "Przeprowadzimy Cię przez cały proces: od profesjonalnego pomiaru aż po precyzyjny montaż.", "cog"),
-        ("Gwarancja", "Udzielamy pełnego bezpieczeństwa na zakupione u nas produkty oraz nasze usługi instalacyjne.", "lock"),
-        ("Lokalność", "Jesteśmy rodzinną firmą z Wielunia. Znamy potrzeby i budownictwo naszych sąsiadów.", "leaf"),
+        ("Gwarancja", "Dbamy o naszych klientów również po montażu.", "lock"),
+        ("Lokalność", "Działamy lokalnie, stawiając na bezpośredni kontakt, zaufanie i relacje z klientami.", "leaf"),
     ]
     cards = "".join(f"""<article class="card">
       <span class="adv__icon">{I[ic]}</span>
       <div><h3>{t}</h3><p class="lead" style="margin:8px 0 0">{d}</p></div>
     </article>""" for t, d, ic in why)
 
-    body = pagehero("wiked22", "Rodzinna firma, która buduje komfort od 1997 roku",
-                    "Poznaj historię PROMYK — od pierwszego montażu żaluzji po nowoczesny showroom w Wieluniu.", "O nas")
-    body += stats(three=True)
+    body = pagehero("real/taras-markiza", "Rodzinna firma od 1997 roku. Zaufanie budujemy od pokoleń.",
+                    "Poznaj historię naszej firmy – od pierwszych montaży żaluzji do pozycji lidera w branży stolarki okiennej.", None)
+    body += stats()
 
     body += f"""<section class="section">
   <div class="container split">
     <div class="split__text">
-      <span class="tag">Nasza Historia</span>
       <h2 class="h-sec">Od rodzinnego rzemiosła do pozycji eksperta</h2>
       <div class="prose">
         <p><strong>PROMYK to rodzinna firma, która powstała w 1997 roku.</strong> Od ponad dwóch dekad rozwijamy się dzięki pasji, zaangażowaniu i ciężkiej pracy, dostarczając naszym klientom rozwiązania, które łączą funkcjonalność, estetykę i najwyższą jakość.</p>
@@ -504,7 +436,6 @@ def build_onas():
   <div class="container split">
     <div class="split__media"><img class="about__img" src="assets/img/wiked57.jpg" alt="Showroom PROMYK"></div>
     <div class="split__text">
-      <span class="tag">Pokolenia i showroom</span>
       <h2 class="h-sec">Rodzinny charakter to nasza największa siła</h2>
       <div class="prose">
         <p>Rodzinny charakter naszej firmy pozostaje jej największą siłą. Do zespołu dołączył najpierw syn, a następnie córka, dzięki czemu kolejne pokolenie aktywnie uczestniczy w dalszym rozwoju przedsiębiorstwa. Łączymy wieloletnie doświadczenie z nowoczesnym podejściem, stale poszerzając ofertę i podnosząc jakość naszych usług.</p>
@@ -520,7 +451,6 @@ def build_onas():
   <div class="container">
     <div class="section-header">
       <div class="section-header__left">
-        <span class="tag">Zalety współpracy</span>
         <h2 class="h-sec">Dlaczego klienci wybierają Promyk?</h2>
       </div>
     </div>
@@ -531,7 +461,7 @@ def build_onas():
 {partners()}
 {reviews()}
 {cta("Dołącz do grona zadowolonych klientów", "Chcesz dołączyć do grona zadowolonych klientów?",
-     "Umów bezpłatny pomiar i przekonaj się, jak wygląda współpraca z rodzinną firmą z niemal 30-letnim doświadczeniem.")}
+     "Zapytaj o wycenę i przekonaj się, jak wygląda współpraca z rodzinną firmą z niemal 30-letnim doświadczeniem.")}
 """
     write("o-nas.html",
           head("O nas — rodzinna firma PROMYK od 1997 roku | Wieluń",
@@ -696,7 +626,7 @@ def build_inwestor():
 
     groups = [
         ("Inwestorzy indywidualni", "Prowadzimy Cię za rękę przez cały proces. Pomagamy wybrać optymalne technologie, łącząc doskonały design z energooszczędnością.",
-         ["Kompleksowa opieka i doradztwo", "Darmowy pomiar i precyzyjne dopasowanie", "Lokalny serwis pogwarancyjny w Wieluniu"]),
+         ["Kompleksowa opieka i doradztwo", "Precyzyjny pomiar i dopasowanie", "Lokalny serwis pogwarancyjny w Wieluniu"]),
         ("Architekci i projektanci", "Dostarczamy pełną dokumentację techniczną, modele CAD/BIM oraz wsparcie inżynieryjne przy niestandardowych, dużych przeszkleniach.",
          ["Pliki CAD i parametry techniczne", "Konsultacje projektów konstrukcyjnych", "Rozwiązania do domów pasywnych i energooszczędnych"]),
         ("Wykonawcy i deweloperzy", "Oferujemy elastyczne warunki współpracy, pewne terminy realizacji oraz montaż realizowany przez doświadczone i certyfikowane ekipy.",
@@ -714,12 +644,12 @@ def build_inwestor():
     faq = [
         ("Kiedy najlepiej zamówić okna i drzwi do nowego domu?",
          "Najlepszym momentem jest etap stanu surowego otwartego, tuż po ukończeniu ścian i dachu. Pozwala to na precyzyjny pomiar przed tynkami oraz odpowiednie zaplanowanie montażu ciepłego oraz osłon zewnętrznych (żaluzji, rolet). Jeszcze lepiej zgłosić się do nas już na etapie projektu domu — im wcześniej rozpoczniemy współpracę, tym większe możliwości doboru optymalnych rozwiązań."),
-        ("Czy pomiar i doradztwo techniczne na budowie są bezpłatne?",
-         "Tak. Podczas bezpłatnego spotkania w naszej siedzibie wspólnie przeanalizujemy projekt domu, doradzimy najlepsze rozwiązania techniczne i estetyczne oraz przygotujemy wstępną, niezobowiązującą wycenę. Po podjęciu decyzji wykonujemy dokładny pomiar na budowie — również bez dodatkowych opłat."),
+        ("Czy doradztwo techniczne jest bezpłatne?",
+         "Tak. Podczas bezpłatnego spotkania w naszej siedzibie wspólnie przeanalizujemy projekt domu, doradzimy najlepsze rozwiązania techniczne i estetyczne oraz przygotujemy wstępną, niezobowiązującą wycenę. Po podjęciu decyzji wykonujemy dokładny pomiar na budowie."),
         ("Jak długo trwa realizacja zamówienia od pomiaru?",
          "Standardowy termin realizacji to zwykle 4–8 tygodni od zatwierdzenia zamówienia i wykonania pomiaru. Termin zależy od producenta i stopnia personalizacji stolarki — dokładną datę potwierdzamy w umowie i dopasowujemy do harmonogramu budowy."),
         ("Czy wykonujecie montaż w innych miastach niż Wieluń?",
-         "Tak. Działamy w promieniu ok. 200 km od Wielunia — obsługujemy cały region łódzki oraz województwa sąsiednie. Dojazd na pomiar w tym obszarze jest bezpłatny."),
+         "Tak. Działamy w promieniu ok. 200 km od Wielunia — obsługujemy cały region łódzki oraz województwa sąsiednie."),
         ("Jakiej gwarancji udzielacie na produkty i montaż?",
          "Na produkty obowiązuje gwarancja producenta (najczęściej 5–10 lat w zależności od systemu), a na wykonany przez nas montaż udzielamy własnej gwarancji. Zapewniamy też lokalny serwis gwarancyjny i pogwarancyjny."),
     ]
@@ -817,7 +747,7 @@ def build_inwestor():
 """
     write("dla-inwestora.html",
           head("Dla Inwestora — kompleksowa obsługa budowy | PROMYK Wieluń",
-               "Planujesz budowę domu? Okna, drzwi, bramy garażowe, rolety i parapety zamówisz w jednym miejscu. Bezpłatna konsultacja, pomiar i profesjonalny montaż.")
+               "Planujesz budowę domu? Okna, drzwi, bramy garażowe, rolety i parapety zamówisz w jednym miejscu. Bezpłatna konsultacja i profesjonalny montaż.")
           + nav("dla-inwestora") + body + footer())
 
 # ================================================================ GALERIA ----
@@ -882,7 +812,7 @@ def build_kontakt():
             <label class="consent"><input type="checkbox" required> Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z polityką prywatności w celu obsługi zapytania. *</label>
           </div>
         </div>
-        <button class="btn btn--primary" style="width:100%;justify-content:center;margin-top:24px" type="submit">Wyślij bezpłatne zapytanie {I['arrow']}</button>
+        <button class="btn btn--primary" style="width:100%;justify-content:center;margin-top:24px" type="submit">Wyślij zapytanie {I['arrow']}</button>
         <p data-formmsg style="display:none;margin-top:16px;font-size:14px;color:var(--accent)"></p>
       </form>
     </div>
@@ -919,7 +849,7 @@ def build_kontakt():
 """
     write("kontakt.html",
           head("Kontakt — PROMYK Wieluń | okna, drzwi, bramy, osłony",
-               f"Skontaktuj się z PROMYK: {ADDR1}, {ADDR2}, tel. {PHONE}. Bezpłatna wycena i pomiar stolarki otworowej.")
+               f"Skontaktuj się z PROMYK: {ADDR1}, {ADDR2}, tel. {PHONE}. Wycena i doradztwo w zakresie stolarki otworowej.")
           + nav("kontakt") + body + footer())
 
 # ================================================================ KONFIGURATOR ----
@@ -1062,6 +992,10 @@ def build_konfigurator():
           + nav("konfigurator") + body + footer())
 
 # ================================================================ PRODUKTY ----
+def logo_src(logo):
+    """'@plik.png' = grafika z assets/img, w innym wypadku logo partnera (SVG)."""
+    return f"assets/img/{logo[1:]}" if logo.startswith("@") else f"assets/img/partners/{logo}.svg"
+
 def product_extras_html(slug):
     """Sekcje pogłębiające podstronę: specyfikacja, producenci, Warto wiedzieć, katalogi."""
     ex = PRODUCT_EXTRAS.get(slug)
@@ -1089,7 +1023,7 @@ def product_extras_html(slug):
         for logo, name, bullets in brands:
             li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
             cards += f"""<article class="card model-card">
-        <div class="model-card__head"><img src="assets/img/partners/{logo}.svg" alt="{name}"><h3>{name}</h3></div>
+        <div class="model-card__head"><img src="{logo_src(logo)}" alt="{name}"><h3>{name}</h3></div>
         <ul class="bullets">{li}</ul>
       </article>"""
         out += f"""<section class="section">
@@ -1172,7 +1106,7 @@ def product_page(slug, meta):
         <h2><a href="{sub}.html">{title}</a></h2>
         {intro_html}
         <ul class="bullets">{li}</ul>
-        <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o darmową wycenę {I['arrow']}</a>{sub_link}</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>{sub_link}</div>
       </div>"""
         rows += f'<div class="subrow{" subrow--flip" if k % 2 else ""}">{media if k % 2 == 0 else text}{text if k % 2 == 0 else media}</div>'
 
@@ -1199,8 +1133,8 @@ def product_page(slug, meta):
 <section class="section"><div class="container">{rows}</div></section>
 
 {extras_html}
-{cta("Darmowy pomiar i doradztwo", "Planujesz inwestycję budowlaną?",
-     "Umów bezpłatną wizytę naszego eksperta na Twojej budowie. Precyzyjnie zmierzymy otwory, doradzimy technicznie i przygotujemy kalkulację cenową.")}
+{cta("Doradztwo i wycena", "Planujesz inwestycję budowlaną?",
+     "Skontaktuj się z nami — doradzimy technicznie, precyzyjnie zmierzymy otwory i przygotujemy kalkulację cenową.")}
 
 <section class="section related">
   <div class="container">
@@ -1247,7 +1181,7 @@ PRODUCT_DATA = {
   hero="wiked22", h1="Drzwi zewnętrzne — Wikęd i Aluprof", title="Drzwi zewnętrzne Wikęd (Termo Prestige, Premium) i Aluprof | PROMYK",
   desc="Drzwi stalowe Wikęd Premium 54 i Termo Prestige 72, aluminiowe Aluprof MB-86 i panele HPL. Klasa RC2/RC3, Ud od 0,71 W/m²K. Wieluń.",
   intro="Linie Wikęd Premium i Termo Prestige oraz aluminiowe Aluprof — parametry potwierdzone badaniami, klasy RC2/RC3.",
-  producers=["wiked", "erkado", "aluprof"],
+  producers=["wiked", "erkado", "hk-doors", "aluprof"],
   adv=[("Bezpieczeństwo", "Klasa antywłamaniowa RC2 / RC3, zamki listwowe 3-punktowe", "lock"),
        ("Termoizolacja", "Ud od 0,71 W/m²K — spełnia wymogi programu Czyste Powietrze", "thermo"),
        ("Wzornictwo", "Ponad 100 wzorów przetłoczeń, przeszkleń i naświetli", "sparkle")],
@@ -1363,7 +1297,7 @@ PRODUCT_DATA = {
   hero="brama_antracyt_lampy", h1="Bramy garażowe segmentowe i roletowe", title="Bramy garażowe segmentowe (panel 40–60 mm) i roletowe, napędy Nice i Somfy | PROMYK",
   desc="Bramy segmentowe z panelem 40–60 mm z pianką PU, bramy roletowe aluminiowe, napędy Nice/Somfy, drzwi boczne w kolorze bramy.",
   intro="Bramy segmentowe (panel 40–60 mm z pianką PU) i roletowe, z napędami Nice / Somfy.",
-  producers=["avo", "nice", "somfy"],
+  producers=["avo", "nice", "aluprof", "somfy"],
   adv=[("Bezpieczeństwo", "Zabezpieczenie przed pęknięciem sprężyn i opadnięciem bramy", "lock"),
        ("Izolacja", "Panel 40–60 mm z pianką poliuretanową", "thermo"),
        ("Napędy", "Nice / Somfy: pasek kevlarowy, amperometryka, aplikacja", "cog")],
@@ -1390,7 +1324,7 @@ PRODUCT_DATA = {
   related=["okna", "drzwi-zewnetrzne", "rolety-zewnetrzne"]),
 
 "markizy": dict(
-  hero="al25", h1="Markizy tarasowe i balkonowe Selt", title="Markizy tarasowe Selt — kaseta pełna, wysięg do 4 m, Somfy | PROMYK Wieluń",
+  hero="real/markiza-kasetowa", h1="Markizy tarasowe i balkonowe Selt", title="Markizy tarasowe Selt — kaseta pełna, wysięg do 4 m, Somfy | PROMYK Wieluń",
   desc="Markizy tarasowe Selt w pełnej kasecie (wysięg do 4 m), balkonowe i pionowe. Tkanina akrylowa 300 g/m², automatyka Somfy.",
   intro="Markizy Selt z tkaniną akrylową 300 g/m² i napędami Somfy z czujnikami pogodowymi.",
   producers=["selt", "somfy"],
@@ -1400,7 +1334,7 @@ PRODUCT_DATA = {
   rows=[("Markizy tarasowe (kaseta pełna)", "Poszycie i ramiona chowane w zamkniętej kasecie aluminiowej.",
          ["Wysięg ramion do 4 m, szerokości do 7 m (łączone do 12 m)",
           "Regulacja kąta nachylenia 5–40°",
-          "Napęd Somfy w standardzie, opcja listwy LED w kasecie"], "al25"),
+          "Napęd Somfy w standardzie, opcja listwy LED w kasecie"], "real/markiza-tarasowa"),
         ("Markizy balkonowe i półkasety", "Lżejsze systemy do balkonów i mniejszych tarasów.",
          ["Konstrukcja aluminiowa, montaż ścienny lub sufitowy",
           "Wysięg do 2,5 m, obsługa korbą lub napędem",
@@ -1419,7 +1353,7 @@ PRODUCT_DATA = {
   hero="plisy", h1="Osłony wewnętrzne — żaluzje, plisy, rolety", title="Żaluzje aluminiowe, plisy i rolety wewnętrzne | PROMYK Wieluń",
   desc="Żaluzje aluminiowe 25/50 mm, plisy dwukierunkowe, rolety w kasecie, dzień-noc, rzymskie, verticale i żaluzje bambusowe. Pomiar i montaż.",
   intro="Osłony szyte na wymiar — od żaluzji 25/50 mm i plis po rolety dzień-noc i verticale.",
-  producers=["setto"],
+  producers=[],
   adv=[("Na wymiar", "Produkcja pod wymiar każdej wnęki i skrzydła", "ruler"),
        ("Regulacja światła", "Od pełnego zaciemnienia (blackout) po delikatne rozproszenie", "sun"),
        ("Montaż", "Bezinwazyjny na skrzydle, we wnęce lub na ścianie", "cog")],
@@ -1456,7 +1390,7 @@ PRODUCT_DATA = {
   related=["okna", "moskitiery", "oslony-zewnetrzne"]),
 
 "oslony-zewnetrzne": dict(
-  hero="al27", h1="Osłony zewnętrzne — refleksole, żaluzje fasadowe, sunbreaker",
+  hero="real/refleksole", h1="Osłony zewnętrzne — refleksole, żaluzje fasadowe, sunbreaker",
   title="Refleksole ZIP, żaluzje fasadowe C-80/Z-90 i sunbreaker | PROMYK Wieluń",
   desc="Refleksole screen ZIP, żaluzje fasadowe C-80/Z-90, sunbreakery i moskitiery plisowane. Automatyka Somfy. Wieluń i okolice.",
   intro="Osłony zatrzymujące ciepło przed szybą (Selt / Aluprof) — najskuteczniejsza ochrona przed przegrzewaniem.",
@@ -1468,12 +1402,12 @@ PRODUCT_DATA = {
          ["Tkanina screen (serge) — widok na zewnątrz zachowany, redukcja olśnienia",
           "Prowadnice ZIP: tkanina naprężona, wysoka odporność na wiatr",
           "Szczelne prowadzenie działa również jak moskitiera",
-          "Kasety 85–150 mm, szerokości do 6 m"], "al27"),
+          "Kasety 85–150 mm, szerokości do 6 m"], "real/refleksole"),
         ("Żaluzje fasadowe", "Zewnętrzne lamele aluminiowe o przekroju C lub Z.",
          ["Lamele C-80 / Z-90 lakierowane proszkowo",
           "Płynna regulacja kąta — światło bez olśnienia",
           "Prowadzenie linkowe lub szynowe, zabudowa podtynkowa",
-          "Standard w budynkach biurowych klasy A"], "al41"),
+          "Standard w budynkach biurowych klasy A"], "real/zaluzje-fasadowe"),
         ("Sunbreaker (łamacze światła)", "Stałe lub ruchome lamele wielkogabarytowe.",
          ["Lamele eliptyczne, duże rozpiętości",
           "Wersje stałe i obrotowe (do 90°)",
@@ -1481,14 +1415,14 @@ PRODUCT_DATA = {
         ("Moskitiery plisowane (do dużych przeszkleń)", "Harmonijkowa siatka do drzwi HST i portfenetrów — pełna oferta moskitier w osobnej kategorii.",
          ["Prowadnica dolna 5 mm — przejście bez progu",
           "Zatrzymanie siatki w dowolnym punkcie (bez sprężyny)",
-          "Duże szerokości przy zabudowie dwustronnej"], "al25")],
+          "Duże szerokości przy zabudowie dwustronnej"], "real/moskitiera-plisowana")],
   related=["moskitiery", "rolety-zewnetrzne", "pergole"]),
 
 "moskitiery": dict(
-  hero="moskitiera_mrs", h1="Moskitiery na wymiar", title="Moskitiery ramkowe, drzwiowe, rolowane i plisowane | PROMYK Wieluń",
+  hero="real/moskitiera-plisowana", h1="Moskitiery na wymiar", title="Moskitiery ramkowe, drzwiowe, rolowane i plisowane | PROMYK Wieluń",
   desc="Moskitiery na wymiar: ramkowe, drzwiowe z samozamykaczem, rolowane w kasecie i plisowane do HST. Siatka fiberglass i pet screen. Wieluń.",
-  intro="Produkcja na wymiar do każdego typu okna i drzwi — siatka fiberglass, aluminiowa lub wzmocniona pet screen.",
-  producers=["aluprof", "setto"],
+  intro="Moskitiery z naszej własnej produkcji — na wymiar do każdego typu okna i drzwi — siatka fiberglass, aluminiowa lub wzmocniona pet screen.",
+  producers=[],
   adv=[("Ochrona", "Siatka o drobnym oczku — bariera także dla małych owadów", "bug"),
        ("Wentylacja", "Swobodny przepływ powietrza i światła", "wind"),
        ("Na wymiar", "Rama dopasowana do wnęki — bez szczelin montażowych", "ruler")],
@@ -1507,7 +1441,7 @@ PRODUCT_DATA = {
         ("Moskitiery plisowane", "Harmonijkowe — do drzwi HST i dużych przeszkleń.",
          ["Prowadnica dolna 5 mm — przejście bez potykania",
           "Siatka zatrzymuje się w dowolnym położeniu",
-          "Duże szerokości przy zabudowie dwustronnej"], "al25")],
+          "Duże szerokości przy zabudowie dwustronnej"], "real/moskitiera-plisowana")],
   related=["okna", "rolety-zewnetrzne", "oslony-wewnetrzne"]),
 }
 
@@ -1707,7 +1641,7 @@ PRODUCT_EXTRAS = {
     ("Co zabezpiecza bramę przed wypadkiem?",
      "Standard to zabezpieczenie przed pęknięciem sprężyny (blokada opadnięcia skrzydła), amperometryczne wykrywanie przeszkód w napędzie i opcjonalne fotokomórki. Brama zatrzyma się i cofnie po napotkaniu oporu."),
     ("Jakie wymiary podać do wyceny?",
-     "Wystarczą: szerokość i wysokość otworu w murze, wysokość nadproża, szerokości przestrzeni bocznych i głębokość garażu. Resztę doprecyzuje bezpłatny pomiar — bramy AVO produkowane są na wymiar."),
+     "Wystarczą: szerokość i wysokość otworu w murze, wysokość nadproża, szerokości przestrzeni bocznych i głębokość garażu. Resztę doprecyzuje pomiar — bramy AVO produkowane są na wymiar."),
   ],
   cats=["katalog-avo-bramy.pdf", "katalog-nice-napedy.pdf"]),
 
@@ -1741,8 +1675,8 @@ PRODUCT_EXTRAS = {
           ["Gabinet", "żaluzja drewniana / dzień-noc", "praca przy świetle bez olśnienia"],
           ["Okno dachowe", "plisa w prowadnicach", "trzyma się połaci pod kątem"]]),
   brands=[
-    ("setto", "Setto", [
-      "Produkcja krajowa na wymiar — krótkie terminy",
+    ("@logo-promyk.png", "Produkcja własna PROMYK", [
+      "Osłony szyte i składane na wymiar w naszej pracowni w Wieluniu",
       "Żaluzje 25/50 mm, plisy, rolety, verticale",
       "Tkaniny: transparentne, dzień-noc, blackout, trudnopalne"])],
   know=[
@@ -1753,7 +1687,7 @@ PRODUCT_EXTRAS = {
     ("Czy montaż niszczy okno?",
      "Nie — standardem jest montaż bezinwazyjny: uchwyty zaciskane na skrzydle lub taśma montażowa systemowa. Okno zachowuje gwarancję, a osłonę można zdemontować bez śladów."),
     ("Jak mierzyć okno pod osłony?",
-     "Przy montażu we wnęce podaje się szerokość i wysokość wnęki (my odejmujemy luzy); przy montażu na skrzydle — wymiary szyby z listwami. Najbezpieczniej zostawić pomiar nam — przy zamówieniu z montażem pomiar jest bezpłatny."),
+     "Przy montażu we wnęce podaje się szerokość i wysokość wnęki (my odejmujemy luzy); przy montażu na skrzydle — wymiary szyby z listwami. Najbezpieczniej zostawić pomiar nam."),
   ],
   cats=[]),
 
@@ -1789,11 +1723,9 @@ PRODUCT_EXTRAS = {
           ["Rolowana", "okna często otwierane, okna dachowe", "kaseta, chowana gdy niepotrzebna"],
           ["Plisowana", "HST i duże przeszklenia", "niski próg 5 mm, zatrzymuje się w dowolnym punkcie"]]),
   brands=[
-    ("aluprof", "Aluprof", [
-      "Systemy ramkowe i rolowane zintegrowane z roletami",
-      "Profile aluminiowe malowane w kolorach stolarki"]),
-    ("setto", "Setto", [
-      "Moskitiery na wymiar — także kształty nietypowe",
+    ("@logo-promyk.png", "Produkcja własna PROMYK", [
+      "Moskitiery na wymiar z naszej pracowni — także kształty nietypowe",
+      "Ramkowe, drzwiowe, rolowane i plisowane w kolorach stolarki",
       "Siatki: fiberglass, aluminiowa, pet screen"])],
   know=[
     ("Jaką siatkę wybrać?",
@@ -1956,7 +1888,7 @@ def build_subpages():
             body += f"""<section class="section">
   <div class="container split" style="align-items:start">
     <div class="prose">{ptxt}
-      <a class="btn btn--primary" href="kontakt.html">Zapytaj o darmową wycenę {I['arrow']}</a>
+      <a class="btn btn--primary" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
     </div>
     <aside class="card card--soft" style="gap:14px">
       <h3>Najważniejsze parametry</h3>
@@ -1976,8 +1908,8 @@ def build_subpages():
   </div>
 </section>
 
-{cta("Darmowy pomiar i doradztwo", "Chcesz zobaczyć to rozwiązanie na żywo?",
-     "Umów bezpłatny pomiar lub odwiedź nasz showroom w Wieluniu — pokażemy przekroje, próbniki kolorów i działające ekspozycje.")}
+{cta("Doradztwo i wycena", "Chcesz zobaczyć to rozwiązanie na żywo?",
+     "Zapytaj o wycenę lub odwiedź nasz showroom w Wieluniu — pokażemy przekroje, próbniki kolorów i działające ekspozycje.")}
 """
             first_b = bullets[0].rstrip(".") if bullets else ""
             write(f"{slug}.html",
