@@ -181,7 +181,7 @@ def nav(active=""):
 def cta(tag, h2, p):
     return f"""<section class="cta">
   <div class="container cta__inner">
-    <span class="tag tag--onDark">{tag}</span>
+    {f'<span class="tag tag--onDark">{tag}</span>' if tag else ''}
     <h2>{h2}</h2>
     <p>{p}</p>
     <div class="cta__btns">
@@ -463,7 +463,7 @@ def build_onas():
 
 {partners()}
 {reviews()}
-{cta("Dołącz do grona zadowolonych klientów", "Chcesz dołączyć do grona zadowolonych klientów?",
+{cta(None, "Chcesz dołączyć do grona zadowolonych klientów?",
      "Zapytaj o wycenę i przekonaj się, jak wygląda współpraca z rodzinną firmą z niemal 30-letnim doświadczeniem.")}
 """
     write("o-nas.html",
