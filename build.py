@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "24"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "25"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -83,6 +83,7 @@ PARTNERS = [
     ("porta", "Porta", "https://www.porta.com.pl"),
     ("erkado", "Erkado", "https://erkado.pl"),
     ("avo", "AVO", "https://avogroup.eu"),
+    ("jaro-max", "Jaro-Max", None),
 ]
 
 HOME_REALIZACJE = [  # kolejność wg klienta: okna, drzwi, bramy, pergola/refleksole
@@ -304,12 +305,12 @@ def reviews():
       <div class="section-header__left">
         <h2 class="h-sec">Zaufanie budowane przez dekady</h2>
       </div>
-      <a class="rating" href="{GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener">
-        <span class="rating__num">4,6</span>
-        <span><span class="stars">{I['star'] * 4}<span class="halfstar">{I['star']}{I['star']}</span></span><br><small class="lead">średnia ocena Google — zobacz opinie</small></span>
-      </a>
     </div>
     <div class="grid-3">{cards}</div>
+    <a class="rating rating--below" href="{GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener">
+      <span class="rating__num">4,6</span>
+      <span><span class="stars">{I['star'] * 4}<span class="halfstar">{I['star']}{I['star']}</span></span><br><small class="lead">średnia ocena Google — zobacz więcej opinii</small></span>
+    </a>
   </div>
 </section>
 """
@@ -322,7 +323,7 @@ def write(name, content):
 # ================================================================ STRONA GŁÓWNA ----
 def build_index():
     slides = [
-        ("wiked05", ), ("wiked67", ), ("abm_okno1", ),
+        ("wiked05", ), ("wiked67", ), ("al39", ),
     ]
     sl = "".join(
         f'<div class="hero__slide{" is-active" if k == 0 else ""}"><img src="assets/img/{s[0]}.jpg" alt=""></div>'
@@ -363,7 +364,7 @@ def build_index():
 <section class="section">
   <div class="container split">
     <div class="split__text">
-      <h2 class="h-sec">Od montażu rolet do lidera stolarki premium w Wieluniu</h2>
+      <h2 class="h-sec">Od montażu rolet do lidera stolarki okiennej</h2>
       <p class="lead">Jesteśmy rodzinnym przedsiębiorstwem działającym od 1997 roku. Nasze korzenie to montaż prostych osłon okiennych – dziś dostarczamy i instalujemy kompleksowe systemy okienne, drzwiowe oraz zaawansowane zadaszenia tarasu. Działamy w promieniu 200 km od Wielunia. Gwarantujemy fachowe doradztwo techniczne i precyzyjny montaż z użyciem profesjonalnego sprzętu.</p>
       <a class="btn btn--primary" href="o-nas.html">Poznaj nas bliżej {I['arrow']}</a>
     </div>
@@ -389,7 +390,7 @@ def build_index():
   <div class="container">
     <div class="section-header">
       <div class="section-header__left">
-        <h2 class="h-sec">Nasze realizacje mówią same za siebie</h2>
+        <h2 class="h-sec">Poznaj efekty naszych realizacji</h2>
       </div>
     </div>
     <div class="gallery gallery--home">{gal}</div>
@@ -426,26 +427,34 @@ def build_onas():
     <div class="split__text">
       <h2 class="h-sec">Od rodzinnego rzemiosła do pozycji eksperta</h2>
       <div class="prose">
-        <p><strong>PROMYK to rodzinna firma, która powstała w 1997 roku.</strong> Od ponad dwóch dekad rozwijamy się dzięki pasji, zaangażowaniu i ciężkiej pracy, dostarczając naszym klientom rozwiązania, które łączą funkcjonalność, estetykę i najwyższą jakość.</p>
+        <p><strong>PROMYK to rodzinna firma, która powstała w 1997 roku.</strong></p>
         <p>Nasza historia rozpoczęła się od montażu żaluzji. To właśnie od tej usługi właściciel firmy zaczął budować doświadczenie oraz zaufanie klientów. Z czasem dołączyła do niego żona i wspólnie stworzyli dwuosobową firmę, rozpoczynając produkcję osłon okiennych w niewielkim pomieszczeniu.</p>
         <p>Kolejne lata przyniosły dynamiczny rozwój. Firma przeniosła się do siedziby przy domu, gdzie rozszerzyliśmy działalność o produkcję rolet zewnętrznych. Rosnące grono zadowolonych klientów oraz coraz szersza oferta sprawiły, że powstał samodzielny budynek, w którym oprócz osłon okiennych zaczęliśmy oferować również okna, drzwi, bramy garażowe oraz nowoczesne zewnętrzne systemy przeciwsłoneczne.</p>
       </div>
     </div>
-    <div class="split__media"><img class="about__img" src="assets/img/onas/dom-markiza.jpg" alt="Realizacja PROMYK — markizy"></div>
+    <figure class="split__media about__fig"><img class="about__img" src="assets/img/onas/budynek.jpg" alt="Siedziba PROMYK w Wieluniu"><figcaption>Nasza obecna siedziba w Wieluniu</figcaption></figure>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Tak zaczynaliśmy</h2>
+    <div class="about__strip">
+      <figure class="about__fig"><img src="assets/img/onas/pierwsza-maszyna.jpg" alt="Jedna z pierwszych maszyn PROMYK" loading="lazy"><figcaption>Jedna z pierwszych maszyn, na których pracowaliśmy</figcaption></figure>
+      <figure class="about__fig"><img src="assets/img/onas/stara-siedziba.jpg" alt="Dawna siedziba PROMYK" loading="lazy"><figcaption>Dawna siedziba firmy — „Żaluzje, rolety”</figcaption></figure>
+    </div>
   </div>
 </section>
 
 <section class="section section--soft">
   <div class="container split">
-    <div class="split__media"><img class="about__img" src="assets/img/onas/taras-markiza.jpg" alt="Realizacja PROMYK — taras"></div>
+    <figure class="split__media about__fig"><img class="about__img" src="assets/img/onas/showroom-wizualizacja.jpg" alt="Wizualizacja nowego showroomu PROMYK"><figcaption>Wizualizacja nowego showroomu, który właśnie wykańczamy</figcaption></figure>
     <div class="split__text">
       <h2 class="h-sec">Rodzinny charakter to nasza największa siła</h2>
       <div class="prose">
         <p>Rodzinny charakter naszej firmy pozostaje jej największą siłą. Do zespołu dołączył najpierw syn, a następnie córka, dzięki czemu kolejne pokolenie aktywnie uczestniczy w dalszym rozwoju przedsiębiorstwa. Łączymy wieloletnie doświadczenie z nowoczesnym podejściem, stale poszerzając ofertę i podnosząc jakość naszych usług.</p>
         <p>Dziś z dumą zapraszamy do naszego <strong>nowego showroomu</strong> – miejsca, w którym można zobaczyć najnowsze produkty, porównać dostępne rozwiązania i skorzystać z fachowego doradztwa. To kolejny etap w historii firmy PROMYK i dowód na to, że nieustannie inwestujemy w rozwój oraz komfort naszych klientów.</p>
-        <p>Od pierwszego montażu żaluzji w 1997 roku po nowoczesny salon ekspozycyjny – niezmiennie kierujemy się tymi samymi wartościami: <strong>uczciwością, rzetelnością, jakością i indywidualnym podejściem</strong> do każdego klienta. To właśnie zaufanie naszych klientów pozwala nam rozwijać się już od blisko 30 lat.</p>
       </div>
-      <a class="btn btn--primary" href="kontakt.html">Odwiedź nasz showroom {I['arrow']}</a>
     </div>
   </div>
 </section>
@@ -461,8 +470,8 @@ def build_onas():
   </div>
 </section>
 
-{partners()}
 {reviews()}
+{partners()}
 {cta(None, "Chcesz dołączyć do grona zadowolonych klientów?",
      "Zapytaj o wycenę i przekonaj się, jak wygląda współpraca z rodzinną firmą z niemal 30-letnim doświadczeniem.")}
 """

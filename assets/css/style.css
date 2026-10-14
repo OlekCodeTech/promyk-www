@@ -921,3 +921,14 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 /* bez łamania przycisków i telefonu w menu */
 .btn, .nav__phone { white-space: nowrap; }
 @media (max-width: 780px) { .stat { flex-direction: column; align-items: flex-start; gap: 4px; } }
+
+/* ---------- O nas: zdjęcia z podpisami + ocena Google pod opiniami ---------- */
+.about__fig { margin: 0; position: relative; }
+.about__fig figcaption { margin-top: 10px; font-size: 15px; color: var(--muted); }
+.about__strip { display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; }
+.about__strip img { width: 100%; height: 420px; object-fit: cover; border-radius: var(--r-lg); }
+.rating--below { justify-content: center; margin-top: 36px; }
+@media (max-width: 780px) {
+  .about__strip { grid-template-columns: 1fr; }
+  .about__strip img { height: 280px; }
+}
