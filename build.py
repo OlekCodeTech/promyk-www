@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "23"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "24"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -58,9 +58,9 @@ PRODUCTS = [
     ("rolety-zewnetrzne", "Rolety zewnętrzne",  "Produkcja własna",   "al30_rol"),
     ("pergole",           "Pergole",            "Selt",               "pergola1"),
     ("bramy-garazowe",    "Bramy garażowe",     "Nice / AVO / Aluprof", "brama_antracyt"),
-    ("markizy",           "Markizy",            "Selt",               "real/markiza-kasetowa"),
+    ("markizy",           "Markizy",            "Selt",               "katalog/markiza-palladio-dom"),
     ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Produkcja własna",   "plisy"),
-    ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Selt / Aluprof",     "real/refleksole"),
+    ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Selt / Aluprof",     "katalog/screeny-dom"),
     ("moskitiery",        "Moskitiery",         "Produkcja własna",   "al25"),
 ]
 PROD_LABEL = {s: t for s, t, _b, _i in PRODUCTS}
@@ -431,13 +431,13 @@ def build_onas():
         <p>Kolejne lata przyniosły dynamiczny rozwój. Firma przeniosła się do siedziby przy domu, gdzie rozszerzyliśmy działalność o produkcję rolet zewnętrznych. Rosnące grono zadowolonych klientów oraz coraz szersza oferta sprawiły, że powstał samodzielny budynek, w którym oprócz osłon okiennych zaczęliśmy oferować również okna, drzwi, bramy garażowe oraz nowoczesne zewnętrzne systemy przeciwsłoneczne.</p>
       </div>
     </div>
-    <div class="split__media"><img class="about__img" src="assets/img/wiked37.jpg" alt="Realizacja PROMYK"></div>
+    <div class="split__media"><img class="about__img" src="assets/img/onas/dom-markiza.jpg" alt="Realizacja PROMYK — markizy"></div>
   </div>
 </section>
 
 <section class="section section--soft">
   <div class="container split">
-    <div class="split__media"><img class="about__img" src="assets/img/wiked57.jpg" alt="Showroom PROMYK"></div>
+    <div class="split__media"><img class="about__img" src="assets/img/onas/taras-markiza.jpg" alt="Realizacja PROMYK — taras"></div>
     <div class="split__text">
       <h2 class="h-sec">Rodzinny charakter to nasza największa siła</h2>
       <div class="prose">
@@ -1327,7 +1327,7 @@ PRODUCT_DATA = {
   related=["okna", "drzwi-zewnetrzne", "rolety-zewnetrzne"]),
 
 "markizy": dict(
-  hero="real/markiza-kasetowa", h1="Markizy tarasowe i balkonowe Selt", title="Markizy tarasowe Selt — kaseta pełna, wysięg do 4 m, Somfy | PROMYK Wieluń",
+  hero="katalog/markiza-palladio-taras", h1="Markizy tarasowe i balkonowe Selt", title="Markizy tarasowe Selt — kaseta pełna, wysięg do 4 m, Somfy | PROMYK Wieluń",
   desc="Markizy tarasowe Selt w pełnej kasecie (wysięg do 4 m), balkonowe i pionowe. Tkanina akrylowa 300 g/m², automatyka Somfy.",
   intro="Markizy Selt z tkaniną akrylową 300 g/m² i napędami Somfy z czujnikami pogodowymi.",
   producers=["selt", "somfy"],
@@ -1337,15 +1337,15 @@ PRODUCT_DATA = {
   rows=[("Markizy tarasowe (kaseta pełna)", "Poszycie i ramiona chowane w zamkniętej kasecie aluminiowej.",
          ["Wysięg ramion do 4 m, szerokości do 7 m (łączone do 12 m)",
           "Regulacja kąta nachylenia 5–40°",
-          "Napęd Somfy w standardzie, opcja listwy LED w kasecie"], "real/markiza-tarasowa"),
+          "Napęd Somfy w standardzie, opcja listwy LED w kasecie"], "katalog/markiza-palladio-dom"),
         ("Markizy balkonowe i półkasety", "Lżejsze systemy do balkonów i mniejszych tarasów.",
          ["Konstrukcja aluminiowa, montaż ścienny lub sufitowy",
           "Wysięg do 2,5 m, obsługa korbą lub napędem",
-          "Kolekcja ponad 100 tkanin"], "al26"),
+          "Kolekcja ponad 100 tkanin"], "katalog/markiza-australia-balkon"),
         ("Markizy pionowe (przyścienne)", "Osłona krawędzi tarasu przed niskim słońcem i wiatrem.",
          ["Prowadzenie linkowe lub w prowadnicach",
           "Tkaniny akrylowe i screen, opcja okna widokowego",
-          "Ochrona prywatności bez zabudowy tarasu"], "al27"),
+          "Ochrona prywatności bez zabudowy tarasu"], "katalog/screeny-taras"),
         ("Automatyka Somfy", "Sterowanie i ochrona konstrukcji.",
          ["Czujnik wiatru Eolis — automatyczne zwinięcie przy podmuchach",
           "Czujnik słońca Sunis — automatyczne rozwijanie",
@@ -1393,7 +1393,7 @@ PRODUCT_DATA = {
   related=["okna", "moskitiery", "oslony-zewnetrzne"]),
 
 "oslony-zewnetrzne": dict(
-  hero="real/refleksole", h1="Osłony zewnętrzne — refleksole, żaluzje fasadowe, sunbreaker",
+  hero="katalog/screeny-taras", h1="Osłony zewnętrzne — refleksole, żaluzje fasadowe, sunbreaker",
   title="Refleksole ZIP, żaluzje fasadowe C-80/Z-90 i sunbreaker | PROMYK Wieluń",
   desc="Refleksole screen ZIP, żaluzje fasadowe C-80/Z-90, sunbreakery i moskitiery plisowane. Automatyka Somfy. Wieluń i okolice.",
   intro="Osłony zatrzymujące ciepło przed szybą (Selt / Aluprof) — najskuteczniejsza ochrona przed przegrzewaniem.",
@@ -1405,12 +1405,12 @@ PRODUCT_DATA = {
          ["Tkanina screen (serge) — widok na zewnątrz zachowany, redukcja olśnienia",
           "Prowadnice ZIP: tkanina naprężona, wysoka odporność na wiatr",
           "Szczelne prowadzenie działa również jak moskitiera",
-          "Kasety 85–150 mm, szerokości do 6 m"], "real/refleksole"),
+          "Kasety 85–150 mm, szerokości do 6 m"], "katalog/screeny-elewacja"),
         ("Żaluzje fasadowe", "Zewnętrzne lamele aluminiowe o przekroju C lub Z.",
          ["Lamele C-80 / Z-90 lakierowane proszkowo",
           "Płynna regulacja kąta — światło bez olśnienia",
           "Prowadzenie linkowe lub szynowe, zabudowa podtynkowa",
-          "Standard w budynkach biurowych klasy A"], "real/zaluzje-fasadowe"),
+          "Standard w budynkach biurowych klasy A"], "al41"),
         ("Sunbreaker (łamacze światła)", "Stałe lub ruchome lamele wielkogabarytowe.",
          ["Lamele eliptyczne, duże rozpiętości",
           "Wersje stałe i obrotowe (do 90°)",
