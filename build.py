@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "28"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "30"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -432,19 +432,10 @@ def build_onas():
         <p>Kolejne lata przyniosły dynamiczny rozwój. Firma przeniosła się do siedziby przy domu, gdzie rozszerzyliśmy działalność o produkcję rolet zewnętrznych. Rosnące grono zadowolonych klientów oraz coraz szersza oferta sprawiły, że powstał samodzielny budynek, w którym oprócz osłon okiennych zaczęliśmy oferować również okna, drzwi, bramy garażowe oraz nowoczesne zewnętrzne systemy przeciwsłoneczne.</p>
       </div>
     </div>
-    <figure class="split__media about__fig"><img class="about__img" src="assets/img/onas/budynek.jpg" alt="Siedziba PROMYK w Wieluniu"><figcaption>Nasza obecna siedziba w Wieluniu</figcaption></figure>
+    <figure class="split__media about__fig"><img class="about__img about__img--full" src="assets/img/onas/budynek.jpg" alt="Siedziba PROMYK w Wieluniu"><figcaption>Nasza obecna siedziba w Wieluniu</figcaption></figure>
   </div>
 </section>
 
-<section class="section" style="padding-top:0">
-  <div class="container">
-    <h2 class="h-sec" style="margin-bottom:32px">Tak zaczynaliśmy</h2>
-    <div class="about__strip">
-      <figure class="about__fig"><img src="assets/img/onas/pierwsza-maszyna.jpg" alt="Jedna z pierwszych maszyn PROMYK" loading="lazy"><figcaption>Jedna z pierwszych maszyn, na których pracowaliśmy</figcaption></figure>
-      <figure class="about__fig"><img src="assets/img/onas/stara-siedziba.jpg" alt="Dawna siedziba PROMYK" loading="lazy"><figcaption>Dawna siedziba firmy — „Żaluzje, rolety”</figcaption></figure>
-    </div>
-  </div>
-</section>
 
 <section class="section section--soft">
   <div class="container split">
@@ -455,6 +446,16 @@ def build_onas():
         <p>Rodzinny charakter naszej firmy pozostaje jej największą siłą. Do zespołu dołączył najpierw syn, a następnie córka, dzięki czemu kolejne pokolenie aktywnie uczestniczy w dalszym rozwoju przedsiębiorstwa. Łączymy wieloletnie doświadczenie z nowoczesnym podejściem, stale poszerzając ofertę i podnosząc jakość naszych usług.</p>
         <p>Dziś z dumą zapraszamy do naszego <strong>nowego showroomu</strong> – miejsca, w którym można zobaczyć najnowsze produkty, porównać dostępne rozwiązania i skorzystać z fachowego doradztwa. To kolejny etap w historii firmy PROMYK i dowód na to, że nieustannie inwestujemy w rozwój oraz komfort naszych klientów.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">A tak zaczynaliśmy...</h2>
+    <div class="about__strip">
+      <figure class="about__fig"><img src="assets/img/onas/stara-siedziba-kw.jpg" alt="Dawna siedziba PROMYK" loading="lazy"><figcaption>Dawna siedziba firmy — „Żaluzje, rolety”</figcaption></figure>
+      <figure class="about__fig"><img src="assets/img/onas/pierwsza-maszyna-kw.jpg" alt="Jedna z pierwszych maszyn PROMYK" loading="lazy"><figcaption>Jedna z pierwszych maszyn, na których pracowaliśmy</figcaption></figure>
     </div>
   </div>
 </section>
