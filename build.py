@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "27"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "28"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -280,7 +280,7 @@ def gbadge():
 def partners():
     row = "".join(
         (f'<a href="{url}" target="_blank" rel="noopener" aria-label="{name}">' if url else f'<a aria-label="{name}">')
-        + f'<img src="assets/img/partners/{slug}.svg" alt="{name}" loading="lazy"></a>'
+        + f'<img src="assets/img/partners/{slug}.svg?v={ASSET_VER}" alt="{name}" loading="lazy"></a>'
         for slug, name, url in PARTNERS)
     return f"""<section class="partners">
   <div class="container">
@@ -559,7 +559,7 @@ def build_oferta():
 
     models = "".join(
         f'''<article class="card model-card">
-        <div class="model-card__head"><img src="assets/img/partners/{logo}.svg" alt=""><h3>{title}</h3></div>
+        <div class="model-card__head"><img src="assets/img/partners/{logo}.svg?v={ASSET_VER}" alt=""><h3>{title}</h3></div>
         <ul class="bullets">{"".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)}</ul>
         <a class="card__more" href="{href}">Zobacz kategorię {I['arrow']}</a>
       </article>'''
@@ -1006,7 +1006,7 @@ def build_konfigurator():
 # ================================================================ PRODUKTY ----
 def logo_src(logo):
     """'@plik.png' = grafika z assets/img, w innym wypadku logo partnera (SVG)."""
-    return f"assets/img/{logo[1:]}" if logo.startswith("@") else f"assets/img/partners/{logo}.svg"
+    return f"assets/img/{logo[1:]}" if logo.startswith("@") else f"assets/img/partners/{logo}.svg?v={ASSET_VER}"
 
 def product_extras_html(slug):
     """Sekcje pogłębiające podstronę: specyfikacja, producenci, Warto wiedzieć, katalogi."""
@@ -1131,7 +1131,7 @@ def product_page(slug, meta):
       </article></a>"""
 
     prod_logos = "".join(
-        f'<img src="assets/img/partners/{p}.svg" alt="{p}">'
+        f'<img src="assets/img/partners/{p}.svg?v={ASSET_VER}" alt="{p}">'
         for p in meta.get("producers", []))
     producers_bar = (f'<div class="producer-strip"><div class="container producer-strip__inner">'
                      f'<span>Producenci w tej kategorii:</span>{prod_logos}</div></div>') if prod_logos else ""
@@ -1889,7 +1889,7 @@ def build_subpages():
 
     # producenci kategorii
             prod_logos = "".join(
-                f'<img src="assets/img/partners/{p}.svg" alt="{p}">'
+                f'<img src="assets/img/partners/{p}.svg?v={ASSET_VER}" alt="{p}">'
                 for p in meta.get("producers", []))
             producers_bar = (f'<div class="producer-strip"><div class="container producer-strip__inner">'
                              f'<span>Producenci w tej kategorii:</span>{prod_logos}</div></div>') if prod_logos else ""
