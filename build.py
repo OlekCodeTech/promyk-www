@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "25"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "26"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -309,7 +309,7 @@ def reviews():
     <div class="grid-3">{cards}</div>
     <a class="rating rating--below" href="{GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener">
       <span class="rating__num">4,6</span>
-      <span><span class="stars">{I['star'] * 4}<span class="halfstar">{I['star']}{I['star']}</span></span><br><small class="lead">średnia ocena Google — zobacz więcej opinii</small></span>
+      <span class="rating__meta"><span class="stars">{I['star'] * 4}<span class="halfstar">{I['star']}{I['star']}</span></span><small class="lead">średnia ocena Google — zobacz więcej opinii</small></span>
     </a>
   </div>
 </section>
