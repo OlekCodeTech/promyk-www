@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "22"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "23"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -53,15 +53,15 @@ I = {
 # ------------------------------------------------------------- produkty ----
 PRODUCTS = [
     ("okna",              "Okna",               "VEKA / Aluprof",     "al39"),
-    ("drzwi-zewnetrzne",  "Drzwi zewnętrzne",   "Wikęd / Erkado / HK Doors", "wiked30"),
+    ("drzwi-zewnetrzne",  "Drzwi zewnętrzne",   "Wikęd / Erkado / MK-DOOR", "wiked57"),
     ("drzwi-wewnetrzne",  "Drzwi wewnętrzne",   "DRE / Porta / Erkado", "dre_binito50"),
-    ("rolety-zewnetrzne", "Rolety zewnętrzne",  "Aluprof",            "al30_rol"),
+    ("rolety-zewnetrzne", "Rolety zewnętrzne",  "Produkcja własna",   "al30_rol"),
     ("pergole",           "Pergole",            "Selt",               "pergola1"),
     ("bramy-garazowe",    "Bramy garażowe",     "Nice / AVO / Aluprof", "brama_antracyt"),
     ("markizy",           "Markizy",            "Selt",               "real/markiza-kasetowa"),
     ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Produkcja własna",   "plisy"),
     ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Selt / Aluprof",     "real/refleksole"),
-    ("moskitiery",        "Moskitiery",         "Produkcja własna",   "real/moskitiera-plisowana"),
+    ("moskitiery",        "Moskitiery",         "Produkcja własna",   "al25"),
 ]
 PROD_LABEL = {s: t for s, t, _b, _i in PRODUCTS}
 PROD_IMG = {s: i for s, _t, _b, i in PRODUCTS}
@@ -77,12 +77,19 @@ PARTNERS = [
     ("somfy", "Somfy", "https://www.somfy.pl"),
     ("nice", "Nice", "https://www.niceforyou.com/pl"),
     ("selt", "Selt", "https://selt.com"),
-    ("hk-doors", "HK Doors", "https://hkdoors.pl"),
+    ("mk-door", "MK-DOOR", None),
     ("wiked", "Wikęd", "https://wiked.pl"),
     ("dre", "DRE", "https://dre.pl"),
     ("porta", "Porta", "https://www.porta.com.pl"),
     ("erkado", "Erkado", "https://erkado.pl"),
     ("avo", "AVO", "https://avogroup.eu"),
+]
+
+HOME_REALIZACJE = [  # kolejność wg klienta: okna, drzwi, bramy, pergola/refleksole
+    ("realizacje/okna", "Okna — dom jednorodzinny"),
+    ("realizacje/drzwi", "Drzwi zewnętrzne"),
+    ("realizacje/bramy", "Brama garażowa segmentowa"),
+    ("realizacje/pergola", "Pergola z lamelami"),
 ]
 
 GALLERY = [  # wyłącznie realizacje PROMYK (zdjęcia ze zgodą klientów)
@@ -271,8 +278,8 @@ def gbadge():
 
 def partners():
     row = "".join(
-        f'<a href="{url}" target="_blank" rel="noopener" aria-label="{name}">'
-        f'<img src="assets/img/partners/{slug}.svg" alt="{name}" loading="lazy"></a>'
+        (f'<a href="{url}" target="_blank" rel="noopener" aria-label="{name}">' if url else f'<a aria-label="{name}">')
+        + f'<img src="assets/img/partners/{slug}.svg" alt="{name}" loading="lazy"></a>'
         for slug, name, url in PARTNERS)
     return f"""<section class="partners">
   <div class="container">
@@ -315,7 +322,7 @@ def write(name, content):
 # ================================================================ STRONA GŁÓWNA ----
 def build_index():
     slides = [
-        ("real/taras-markiza", ), ("real/pergola", ), ("real/rolety-zew", ),
+        ("wiked05", ), ("wiked67", ), ("abm_okno1", ),
     ]
     sl = "".join(
         f'<div class="hero__slide{" is-active" if k == 0 else ""}"><img src="assets/img/{s[0]}.jpg" alt=""></div>'
@@ -331,8 +338,8 @@ def build_index():
       </a>"""
 
     gal = "".join(
-        f'<a href="galeria.html"><img src="assets/img/{g[0]}.jpg" alt="{g[1]}"><figcaption>{g[1]}</figcaption></a>'
-        for g in GALLERY[:4])
+        f'<a href="galeria.html"><img src="assets/img/{img}.jpg" alt="{cap}"><figcaption>{cap}</figcaption></a>'
+        for img, cap in HOME_REALIZACJE)
 
     body = f"""<section class="hero">
   <div class="hero__slides">{sl}</div>
@@ -342,12 +349,8 @@ def build_index():
       <button class="hero__arrow" data-hero="prev" aria-label="Poprzedni">{I['chevL']}</button>
       <div class="hero__text">
         <span class="tag tag--solid">Rodzinna firma od 1997 roku</span>
-        <h1>Okna, drzwi i osłony na całe lata</h1>
-        <p>Wybierz jakość popartą 30-letnim doświadczeniem w branży stolarki otworowej.</p>
-        <div class="hero__ctas">
-          <a class="btn btn--primary" href="galeria.html">Zobacz realizacje {I['arrow']}</a>
-        </div>
-        {gbadge()}
+        <h1>Okna, drzwi i osłony na lata</h1>
+        <p>Wybierz jakość popartą 30-letnim doświadczeniem.</p>
       </div>
       <button class="hero__arrow hero__arrow--next" data-hero="next" aria-label="Następny">{I['chevR']}</button>
     </div>
@@ -361,10 +364,10 @@ def build_index():
   <div class="container split">
     <div class="split__text">
       <h2 class="h-sec">Od montażu rolet do lidera stolarki premium w Wieluniu</h2>
-      <p class="lead">Jesteśmy rodzinnym przedsiębiorstwem działającym od 1997 roku. Nasze korzenie to montaż prostych osłon okiennych – dziś dostarczamy i instalujemy kompleksowe systemy okienne, drzwiowe oraz zaawansowane pergole bioklimatyczne. Działamy w promieniu 200 km od Wielunia. Gwarantujemy fachowe doradztwo techniczne i precyzyjny montaż z użyciem profesjonalnego sprzętu.</p>
+      <p class="lead">Jesteśmy rodzinnym przedsiębiorstwem działającym od 1997 roku. Nasze korzenie to montaż prostych osłon okiennych – dziś dostarczamy i instalujemy kompleksowe systemy okienne, drzwiowe oraz zaawansowane zadaszenia tarasu. Działamy w promieniu 200 km od Wielunia. Gwarantujemy fachowe doradztwo techniczne i precyzyjny montaż z użyciem profesjonalnego sprzętu.</p>
       <a class="btn btn--primary" href="o-nas.html">Poznaj nas bliżej {I['arrow']}</a>
     </div>
-    <div class="split__media"><img class="about__img" src="assets/img/real/dom-markiza.jpg" alt="Realizacja PROMYK"></div>
+    <div class="split__media"><img class="about__img" src="assets/img/wiked35.jpg" alt="Drzwi zewnętrzne Wikęd"></div>
   </div>
 </section>
 
@@ -414,7 +417,7 @@ def build_onas():
       <div><h3>{t}</h3><p class="lead" style="margin:8px 0 0">{d}</p></div>
     </article>""" for t, d, ic in why)
 
-    body = pagehero("real/taras-markiza", "Rodzinna firma od 1997 roku. Zaufanie budujemy od pokoleń.",
+    body = pagehero("wiked03", "Rodzinna firma od 1997 roku<br>Zaufanie budujemy od pokoleń",
                     "Poznaj historię naszej firmy – od pierwszych montaży żaluzji do pozycji lidera w branży stolarki okiennej.", None)
     body += stats()
 
@@ -1181,7 +1184,7 @@ PRODUCT_DATA = {
   hero="wiked22", h1="Drzwi zewnętrzne — Wikęd i Aluprof", title="Drzwi zewnętrzne Wikęd (Termo Prestige, Premium) i Aluprof | PROMYK",
   desc="Drzwi stalowe Wikęd Premium 54 i Termo Prestige 72, aluminiowe Aluprof MB-86 i panele HPL. Klasa RC2/RC3, Ud od 0,71 W/m²K. Wieluń.",
   intro="Linie Wikęd Premium i Termo Prestige oraz aluminiowe Aluprof — parametry potwierdzone badaniami, klasy RC2/RC3.",
-  producers=["wiked", "erkado", "hk-doors", "aluprof"],
+  producers=["wiked", "erkado", "mk-door", "aluprof"],
   adv=[("Bezpieczeństwo", "Klasa antywłamaniowa RC2 / RC3, zamki listwowe 3-punktowe", "lock"),
        ("Termoizolacja", "Ud od 0,71 W/m²K — spełnia wymogi programu Czyste Powietrze", "thermo"),
        ("Wzornictwo", "Ponad 100 wzorów przetłoczeń, przeszkleń i naświetli", "sparkle")],
@@ -1415,11 +1418,11 @@ PRODUCT_DATA = {
         ("Moskitiery plisowane (do dużych przeszkleń)", "Harmonijkowa siatka do drzwi HST i portfenetrów — pełna oferta moskitier w osobnej kategorii.",
          ["Prowadnica dolna 5 mm — przejście bez progu",
           "Zatrzymanie siatki w dowolnym punkcie (bez sprężyny)",
-          "Duże szerokości przy zabudowie dwustronnej"], "real/moskitiera-plisowana")],
+          "Duże szerokości przy zabudowie dwustronnej"], "al25")],
   related=["moskitiery", "rolety-zewnetrzne", "pergole"]),
 
 "moskitiery": dict(
-  hero="real/moskitiera-plisowana", h1="Moskitiery na wymiar", title="Moskitiery ramkowe, drzwiowe, rolowane i plisowane | PROMYK Wieluń",
+  hero="al26", h1="Moskitiery na wymiar", title="Moskitiery ramkowe, drzwiowe, rolowane i plisowane | PROMYK Wieluń",
   desc="Moskitiery na wymiar: ramkowe, drzwiowe z samozamykaczem, rolowane w kasecie i plisowane do HST. Siatka fiberglass i pet screen. Wieluń.",
   intro="Moskitiery z naszej własnej produkcji — na wymiar do każdego typu okna i drzwi — siatka fiberglass, aluminiowa lub wzmocniona pet screen.",
   producers=[],
@@ -1441,7 +1444,7 @@ PRODUCT_DATA = {
         ("Moskitiery plisowane", "Harmonijkowe — do drzwi HST i dużych przeszkleń.",
          ["Prowadnica dolna 5 mm — przejście bez potykania",
           "Siatka zatrzymuje się w dowolnym położeniu",
-          "Duże szerokości przy zabudowie dwustronnej"], "real/moskitiera-plisowana")],
+          "Duże szerokości przy zabudowie dwustronnej"], "al25")],
   related=["okna", "rolety-zewnetrzne", "oslony-wewnetrzne"]),
 }
 
