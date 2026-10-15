@@ -1959,15 +1959,15 @@ OKNA_VEKA = [
 OKNA_ALUPROF = [
     ("Aluprof MB-79N",
      ["Głębokość zabudowy ramy 70 mm",
-      "Uw od 0,75 W/m²K, system pozwala na wykonanie skrzydeł do 1350 × 2700 mm",
+      "Uw od 0,75 W/m²K, system ten pozwala na wykonanie skrzydeł do 1350 mm × 2700 mm",
       "Wąskie profile — maksymalna powierzchnia szklenia",
-      "Wysoka trwałość i odporność na promieniowanie słoneczne"],
+      "Wysoka trwałość, odporność na promieniowanie słoneczne"],
      "al38"),
     ("Aluprof MB-77HS",
-     ["Drzwi podnoszono-przesuwne — możliwość wykonania skrzydeł o wadze do 600 kg",
+     ["Drzwi podnoszono-przesuwne, możliwość wykonania skrzydeł o wadze do 600 kg",
       "Głębokość zabudowy ramy 174 mm",
       "Konstrukcja pozwala na niemal całkowite zlicowanie progu z poziomem podłogi",
-      "Innowacyjne mechanizmy podnoszono-przesuwne redukują opory ruchu do minimum — skrzydło unosi się i przesuwa po szynach jezdnych niezwykle cicho, płynnie i bez wysiłku"],
+      "Innowacyjne mechanizmy podnoszono-przesuwne redukują opory ruchu do minimum. Skrzydło unosi się oraz przesuwa po szynach jezdnych niezwykle cicho, płynnie i bez wysiłku"],
      "al31_rol"),
 ]
 OKNA_ADV_VEKA = [
@@ -2079,7 +2079,7 @@ def build_okna():
 
 <section class="section">
   <div class="container">
-    {brand_intro("aluprof", "Aluprof", "Aluprof to ceniony polski producent systemów aluminiowych, który łączy nowoczesne technologie z funkcjonalnością i estetyką. Okna Aluprof to doskonały wybór dla osób ceniących trwałość, energooszczędność i nowoczesny design. Sprawdzają się zarówno w nowoczesnych domach, jak i w budynkach komercyjnych.")}
+    {brand_intro("aluprof", "Aluprof", "Aluprof to ceniony polski producent systemów aluminiowych, który łączy nowoczesne technologie z funkcjonalnością i estetyką. Okna Aluprof to doskonały wybór dla osób ceniących trwałość, energooszczędność i nowoczesny design. Sprawdzają się zarówno w nowoczesnych domach, jak i budynkach komercyjnych.")}
     {rows_html(OKNA_ALUPROF, 1, False)}
   </div>
 </section>
