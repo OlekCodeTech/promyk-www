@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "32"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "34"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -451,8 +451,10 @@ def build_onas():
 </section>
 
 <section class="section about__then">
-  <div class="container">
-    <h3 class="about__then-title">A tak zaczynaliśmy...</h3>
+  <div class="container about__then-inner">
+    <div class="about__then-head">
+      <h3 class="about__then-title">A tak zaczynaliśmy...</h3>
+    </div>
     <div class="about__strip">
       <figure class="about__fig"><img src="assets/img/onas/stara-siedziba-kw.jpg" alt="Dawna siedziba PROMYK" loading="lazy"><figcaption>Dawna siedziba firmy — „Żaluzje, rolety”</figcaption></figure>
       <figure class="about__fig"><img src="assets/img/onas/pierwsza-maszyna-kw.jpg" alt="Jedna z pierwszych maszyn PROMYK" loading="lazy"><figcaption>Jedna z pierwszych maszyn, na których pracowaliśmy</figcaption></figure>
