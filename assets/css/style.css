@@ -949,12 +949,24 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 .brand-intro { display: flex; align-items: center; gap: 40px; margin-bottom: 72px; padding-bottom: 48px; border-bottom: 1px solid var(--line); }
 .brand-intro img { height: 64px; width: auto; flex: none; }
 .brand-intro p { margin: 0; font-size: 19px; line-height: 1.75; color: #3a3f45; max-width: 860px; }
-.gallery--okna { grid-template-columns: repeat(4, 1fr); }
-.gallery--okna a { height: 260px; }
 @media (max-width: 780px) {
   .brand-intro { flex-direction: column; align-items: flex-start; gap: 20px; margin-bottom: 48px; }
   .brand-intro img { height: 48px; }
   .brand-intro p { font-size: 17px; }
-  .gallery--okna { grid-template-columns: repeat(2, 1fr); }
-  .gallery--okna a { height: 160px; }
+}
+
+/* ---------- karuzela (Inspiracje) ---------- */
+.carousel { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
+.carousel::-webkit-scrollbar { display: none; }
+.carousel__item { flex: 0 0 calc((100% - 60px) / 4); height: 300px; border-radius: var(--r-lg); overflow: hidden; scroll-snap-align: start; }
+.carousel__item img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.carousel__item:hover img { transform: scale(1.05); }
+.carousel__nav { display: flex; gap: 12px; }
+.carousel__nav .hero__arrow { border-color: var(--line); background: #fff; color: var(--ink); }
+.carousel__nav .hero__arrow--next { background: var(--ink); border-color: var(--ink); color: #fff; }
+.carousel__nav .hero__arrow[disabled] { opacity: .35; cursor: default; }
+@media (max-width: 1024px) { .carousel__item { flex-basis: calc((100% - 20px) / 2); } }
+@media (max-width: 780px) {
+  .carousel__item { flex-basis: 82%; height: 240px; }
+  .carousel__nav .hero__arrow { display: grid; }
 }

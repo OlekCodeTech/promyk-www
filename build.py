@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "35"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "36"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -444,7 +444,7 @@ def build_onas():
       <h2 class="h-sec">Rodzinny charakter to nasza największa siła</h2>
       <div class="prose">
         <p>Rodzinny charakter naszej firmy pozostaje jej największą siłą. Do zespołu dołączył najpierw syn, a następnie córka, dzięki czemu kolejne pokolenie aktywnie uczestniczy w dalszym rozwoju przedsiębiorstwa. Łączymy wieloletnie doświadczenie z nowoczesnym podejściem, stale poszerzając ofertę i podnosząc jakość naszych usług.</p>
-        <p>Dziś z dumą zapraszamy do naszego <strong>nowego showroomu</strong> – miejsca, w którym można zobaczyć najnowsze produkty, porównać dostępne rozwiązania i skorzystać z fachowego doradztwa. To kolejny etap w historii firmy PROMYK i dowód na to, że nieustannie inwestujemy w rozwój oraz komfort naszych klientów.</p>
+        <p>Wkrótce zaprosimy Was do naszego <strong>nowego showroomu</strong> – miejsca, w którym będzie można zobaczyć najnowsze produkty, porównać dostępne rozwiązania i skorzystać z fachowego doradztwa. To kolejny etap w historii firmy PROMYK i dowód na to, że nieustannie inwestujemy w rozwój oraz komfort naszych klientów.</p>
       </div>
     </div>
   </div>
@@ -487,7 +487,7 @@ MODELS_2026 = [
     ("veka", "VEKA — okna PVC", "okna.html", [
         "SOFTLINE 82 MD: profil kl. A (ścianka 3 mm, DIN EN 12608), Uf do 1,0, Uw do 0,74 W/m²K",
         "Uszczelnienie środkowe MD, odporność RC2 wg DIN EN 1627",
-        "VEKAMOTION 82 (HST): Ud do 0,76 W/m²K, rama skrzydła stałego 86 mm",
+        "VEKAMOTION 82 (HST): Uw od 0,78 W/m²K, rama skrzydła stałego 86 mm",
         "Powierzchnie: folie VEKA (60+ dekorów), VEKA Spectral ultramat, panele alu"]),
     ("wiked", "Wikęd — drzwi zewnętrzne", "drzwi-zewnetrzne.html", [
         "Kolekcje 2026: Rustik (Masterline/Woodline), 3D, Softline, Future Inox, Glass, Royal, Klasyk",
@@ -532,7 +532,7 @@ def build_oferta():
       </a>"""
     catalogs = [
         ("VEKA SOFTLINE 82 MD", "Okna PVC klasy A — profil 82 mm, Uw do 0,74 W/m²K", "katalog-veka-softline82.pdf"),
-        ("VEKA VEKAMOTION 82", "Drzwi podnoszono-przesuwne HST — Ud do 0,76 W/m²K", "katalog-veka-vekamotion82.pdf"),
+        ("VEKA VEKAMOTION 82", "Drzwi podnoszono-przesuwne HST — Uw od 0,78 W/m²K", "katalog-veka-vekamotion82.pdf"),
         ("Wikęd — drzwi do domu 2026", "Kolekcje Rustik, 3D, Softline, Glass, Royal; linie Prima–Alu Hybrid", "katalog-wiked.pdf"),
         ("Erkado — drzwi stalowe 2026", "Konstrukcje Thermo 64–88 mm, serie Horn, Langen, Trebur, Arendal", "katalog-erkado-stalowe.pdf"),
         ("Erkado — drzwi wewnętrzne 2026", "Ramiakowe Stile: Werbena, Jasmin, Laurencja i inne", "katalog-erkado-wewnetrzne.pdf"),
@@ -670,8 +670,8 @@ def build_inwestor():
     ]
     fq = ""
     for k, (q, a) in enumerate(faq):
-        cls = " is-open" if k == 0 else ""
-        sign = "–" if k == 0 else "+"
+        cls = ""
+        sign = "+"
         fq += f"""<div class="faq__row{cls}">
       <button class="faq__q"><span>{q}</span><span>{sign}</span></button>
       <div class="faq__a">{a}</div>
@@ -1055,8 +1055,8 @@ def product_extras_html(slug):
     if know:
         rows = ""
         for k, (q, a) in enumerate(know):
-            cls = " is-open" if k == 0 else ""
-            sign = "–" if k == 0 else "+"
+            cls = ""
+            sign = "+"
             rows += f"""<div class="faq__row{cls}">
       <button class="faq__q"><span>{q}</span><span>{sign}</span></button>
       <div class="faq__a">{a}</div>
@@ -1983,9 +1983,9 @@ OKNA_ADV_ALUPROF = [
 OKNA_SPECS = (["System", "Materiał", "Głębokość zabudowy", "Uw od", "Zastosowanie"], [
     ["VEKA SOFTLINE 82 MD", "PVC kl. A", "82 mm", "0,74 W/m²K", "domy energooszczędne, nowe budownictwo i modernizacje"],
     ["VEKA PERFECTLINE", "PVC kl. A", "70 mm", "0,83 W/m²K", "wymiana stolarki w budynkach istniejących"],
-    ["VEKAMOTION 82 (HST)", "PVC kl. A", "194 mm (rama)", "—", "przeszklenia tarasowe do 6,5 m"],
+    ["VEKAMOTION 82 (HST)", "PVC kl. A", "194 mm (rama)", "0,78 W/m²K", "przeszklenia tarasowe do 6,5 m"],
     ["Aluprof MB-79N", "aluminium", "70 mm (rama)", "0,75 W/m²K", "nowoczesne domy i budynki komercyjne"],
-    ["Aluprof MB-77HS", "aluminium", "174 mm (rama)", "—", "duże przeszklenia przesuwne, skrzydła do 600 kg"],
+    ["Aluprof MB-77HS", "aluminium", "174 mm (rama)", "0,84 W/m²K", "duże przeszklenia przesuwne, skrzydła do 600 kg"],
 ])
 OKNA_FAQ = [
     ("Jak dobrać okna do stylu domu?",
@@ -2014,7 +2014,7 @@ OKNA_FAQ = [
     ("Pakiet 2-szybowy czy 3-szybowy?",
      "<p>Pakiet 3-szybowy (Ug 0,5–0,7) ogranicza straty ciepła o ok. 30–40% względem 2-szybowego (Ug 1,0) i poprawia komfort zimą przy dużych przeszkleniach. Do tego ciepła ramka dystansowa obniża współczynnik psi na krawędzi szyby i ryzyko wykraplania pary.</p>"),
 ]
-OKNA_GALERIA = [f"okna/galeria-{k}" for k in range(1, 9)]
+OKNA_GALERIA = [f"okna/galeria-{k}" for k in range(1, 13)]
 
 
 def build_okna():
@@ -2051,12 +2051,12 @@ def build_okna():
 
     faq = ""
     for k, (q, a) in enumerate(OKNA_FAQ):
-        faq += f"""<div class="faq__row{" is-open" if k == 0 else ""}">
-      <button class="faq__q"><span>{q}</span><span>{"–" if k == 0 else "+"}</span></button>
+        faq += f"""<div class="faq__row">
+      <button class="faq__q"><span>{q}</span><span>+</span></button>
       <div class="faq__a">{a}</div>
     </div>"""
 
-    gal = "".join(f'<a href="assets/img/{g}.jpg" target="_blank"><img src="assets/img/{g}.jpg" alt="Wizualizacja okien VEKA" loading="lazy"></a>'
+    gal = "".join(f'<a class="carousel__item" href="assets/img/{g}.jpg" target="_blank"><img src="assets/img/{g}.jpg" alt="Wizualizacja okien VEKA" loading="lazy"></a>'
                   for g in OKNA_GALERIA)
 
     rel = ""
@@ -2101,8 +2101,14 @@ def build_okna():
 
 <section class="section section--soft">
   <div class="container">
-    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
-    <div class="gallery gallery--okna">{gal}</div>
+    <div class="section-header">
+      <div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div>
+      <div class="carousel__nav">
+        <button class="hero__arrow" data-carousel-prev aria-label="Poprzednie zdjęcia">{I['chevL']}</button>
+        <button class="hero__arrow hero__arrow--next" data-carousel-next aria-label="Następne zdjęcia">{I['chevR']}</button>
+      </div>
+    </div>
+    <div class="carousel" data-carousel>{gal}</div>
   </div>
 </section>
 

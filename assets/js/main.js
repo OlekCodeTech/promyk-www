@@ -102,3 +102,20 @@
     });
   });
 })();
+
+// karuzela ze strzałkami (np. „Inspiracje” na podstronie Okna)
+document.querySelectorAll('[data-carousel]').forEach(function (track) {
+  var sec = track.closest('section');
+  var prev = sec && sec.querySelector('[data-carousel-prev]');
+  var next = sec && sec.querySelector('[data-carousel-next]');
+  function step() { var it = track.querySelector('.carousel__item'); return it ? it.getBoundingClientRect().width + 20 : track.clientWidth; }
+  function update() {
+    if (prev) prev.disabled = track.scrollLeft <= 2;
+    if (next) next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+  }
+  if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+  if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+  track.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+});
