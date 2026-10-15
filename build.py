@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "34"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "35"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -1872,6 +1872,8 @@ for _p, _meta in PRODUCT_DATA.items():
 def build_subpages():
     """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
     for parent, meta in PRODUCT_DATA.items():
+        if parent == "okna":      # okna bez podstron 3. poziomu (uwagi klienta 15.10)
+            continue
         details = SUB_DETAILS.get(parent, [])
         for k, row in enumerate(meta["rows"]):
             title, intro, bullets, img = row
@@ -1933,6 +1935,192 @@ def build_subpages():
                   + nav(parent) + body + footer())
 
 # ---------------------------------------------------------------------------
+# ================================================================ OKNA (układ wg uwag klienta 15.10.2026) ----
+OKNA_VEKA = [
+    ("VEKA SOFTLINE 82 MD",
+     ["Głębokość zabudowy 82 mm, 7 komór, profil klasy A",
+      "Uw od 0,74 W/m²K (pakiet 3-szybowy, ciepła ramka)",
+      "3 płaszczyzny uszczelnienia z uszczelką środkową (MD)",
+      "Sprawdza się zarówno w nowym budownictwie, jak i podczas modernizacji istniejących budynków"],
+     "okna/softline82"),
+    ("VEKA PERFECTLINE",
+     ["Głębokość zabudowy 70 mm, 5 komór, profil klasy A",
+      "Uw od 0,83 W/m²K",
+      "2 uszczelki odbojowe (AD)",
+      "Sprawdzony system do wymiany stolarki w budynkach istniejących"],
+     "okna/perfectline"),
+    ("VEKAMOTION 82 (HST)",
+     ["Drzwi podnoszono-przesuwne — konstrukcje do 6,5 m szerokości",
+      "Głębokość zabudowy ramy 194 mm",
+      "Konstrukcja pozwala na niemal całkowite zlicowanie progu z poziomem podłogi",
+      "Dzięki zaawansowanym mechanizmom skrzydło przesuwa się niezwykle płynnie"],
+     "okna/vekamotion82"),
+]
+OKNA_ALUPROF = [
+    ("Aluprof MB-79N",
+     ["Głębokość zabudowy ramy 70 mm",
+      "Uw od 0,75 W/m²K, system pozwala na wykonanie skrzydeł do 1350 × 2700 mm",
+      "Wąskie profile — maksymalna powierzchnia szklenia",
+      "Wysoka trwałość i odporność na promieniowanie słoneczne"],
+     "al38"),
+    ("Aluprof MB-77HS",
+     ["Drzwi podnoszono-przesuwne — możliwość wykonania skrzydeł o wadze do 600 kg",
+      "Głębokość zabudowy ramy 174 mm",
+      "Konstrukcja pozwala na niemal całkowite zlicowanie progu z poziomem podłogi",
+      "Innowacyjne mechanizmy podnoszono-przesuwne redukują opory ruchu do minimum — skrzydło unosi się i przesuwa po szynach jezdnych niezwykle cicho, płynnie i bez wysiłku"],
+     "al31_rol"),
+]
+OKNA_ADV_VEKA = [
+    ("Energooszczędność", "Uw od 0,74 W/m²K przy pakiecie 3-szybowym", "thermo"),
+    ("Klasa A profili", "Ścianki zewnętrzne min. 2,8 mm wg PN-EN 12608", "shield"),
+    ("Kolorystyka", "Ponad 50 oklein: dekory drewnopodobne, RAL, VEKA Spectral", "palette"),
+]
+OKNA_ADV_ALUPROF = [
+    ("Energooszczędność", "Uw od 0,75 W/m²K — ciepłe profile z przekładką termiczną", "thermo"),
+    ("Trwałość", "Aluminium odporne na warunki atmosferyczne i promieniowanie słoneczne", "shield"),
+    ("Nowoczesny design", "Smukłe profile i duże przeszklenia w pełnej palecie kolorów RAL", "sparkle"),
+]
+OKNA_SPECS = (["System", "Materiał", "Głębokość zabudowy", "Uw od", "Zastosowanie"], [
+    ["VEKA SOFTLINE 82 MD", "PVC kl. A", "82 mm", "0,74 W/m²K", "domy energooszczędne, nowe budownictwo i modernizacje"],
+    ["VEKA PERFECTLINE", "PVC kl. A", "70 mm", "0,83 W/m²K", "wymiana stolarki w budynkach istniejących"],
+    ["VEKAMOTION 82 (HST)", "PVC kl. A", "194 mm (rama)", "—", "przeszklenia tarasowe do 6,5 m"],
+    ["Aluprof MB-79N", "aluminium", "70 mm (rama)", "0,75 W/m²K", "nowoczesne domy i budynki komercyjne"],
+    ["Aluprof MB-77HS", "aluminium", "174 mm (rama)", "—", "duże przeszklenia przesuwne, skrzydła do 600 kg"],
+])
+OKNA_FAQ = [
+    ("Jak dobrać okna do stylu domu?",
+     "<p><strong>Domy tradycyjne i dworkowe</strong> – klasyczne proporcje, białe profile, okleiny drewnopodobne i szprosy podkreślają ponadczasowy wygląd elewacji.</p>"
+     "<p><strong>Domy rustykalne</strong> – okna w kolorach naturalnego drewna doskonale komponują się z kamieniem i drewnianymi elementami.</p>"
+     "<p><strong>Nowoczesna architektura</strong> – duże przeszklenia, profile w kolorze antracytu lub czerni oraz systemy przesuwne podkreślają minimalistyczny charakter budynku.</p>"),
+    ("Jakie okna wybrać do programu „Czyste Powietrze”?",
+     "<p>Program „Czyste Powietrze” daje możliwość uzyskania dofinansowania na wymianę okien w ramach termomodernizacji budynku. Planując wymianę okien z dofinansowaniem, warto zwrócić uwagę przede wszystkim na:</p>"
+     "<ul><li><strong>Współczynnik Uw</strong> – im niższy, tym mniejsze straty ciepła przez całe okno</li>"
+     "<li><strong>Profil okienny</strong> – dobrej jakości system, taki jak VEKA Softline 82, stanowi solidną podstawę energooszczędnej stolarki</li>"
+     "<li><strong>Profesjonalny montaż</strong> – prawidłowe osadzenie okien ma istotne znaczenie dla ich szczelności</li></ul>"),
+    ("Czy można zamówić okna na wymiar?",
+     "<p>Tak! Okna są produkowane na indywidualny wymiar, dzięki czemu można idealnie dopasować je do otworów okiennych oraz projektu budynku. Oferujemy rozwiązania dostosowane do różnych potrzeb – od standardowych okien po nietypowe kształty, wymiary i przeszklenia.</p>"),
+    ("Czy wycena okien jest bezpłatna?",
+     "<p>Tak! Przygotowujemy bezpłatną wycenę okien na podstawie projektu lub zapytania przesłanego mailowo. Możesz również odwiedzić naszą firmę i na miejscu omówić szczegóły inwestycji oraz dobrać odpowiednie rozwiązania. Pomożemy Ci wybrać okna dopasowane do Twoich potrzeb i budżetu.</p>"),
+    ("Czy wykonujecie pomiar okien na miejscu?",
+     "<p>Tak, wykonujemy pomiary okien bezpośrednio u klienta, aby jak najlepiej dopasować stolarkę do budynku. Pomiar ma charakter wiążący i wiąże się z pobraniem zaliczki na poczet zamówienia. Dzięki temu możemy precyzyjnie przygotować ofertę i przejść do realizacji zamówienia.</p>"),
+    ("Czy demontujecie stare okna?",
+     "<p>Tak, oferujemy demontaż starych okien w ramach wymiany stolarki okiennej. Zakres prac ustalamy indywidualnie, aby dopasować usługę do potrzeb klienta i specyfiki budynku. Szczegóły demontażu warto omówić już na etapie przygotowywania wyceny.</p>"),
+    ("Czy zapewniacie serwis zamontowanych okien?",
+     "<p>Tak! Zapewniamy serwis zamontowanych okien, ponieważ zależy nam na długotrwałej współpracy i zadowoleniu naszych klientów. Pomagamy również w przypadku problemów z funkcjonowaniem okien i w razie potrzeby wykonujemy regulację.</p>"),
+    ("Co oznacza współczynnik Uw?",
+     "<p>Uw opisuje izolacyjność całego okna. Im niższa wartość, tym cieplejsze okno.</p>"),
+    ("Czym różni się profil klasy A od klasy B?",
+     "<p>Norma PN-EN 12608 dzieli profile PVC według grubości ścianek: klasa A to ścianki zewnętrzne ≥ 2,8 mm, klasa B — ≥ 2,5 mm. Grubsze ścianki oznaczają sztywniejsze konstrukcje, mocniejsze zgrzewy naroży i lepsze osadzenie okuć — dlatego montujemy wyłącznie profile klasy A.</p>"),
+    ("Pakiet 2-szybowy czy 3-szybowy?",
+     "<p>Pakiet 3-szybowy (Ug 0,5–0,7) ogranicza straty ciepła o ok. 30–40% względem 2-szybowego (Ug 1,0) i poprawia komfort zimą przy dużych przeszkleniach. Do tego ciepła ramka dystansowa obniża współczynnik psi na krawędzi szyby i ryzyko wykraplania pary.</p>"),
+]
+OKNA_GALERIA = [f"okna/galeria-{k}" for k in range(1, 9)]
+
+
+def build_okna():
+    def rows_html(items, offset, veka):
+        out = ""
+        for k, (title, bullets, img) in enumerate(items):
+            li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+            btns = (f'<a class="btn btn--primary btn--sm" href="konfigurator.html">Skonfiguruj okno {I["win"]}</a>'
+                    f'<a class="btn btn--outline btn--sm" href="kontakt.html">Zapytaj o wycenę {I["arrow"]}</a>') if veka else \
+                   f'<a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I["arrow"]}</a>'
+            media = f'<div><img src="assets/img/{img}.jpg" alt="{title}" loading="lazy"></div>'
+            text = f"""<div class="subrow__text">
+        <h2>{title}</h2>
+        <ul class="bullets">{li}</ul>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">{btns}</div>
+      </div>"""
+            flip = (k + offset) % 2
+            out += f'<div class="subrow{" subrow--flip" if flip else ""}">{media if not flip else text}{text if not flip else media}</div>'
+        return out
+
+    def adv_html(items):
+        return "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in items)
+
+    def brand_intro(logo, name, text):
+        return f"""<div class="brand-intro">
+      <img src="assets/img/partners/{logo}.svg?v={ASSET_VER}" alt="{name}">
+      <p>{text}</p>
+    </div>"""
+
+    cols, srows = OKNA_SPECS
+    th = "".join(f"<th>{c}</th>" for c in cols)
+    tr = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in srows)
+
+    faq = ""
+    for k, (q, a) in enumerate(OKNA_FAQ):
+        faq += f"""<div class="faq__row{" is-open" if k == 0 else ""}">
+      <button class="faq__q"><span>{q}</span><span>{"–" if k == 0 else "+"}</span></button>
+      <div class="faq__a">{a}</div>
+    </div>"""
+
+    gal = "".join(f'<a href="assets/img/{g}.jpg" target="_blank"><img src="assets/img/{g}.jpg" alt="Wizualizacja okien VEKA" loading="lazy"></a>'
+                  for g in OKNA_GALERIA)
+
+    rel = ""
+    for s in ["rolety-zewnetrzne", "moskitiery", "oslony-wewnetrzne"]:
+        rel += f"""<a href="{s}.html"><article class="card">
+        <img src="assets/img/{PROD_IMG[s]}.jpg" alt="{PROD_LABEL[s]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
+        <div><h3>{PROD_LABEL[s]}</h3></div>
+        <span class="card__more">Zobacz ofertę {I['arrow']}</span>
+      </article></a>"""
+
+    body = pagehero("al39", "Okna VEKA i systemy Aluprof",
+                    "Wysoka jakość, doskonałe parametry i design dopasowany do Twoich potrzeb.", None)
+    body += f"""<section class="section">
+  <div class="container">
+    {brand_intro("veka", "VEKA", "Odpowiednio dobrane okna mają istotny wpływ na efektywność energetyczną budynku i komfort jego użytkowania. Systemy okienne VEKA z wysokiej jakości profili PVC łączą dobre parametry techniczne z estetyką i trwałością. Wybierając okna VEKA, stawiasz na sprawdzone rozwiązania, jakość i niezawodność na lata.")}
+    {rows_html(OKNA_VEKA, 0, True)}
+  </div>
+</section>
+<section class="advantages"><div class="container advantages__inner">{adv_html(OKNA_ADV_VEKA)}</div></section>
+
+<section class="section">
+  <div class="container">
+    {brand_intro("aluprof", "Aluprof", "Aluprof to ceniony polski producent systemów aluminiowych, który łączy nowoczesne technologie z funkcjonalnością i estetyką. Okna Aluprof to doskonały wybór dla osób ceniących trwałość, energooszczędność i nowoczesny design. Sprawdzają się zarówno w nowoczesnych domach, jak i w budynkach komercyjnych.")}
+    {rows_html(OKNA_ALUPROF, 1, False)}
+  </div>
+</section>
+<section class="advantages"><div class="container advantages__inner">{adv_html(OKNA_ADV_ALUPROF)}</div></section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Porównanie systemów okiennych</h2></div></div>
+    <div class="spec-wrap"><table class="spec-table"><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
+    <div class="faq">{faq}</div>
+  </div>
+</section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
+    <div class="gallery gallery--okna">{gal}</div>
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Planujesz inwestycję budowlaną?",
+     "Skontaktuj się z nami — doradzimy technicznie, precyzyjnie zmierzymy otwory i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Sprawdź również inne systemy</h2>
+    <div class="grid-3">{rel}</div>
+  </div>
+</section>
+"""
+    write("okna.html", head("Okna PVC VEKA i aluminiowe Aluprof | PROMYK Wieluń",
+                            "Okna PVC VEKA Softline 82 MD i Perfectline, drzwi HST VEKAMOTION 82 oraz aluminiowe Aluprof MB-79N i MB-77HS. Bezpłatna wycena, profesjonalny pomiar i montaż — PROMYK Wieluń.")
+          + nav("okna") + body + footer())
+
+
 if __name__ == "__main__":
     print("Generuję strony PROMYK...")
     build_index()
@@ -1943,6 +2131,9 @@ if __name__ == "__main__":
     build_galeria()
     build_kontakt()
     for slug, meta in PRODUCT_DATA.items():
-        product_page(slug, meta)
+        if slug == "okna":
+            build_okna()          # własny układ wg uwag klienta
+        else:
+            product_page(slug, meta)
     build_subpages()
     print("Gotowe.")

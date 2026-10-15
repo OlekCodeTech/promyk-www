@@ -944,3 +944,17 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 .rating__meta .lead { line-height: 1.15; font-size: 16px; }
 .about__then-head { padding-bottom: 46px; }
 @media (max-width: 1024px) { .about__then-head { padding-bottom: 0; } }
+
+/* ---------- podstrona Okna: wstęp producenta z logo + galeria inspiracji ---------- */
+.brand-intro { display: flex; align-items: center; gap: 40px; margin-bottom: 72px; padding-bottom: 48px; border-bottom: 1px solid var(--line); }
+.brand-intro img { height: 64px; width: auto; flex: none; }
+.brand-intro p { margin: 0; font-size: 19px; line-height: 1.75; color: #3a3f45; max-width: 860px; }
+.gallery--okna { grid-template-columns: repeat(4, 1fr); }
+.gallery--okna a { height: 260px; }
+@media (max-width: 780px) {
+  .brand-intro { flex-direction: column; align-items: flex-start; gap: 20px; margin-bottom: 48px; }
+  .brand-intro img { height: 48px; }
+  .brand-intro p { font-size: 17px; }
+  .gallery--okna { grid-template-columns: repeat(2, 1fr); }
+  .gallery--okna a { height: 160px; }
+}
