@@ -925,12 +925,15 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 /* ---------- O nas: zdjęcia z podpisami + ocena Google pod opiniami ---------- */
 .about__fig { margin: 0; position: relative; }
 .about__fig figcaption { margin-top: 10px; font-size: 15px; color: var(--muted); }
-.about__strip { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.about__strip { display: grid; grid-template-columns: repeat(2, 260px); gap: 20px; justify-content: center; }
+.about__then { padding-block: 56px; text-align: center; }
+.about__then-title { font-size: 24px; font-weight: 700; margin-bottom: 20px; color: var(--muted); }
+.about__then .about__fig figcaption { font-size: 13px; }
 .about__strip img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: var(--r-lg); }
 .split__media img.about__img--full { height: auto; }
 .rating--below { justify-content: center; margin-top: 36px; }
 @media (max-width: 780px) {
-  .about__strip { grid-template-columns: 1fr; }
+  .about__strip { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 }
 .rating__meta { display: flex; flex-direction: column; gap: 2px; }
 .rating__meta .lead { line-height: 1.15; font-size: 16px; }

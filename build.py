@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "31"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "32"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -432,7 +432,7 @@ def build_onas():
         <p>Kolejne lata przyniosły dynamiczny rozwój. Firma przeniosła się do siedziby przy domu, gdzie rozszerzyliśmy działalność o produkcję rolet zewnętrznych. Rosnące grono zadowolonych klientów oraz coraz szersza oferta sprawiły, że powstał samodzielny budynek, w którym oprócz osłon okiennych zaczęliśmy oferować również okna, drzwi, bramy garażowe oraz nowoczesne zewnętrzne systemy przeciwsłoneczne.</p>
       </div>
     </div>
-    <figure class="split__media about__fig"><img class="about__img about__img--full" src="assets/img/onas/budynek.jpg" alt="Siedziba PROMYK w Wieluniu"><figcaption>Nasza obecna siedziba w Wieluniu</figcaption></figure>
+    <figure class="split__media about__fig"><img class="about__img about__img--full" src="assets/img/onas/budynek-pion.jpg" alt="Siedziba PROMYK w Wieluniu"><figcaption>Nasza obecna siedziba w Wieluniu</figcaption></figure>
   </div>
 </section>
 
@@ -450,9 +450,9 @@ def build_onas():
   </div>
 </section>
 
-<section class="section">
+<section class="section about__then">
   <div class="container">
-    <h2 class="h-sec" style="margin-bottom:32px">A tak zaczynaliśmy...</h2>
+    <h3 class="about__then-title">A tak zaczynaliśmy...</h3>
     <div class="about__strip">
       <figure class="about__fig"><img src="assets/img/onas/stara-siedziba-kw.jpg" alt="Dawna siedziba PROMYK" loading="lazy"><figcaption>Dawna siedziba firmy — „Żaluzje, rolety”</figcaption></figure>
       <figure class="about__fig"><img src="assets/img/onas/pierwsza-maszyna-kw.jpg" alt="Jedna z pierwszych maszyn PROMYK" loading="lazy"><figcaption>Jedna z pierwszych maszyn, na których pracowaliśmy</figcaption></figure>
