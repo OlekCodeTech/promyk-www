@@ -955,18 +955,22 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
   .brand-intro p { font-size: 17px; }
 }
 
-/* ---------- karuzela (Inspiracje) ---------- */
-.carousel { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
-.carousel::-webkit-scrollbar { display: none; }
-.carousel__item { flex: 0 0 calc((100% - 60px) / 4); height: 300px; border-radius: var(--r-lg); overflow: hidden; scroll-snap-align: start; }
-.carousel__item img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
-.carousel__item:hover img { transform: scale(1.05); }
-.carousel__nav { display: flex; gap: 12px; }
-.carousel__nav .hero__arrow { border-color: var(--line); background: #fff; color: var(--ink); }
-.carousel__nav .hero__arrow--next { background: var(--ink); border-color: var(--ink); color: #fff; }
-.carousel__nav .hero__arrow[disabled] { opacity: .35; cursor: default; }
-@media (max-width: 1024px) { .carousel__item { flex-basis: calc((100% - 20px) / 2); } }
+/* ---------- Inspiracje: siatka + powiększenie z przewijaniem ---------- */
+.gallery--okna { grid-template-columns: repeat(4, 1fr); }
+.gallery--okna a { height: 260px; cursor: zoom-in; }
+.lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(15,17,19,.92); display: none; align-items: center; justify-content: center; }
+.lightbox.is-open { display: flex; }
+.lightbox__img { max-width: min(1200px, 88vw); max-height: 84vh; border-radius: var(--r-lg); box-shadow: 0 20px 60px rgba(0,0,0,.4); user-select: none; }
+.lightbox__btn { position: absolute; width: 52px; height: 52px; border-radius: 26px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.1); color: #fff; display: grid; place-items: center; cursor: pointer; transition: background .18s ease; }
+.lightbox__btn:hover { background: rgba(255,255,255,.25); }
+.lightbox__btn svg { width: 20px; height: 20px; }
+.lightbox__prev { left: 24px; top: 50%; transform: translateY(-50%); }
+.lightbox__next { right: 24px; top: 50%; transform: translateY(-50%); }
+.lightbox__close { right: 24px; top: 24px; font-size: 26px; line-height: 1; }
+.lightbox__count { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); color: #cfd2d4; font-size: 15px; }
 @media (max-width: 780px) {
-  .carousel__item { flex-basis: 82%; height: 240px; }
-  .carousel__nav .hero__arrow { display: grid; }
+  .gallery--okna { grid-template-columns: repeat(2, 1fr); }
+  .gallery--okna a { height: 160px; }
+  .lightbox__prev { left: 8px; } .lightbox__next { right: 8px; }
+  .lightbox__btn { width: 44px; height: 44px; }
 }

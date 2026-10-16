@@ -103,19 +103,43 @@
   });
 })();
 
-// karuzela ze strzałkami (np. „Inspiracje” na podstronie Okna)
-document.querySelectorAll('[data-carousel]').forEach(function (track) {
-  var sec = track.closest('section');
-  var prev = sec && sec.querySelector('[data-carousel-prev]');
-  var next = sec && sec.querySelector('[data-carousel-next]');
-  function step() { var it = track.querySelector('.carousel__item'); return it ? it.getBoundingClientRect().width + 20 : track.clientWidth; }
-  function update() {
-    if (prev) prev.disabled = track.scrollLeft <= 2;
-    if (next) next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+// powiększenie zdjęć z galerii — strzałki, klawiatura i przesuwanie palcem (np. „Inspiracje” na podstronie Okna)
+document.querySelectorAll('[data-lightbox]').forEach(function (gal) {
+  var items = Array.prototype.slice.call(gal.querySelectorAll('[data-lightbox-item]'));
+  if (!items.length) return;
+  var box = document.createElement('div');
+  box.className = 'lightbox';
+  box.innerHTML = '<img class="lightbox__img" alt="">' +
+    '<button class="lightbox__btn lightbox__prev" aria-label="Poprzednie zdjęcie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>' +
+    '<button class="lightbox__btn lightbox__next" aria-label="Następne zdjęcie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>' +
+    '<button class="lightbox__btn lightbox__close" aria-label="Zamknij">&times;</button>' +
+    '<span class="lightbox__count"></span>';
+  document.body.appendChild(box);
+  var img = box.querySelector('.lightbox__img'), count = box.querySelector('.lightbox__count'), cur = 0;
+  function show(i) {
+    cur = (i + items.length) % items.length;
+    img.src = items[cur].getAttribute('href');
+    img.alt = (items[cur].querySelector('img') || {}).alt || '';
+    count.textContent = (cur + 1) + ' / ' + items.length;
   }
-  if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
-  if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
-  track.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
-  update();
+  function open(i) { show(i); box.classList.add('is-open'); document.body.style.overflow = 'hidden'; }
+  function close() { box.classList.remove('is-open'); document.body.style.overflow = ''; }
+  items.forEach(function (a, i) { a.addEventListener('click', function (e) { e.preventDefault(); open(i); }); });
+  box.querySelector('.lightbox__prev').addEventListener('click', function (e) { e.stopPropagation(); show(cur - 1); });
+  box.querySelector('.lightbox__next').addEventListener('click', function (e) { e.stopPropagation(); show(cur + 1); });
+  box.querySelector('.lightbox__close').addEventListener('click', close);
+  box.addEventListener('click', function (e) { if (e.target === box) close(); });
+  document.addEventListener('keydown', function (e) {
+    if (!box.classList.contains('is-open')) return;
+    if (e.key === 'ArrowRight') show(cur + 1);
+    else if (e.key === 'ArrowLeft') show(cur - 1);
+    else if (e.key === 'Escape') close();
+  });
+  var x0 = null;
+  box.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  box.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1));
+  });
 });

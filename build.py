@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "36"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "37"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -2056,11 +2056,11 @@ def build_okna():
       <div class="faq__a">{a}</div>
     </div>"""
 
-    gal = "".join(f'<a class="carousel__item" href="assets/img/{g}.jpg" target="_blank"><img src="assets/img/{g}.jpg" alt="Wizualizacja okien VEKA" loading="lazy"></a>'
+    gal = "".join(f'<a href="assets/img/{g}.jpg" data-lightbox-item><img src="assets/img/{g}.jpg" alt="Wizualizacja okien VEKA" loading="lazy"></a>'
                   for g in OKNA_GALERIA)
 
     rel = ""
-    for s in ["rolety-zewnetrzne", "moskitiery", "oslony-wewnetrzne"]:
+    for s in ["rolety-zewnetrzne", "drzwi-zewnetrzne", "bramy-garazowe"]:
         rel += f"""<a href="{s}.html"><article class="card">
         <img src="assets/img/{PROD_IMG[s]}.jpg" alt="{PROD_LABEL[s]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
         <div><h3>{PROD_LABEL[s]}</h3></div>
@@ -2101,14 +2101,8 @@ def build_okna():
 
 <section class="section section--soft">
   <div class="container">
-    <div class="section-header">
-      <div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div>
-      <div class="carousel__nav">
-        <button class="hero__arrow" data-carousel-prev aria-label="Poprzednie zdjęcia">{I['chevL']}</button>
-        <button class="hero__arrow hero__arrow--next" data-carousel-next aria-label="Następne zdjęcia">{I['chevR']}</button>
-      </div>
-    </div>
-    <div class="carousel" data-carousel>{gal}</div>
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
+    <div class="gallery gallery--okna" data-lightbox>{gal}</div>
   </div>
 </section>
 
