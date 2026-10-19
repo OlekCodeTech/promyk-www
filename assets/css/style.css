@@ -974,3 +974,49 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
   .lightbox__prev { left: 8px; } .lightbox__next { right: 8px; }
   .lightbox__btn { width: 44px; height: 44px; }
 }
+
+/* ---------- podstrona Drzwi zewnętrzne: producent + kroki wyboru ---------- */
+.brand-split { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; margin-bottom: 80px; }
+.brand-split__logo { height: 56px; width: auto; margin-bottom: 24px; }
+.brand-split__text p { margin: 0 0 28px; font-size: 19px; line-height: 1.75; color: #3a3f45; }
+.brand-split__media video, .brand-split__media img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: var(--r-lg); display: block; background: var(--soft); }
+.steps-title { margin-bottom: 40px; }
+.step-block { padding: 40px 0; border-top: 1px solid var(--line); }
+.step-block__head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 24px; }
+.step-block__no { font-family: var(--font-head); font-size: 40px; font-weight: 800; color: rgba(68,96,123,.45); line-height: 1; }
+.step-block__head h3 { font-size: 26px; font-weight: 800; margin: 0; }
+.step-note { margin: 16px 0 0; color: var(--muted); font-size: 16px; }
+.tech-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.tech-card { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; text-align: center; }
+.tech-card img { width: 100%; height: 220px; object-fit: contain; }
+.tech-card figcaption { margin-top: 12px; display: flex; flex-direction: column; gap: 2px; }
+.tech-card strong { font-family: var(--font-head); font-size: 19px; }
+.tech-card span { color: var(--muted); font-size: 15px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.chips span { border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font-weight: 700; font-size: 15px; background: #fff; }
+.pick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.pick-grid a { position: relative; display: block; border-radius: var(--r-lg); overflow: hidden; background: #fff; border: 1px solid var(--line); cursor: zoom-in; }
+.pick-grid img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.pick-grid a:hover img { transform: scale(1.04); }
+.pick-grid span { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 12px; background: linear-gradient(to top, rgba(21,23,25,.75), transparent); color: #fff; font-size: 14px; font-weight: 600; }
+.pick-grid--sq a { aspect-ratio: 1 / 1; }
+.pick-grid--doors a { aspect-ratio: 3 / 4; }
+.pick-grid--doors.pick-grid--contain { grid-template-columns: repeat(6, 1fr); }
+.pick-grid--contain img { object-fit: contain; padding: 12px 12px 36px; }
+.pick-grid--contain span { background: none; color: var(--ink); text-align: center; }
+.swatches-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 16px; }
+.swatches-grid figure { margin: 0; text-align: center; }
+.swatches-grid img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 50%; border: 1px solid var(--line); box-shadow: 0 4px 12px rgba(21,23,25,.08); }
+.swatches-grid figcaption { margin-top: 8px; font-size: 13px; font-weight: 600; color: #3a3f45; }
+@media (max-width: 1024px) {
+  .brand-split { grid-template-columns: 1fr; gap: 32px; }
+  .tech-cards { grid-template-columns: repeat(2, 1fr); }
+  .pick-grid--doors.pick-grid--contain { grid-template-columns: repeat(4, 1fr); }
+  .swatches-grid { grid-template-columns: repeat(6, 1fr); }
+}
+@media (max-width: 780px) {
+  .pick-grid, .pick-grid--doors.pick-grid--contain { grid-template-columns: repeat(2, 1fr); }
+  .swatches-grid { grid-template-columns: repeat(4, 1fr); }
+  .tech-card img { height: 160px; }
+  .step-block__no { font-size: 32px; }
+}

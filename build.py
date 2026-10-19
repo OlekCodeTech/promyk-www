@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "37"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "38"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -1872,7 +1872,7 @@ for _p, _meta in PRODUCT_DATA.items():
 def build_subpages():
     """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
     for parent, meta in PRODUCT_DATA.items():
-        if parent == "okna":      # okna bez podstron 3. poziomu (uwagi klienta 15.10)
+        if parent in ("okna", "drzwi-zewnetrzne"):   # bez podstron 3. poziomu (uwagi klienta)
             continue
         details = SUB_DETAILS.get(parent, [])
         for k, row in enumerate(meta["rows"]):
@@ -2121,6 +2121,152 @@ def build_okna():
           + nav("okna") + body + footer())
 
 
+# ================================================================ DRZWI ZEWNĘTRZNE (uwagi klienta 19.10.2026) ----
+DZ_WIKED_TECH = [("Alu Hybrid", "86 mm", "alu-hybrid"), ("Termo Prestige", "86 mm", "termo-prestige"),
+                 ("Optimum", "76 mm", "optimum"), ("Prima", "64 mm", "prima")]
+DZ_WIKED_KOLEKCJE = ["3D", "Glass", "Klasyk", "Royal", "Rustik", "Softline"]
+DZ_WIKED_WZORY = ["wiked04", "wiked62", "wiked26", "wiked37", "wiked46", "wiked12", "wiked71", "wiked84"]
+DZ_WIKED_KOLORY = [("Morning White", "morning-white"), ("Light Grey", "light-grey"), ("Concrete", "concrete"),
+                   ("Obsidian Gray", "obsidian-gray"), ("Nightfall", "nightfall"), ("Blackout", "blackout"),
+                   ("Truffle", "truffle"), ("Red Velvet", "red-velvet"), ("Sage", "sage"), ("Forest Green", "forest-green"),
+                   ("Blue Mist", "blue-mist"), ("Dark Mint", "dark-mint"), ("Złoty Dąb", "zloty-dab"),
+                   ("Winchester", "winchester"), ("Orzech", "orzech"), ("Antracyt Struktura", "antracyt-struktura")]
+DZ_WIKED_POCHWYTY = [("Alfa", "alfa"), ("Alfa Vision Inox", "alfa-vision-inox"), ("Beta", "beta"),
+                     ("Beta + czytnik linii papilarnych", "beta-czytnik"), ("Queen", "queen"), ("Stripe Inox", "stripe-inox"),
+                     ("Toro Inox + LED", "toro-inox-led"), ("Fusion z podświetleniem", "fusion-led")]
+DZ_WIKED_SZYBY = [("Standard", "standard"), ("Mleczna", "mleczna"), ("Reflex grafit", "reflex-grafit"),
+                  ("Lustro weneckie", "lustro-weneckie"), ("Black", "black"), ("Piaskowana + pasek", "piaskowana-pasek"),
+                  ("Lacobel", "lacobel"), ("Fala", "fala")]
+DZ_ERKADO_TECH = [("Thermo 64", "64 mm", "thermo-64"), ("Thermo 78", "78 mm", "thermo-78"),
+                  ("Thermo Hot 78", "78 mm", "thermo-hot-78"), ("Thermo Hot 88", "88 mm", "thermo-hot-88")]
+DZ_ERKADO_MODELE = [("Arendal", "arendal"), ("Utrecht", "utrecht"), ("Helmond", "helmond"), ("Lahti", "lahti"),
+                    ("Alta", "alta"), ("Rotterdam", "rotterdam"), ("Bazylea", "bazylea"), ("Linden", "linden"),
+                    ("Horn", "horn"), ("Fryburg", "fryburg"), ("Wels", "wels"), ("Lutter", "lutter")]
+DZ_ERKADO_KOLORY = [("Biały mat", "bialy-mat"), ("Antracyt jedwabny", "antracyt-jedwabny"), ("Czarny", "czarny"),
+                    ("Dąb antracyt", "dab-antracyt"), ("Dąb turner", "dab-turner"), ("Orzech", "orzech")]
+DZ_ADV_WIKED = [("Bezpieczeństwo", "Ochrona antywłamaniowa do klasy RC2", "lock"),
+                ("Ciepło", "Izolacyjność cieplna Ud od 0,54 W/m²K", "thermo"),
+                ("Wzornictwo", "Setki wzorów i dowolna kolorystyka", "sparkle")]
+DZ_ADV_ERKADO = [("Ciepło", "Ud od 0,60 W/m²K w technologii Thermo Hot 88", "thermo"),
+                 ("Bezpieczeństwo", "Zamek listwowy i bolce antywyważeniowe w standardzie", "lock"),
+                 ("Na wymiar", "Dopasowanie do otworu w murze co do 1 cm", "ruler")]
+
+
+def build_drzwi_zewnetrzne():
+    def adv_html(items):
+        return "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in items)
+
+    def step(no, title, inner):
+        return f"""<div class="step-block">
+      <div class="step-block__head"><span class="step-block__no">{no:02d}</span><h3>{title}</h3></div>
+      {inner}
+    </div>"""
+
+    def tech_cards(items, prefix):
+        return '<div class="tech-cards">' + "".join(
+            f'<figure class="tech-card"><img src="assets/img/drzwi/{prefix}-tech-{f}.jpg" alt="{n}" loading="lazy">'
+            f'<figcaption><strong>{n}</strong><span>Grubość skrzydła {mm}</span></figcaption></figure>'
+            for n, mm, f in items) + "</div>"
+
+    def tiles(items, path, cls):
+        return f'<div class="pick-grid {cls}" data-lightbox>' + "".join(
+            f'<a href="assets/img/{path(f)}.jpg" data-lightbox-item><img src="assets/img/{path(f)}.jpg" alt="{n}" loading="lazy"><span>{n}</span></a>'
+            for n, f in items) + "</div>"
+
+    def swatches(items, prefix):
+        return '<div class="swatches-grid">' + "".join(
+            f'<figure><img src="assets/img/drzwi/{prefix}-kolor-{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
+            for n, f in items) + "</div>"
+
+    wzory = '<div class="pick-grid pick-grid--doors" data-lightbox>' + "".join(
+        f'<a href="assets/img/{w}.jpg" data-lightbox-item><img src="assets/img/{w}.jpg" alt="Drzwi Wikęd" loading="lazy"></a>'
+        for w in DZ_WIKED_WZORY) + "</div>"
+    kolekcje = '<div class="chips">' + "".join(f"<span>{k}</span>" for k in DZ_WIKED_KOLEKCJE) + "</div>"
+
+    know = [kv for kv in PRODUCT_EXTRAS["drzwi-zewnetrzne"]["know"] if "HPL" not in kv[0]]
+    faq = "".join(f"""<div class="faq__row">
+      <button class="faq__q"><span>{q}</span><span>+</span></button>
+      <div class="faq__a">{a}</div>
+    </div>""" for q, a in know)
+
+    rel = ""
+    for s in ["okna", "bramy-garazowe", "drzwi-wewnetrzne"]:
+        rel += f"""<a href="{s}.html"><article class="card">
+        <img src="assets/img/{PROD_IMG[s]}.jpg" alt="{PROD_LABEL[s]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
+        <div><h3>{PROD_LABEL[s]}</h3></div>
+        <span class="card__more">Zobacz ofertę {I['arrow']}</span>
+      </article></a>"""
+
+    body = pagehero("wiked92", "Wikęd i Erkado – drzwi dopasowane do Twojego domu",
+                    "Postaw na drzwi, które łączą estetykę z funkcjonalnością i podkreślają charakter Twojego domu już od samego wejścia.", None)
+    body += f"""<section class="section">
+  <div class="container">
+    <div class="brand-split">
+      <div class="brand-split__text">
+        <img class="brand-split__logo" src="assets/img/partners/wiked.svg?v={ASSET_VER}" alt="Wikęd">
+        <p>Wikęd to polski producent drzwi zewnętrznych, który łączy nowoczesne wzornictwo z solidnym wykonaniem. Szeroka oferta modeli, kolorów i dodatków pozwala dopasować drzwi do stylu każdego domu, zapewniając estetykę, komfort i bezpieczeństwo na co dzień.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--primary" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a></div>
+      </div>
+      <div class="brand-split__media">
+        <video autoplay muted loop playsinline preload="metadata" poster="assets/img/drzwi/wiked-wejscie.jpg">
+          <source src="assets/img/drzwi/wiked-wejscie.webm" type="video/webm">
+          <source src="assets/img/drzwi/wiked-wejscie.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <h2 class="h-sec steps-title">Wybierz drzwi Wikęd krok po kroku</h2>
+    {step(1, "Technologia", tech_cards(DZ_WIKED_TECH, "wiked"))}
+    {step(2, "Styl i wzór", kolekcje + wzory)}
+    {step(3, "Kolor", swatches(DZ_WIKED_KOLORY, "wiked") + '<p class="step-note">Oraz pełny wzornik RAL K7 Classic.</p>')}
+    {step(4, "Pochwyt", tiles(DZ_WIKED_POCHWYTY, lambda f: f"drzwi/wiked-pochwyt-{f}", "pick-grid--sq"))}
+    {step(5, "Przeszklenie", tiles(DZ_WIKED_SZYBY, lambda f: f"drzwi/wiked-szyba-{f}", "pick-grid--sq"))}
+  </div>
+</section>
+<section class="advantages"><div class="container advantages__inner">{adv_html(DZ_ADV_WIKED)}</div></section>
+
+<section class="section">
+  <div class="container">
+    <div class="brand-split">
+      <div class="brand-split__text">
+        <img class="brand-split__logo" src="assets/img/partners/erkado.svg?v={ASSET_VER}" alt="Erkado">
+        <p>Erkado to polski producent drzwi z ponad 50-letnim doświadczeniem, oferujący szeroki wybór modeli łączących nowoczesny design z funkcjonalnością. Bogata oferta pozwoli Ci wybrać drzwi odpowiadające Twoim oczekiwaniom.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--primary" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a></div>
+      </div>
+      <div class="brand-split__media"><img src="assets/img/drzwi/erkado-wizualizacja.jpg" alt="Drzwi Erkado — wizualizacja"></div>
+    </div>
+
+    <h2 class="h-sec steps-title">Wybierz drzwi Erkado krok po kroku</h2>
+    {step(1, "Technologia", tech_cards(DZ_ERKADO_TECH, "erkado"))}
+    {step(2, "Model", tiles(DZ_ERKADO_MODELE, lambda f: f"drzwi/erkado-model-{f}", "pick-grid--doors pick-grid--contain"))}
+    {step(3, "Kolor", swatches(DZ_ERKADO_KOLORY, "erkado") + '<p class="step-note">Oraz m.in. złoty dąb, winchester, dąb bagienny, sosna górska i antracyt struktura.</p>')}
+  </div>
+</section>
+<section class="advantages"><div class="container advantages__inner">{adv_html(DZ_ADV_ERKADO)}</div></section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
+    <div class="faq">{faq}</div>
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Planujesz inwestycję budowlaną?",
+     "Skontaktuj się z nami — doradzimy technicznie, precyzyjnie zmierzymy otwory i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Sprawdź również inne systemy</h2>
+    <div class="grid-3">{rel}</div>
+  </div>
+</section>
+"""
+    write("drzwi-zewnetrzne.html", head("Drzwi zewnętrzne Wikęd i Erkado | PROMYK Wieluń",
+                                        "Drzwi zewnętrzne Wikęd (Alu Hybrid, Termo Prestige, Optimum, Prima) i Erkado (Thermo 64–88). Kolory, pochwyty, przeszklenia — doradztwo i montaż PROMYK Wieluń.")
+          + nav("drzwi-zewnetrzne") + body + footer())
+
+
 if __name__ == "__main__":
     print("Generuję strony PROMYK...")
     build_index()
@@ -2133,6 +2279,8 @@ if __name__ == "__main__":
     for slug, meta in PRODUCT_DATA.items():
         if slug == "okna":
             build_okna()          # własny układ wg uwag klienta
+        elif slug == "drzwi-zewnetrzne":
+            build_drzwi_zewnetrzne()
         else:
             product_page(slug, meta)
     build_subpages()
