@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "42"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "43"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -1872,7 +1872,7 @@ for _p, _meta in PRODUCT_DATA.items():
 def build_subpages():
     """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
     for parent, meta in PRODUCT_DATA.items():
-        if parent in ("okna", "drzwi-zewnetrzne"):   # bez podstron 3. poziomu (uwagi klienta)
+        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne"):   # bez podstron 3. poziomu (uwagi klienta)
             continue
         details = SUB_DETAILS.get(parent, [])
         for k, row in enumerate(meta["rows"]):
@@ -2534,12 +2534,6 @@ def build_drzwi_zewnetrzne():
   </div>
 </section>
 
-<section class="section section--tight-bottom">
-  <div class="container">
-    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
-    {insp}
-  </div>
-</section>
 <section class="advantages"><div class="container advantages__inner">{adv_html(DZ_ADV_WIKED)}</div></section>
 
 <section class="section section--tight-bottom" id="erkado">
@@ -2568,6 +2562,13 @@ def build_drzwi_zewnetrzne():
   </div>
 </section>
 
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
+    {insp}
+  </div>
+</section>
+
 {cta("Doradztwo i wycena", "Planujesz inwestycję budowlaną?",
      "Skontaktuj się z nami — doradzimy technicznie, precyzyjnie zmierzymy otwory i przygotujemy kalkulację cenową.")}
 
@@ -2581,6 +2582,127 @@ def build_drzwi_zewnetrzne():
     write("drzwi-zewnetrzne.html", head("Drzwi zewnętrzne Wikęd i Erkado | PROMYK Wieluń",
                                         "Drzwi zewnętrzne Wikęd (Alu Hybrid, Termo Prestige, Optimum, Prima) i Erkado (Thermo 64–88). Kolekcje, kolory, pochwyty, klamki, drzwi SMART — doradztwo i montaż PROMYK Wieluń.")
           + nav("drzwi-zewnetrzne") + body + footer())
+
+
+# ================================================================ DRZWI WEWNĘTRZNE (uwagi klienta 20.10.2026) ----
+DW_ROWS = [
+    ("Drzwi przylgowe",
+     ["Klasyczne rozwiązanie z widoczną przylgą na krawędzi skrzydła.",
+      "Uniwersalny wygląd pasujący do wielu aranżacji.",
+      "Sprawdzony wybór do tradycyjnych i nowoczesnych pomieszczeń."],
+     "dre_binito50", "katalog-dre.pdf"),
+    ("Drzwi bezprzylgowe",
+     ["Minimalistyczny design z gładką krawędzią skrzydła.",
+      "Po zamknięciu tworzą jedną płaszczyznę z ościeżnicą.",
+      "Idealne do nowoczesnych i eleganckich wnętrz."],
+     "dre_nestor11", "katalog-dre.pdf"),
+    ("Drzwi ukryte",
+     ["Ościeżnica zlicowana ze ścianą, bez widocznych opasek.",
+      "Minimalistyczny design, który nie zaburza aranżacji pomieszczenia.",
+      "Możliwość dopasowania wykończenia skrzydła do koloru ściany.",
+      "Doskonały wybór do nowoczesnych i eleganckich wnętrz."],
+     "dre_saraeco", "katalog-porta.pdf"),
+    ("Drzwi przesuwne",
+     ["Praktyczne rozwiązanie, które pozwala zaoszczędzić miejsce w pomieszczeniu.",
+      "Szeroki wybór wzorów, kolorów i przeszkleń.",
+      "Idealne do nowoczesnych mieszkań, garderób i pomieszczeń, w których liczy się funkcjonalność."],
+     "dw/przesuwne", "katalog-erkado-wewnetrzne.pdf"),
+    ("Drzwi szklane i loftowe",
+     ["Nowoczesne wzornictwo, które przyciąga uwagę i podkreśla charakter wnętrza.",
+      "Szklane skrzydła, także z czarnymi ramami i szprosami w stylu loftowym.",
+      "Doskonałe do nowoczesnych aranżacji, w których liczy się dostęp do naturalnego światła."],
+     "dw/szklane-loftowe", "katalog-erkado-wewnetrzne.pdf"),
+]
+DW_ADV = [("Wzory i kolory", "Kolekcje DRE, Porta i Erkado — od klasyki po loft", "palette"),
+          ("Dopasowanie do wnętrza", "Drzwi przylgowe, bezprzylgowe, ukryte, przesuwne i szklane", "sparkle"),
+          ("Pomiar i montaż", "Pomagamy na każdym etapie — od wyboru po montaż", "ruler")]
+DW_INSPIRACJE = ["dre_city2", "dw/insp-erkado-0", "dre_nella6", "dw/insp-erkado-4",
+                 "dre_saraeco2", "dw/insp-erkado-10", "dre_seco1", "dw/insp-erkado-14",
+                 "dw/insp-erkado-1", "dw/insp-erkado-13", "dw/insp-erkado-20", "dw/hero-loft"]
+DW_FAQ_NOWE = [
+    ("Jak dobrać kolor drzwi do podłogi i ścian?",
+     "<p>Kolor drzwi warto dopasować do podłogi, ścian i stylu całego wnętrza. Nie musi być identyczny – ważne, aby poszczególne elementy dobrze ze sobą współgrały.</p>"
+     "<ul><li><strong>Drzwi w kolorze podłogi</strong> – tworzą spójną aranżację i sprawdzają się szczególnie w klasycznych wnętrzach.</li>"
+     "<li><strong>Drzwi kontrastujące z podłogą</strong> – np. czarne lub ciemne przy jasnych panelach, nadają wnętrzu wyrazisty charakter.</li>"
+     "<li><strong>Drzwi dopasowane do ścian</strong> – białe lub w podobnym odcieniu optycznie wtapiają się w tło i nie dominują w pomieszczeniu.</li>"
+     "<li><strong>Drzwi w kolorze drewna</strong> – ocieplają wnętrze i dobrze komponują się z naturalnymi materiałami.</li></ul>"),
+    ("Czy można zamówić drzwi w niestandardowym kolorze?",
+     "<p>Tak, w zależności od producenta i wybranego modelu istnieje możliwość zamówienia drzwi w niestandardowym kolorze lub wykończeniu. Dostępne opcje obejmują różne odcienie, dekory drewnopodobne oraz wybrane kolory z palety RAL. Zakres personalizacji zależy od konkretnej kolekcji, dlatego warto sprawdzić dostępne możliwości przed złożeniem zamówienia.</p>"),
+    ("Czy oferujecie pomiar i montaż drzwi?",
+     "<p>Tak, oferujemy możliwość pomiaru i montażu drzwi. Pomagamy na każdym etapie – od wyboru odpowiedniego modelu i dopasowania ościeżnicy, po ustalenie szczegółów montażu. Dzięki temu masz pewność, że drzwi będą dobrze dopasowane do otworu i przygotowane do prawidłowego użytkowania.</p>"),
+]
+
+
+def build_drzwi_wewnetrzne():
+    rows = ""
+    for k, (title, bullets, img, cat) in enumerate(DW_ROWS):
+        li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+        media = f'<div><img src="assets/img/{img}.jpg" alt="{title}" loading="lazy"></div>'
+        text = f"""<div class="subrow__text">
+        <h2>{title}</h2>
+        <ul class="bullets">{li}</ul>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn--primary btn--sm" href="assets/katalogi/{cat}" target="_blank" rel="noopener">Odkryj dostępne modele {I['arrow']}</a>
+          <a class="btn btn--outline btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+        </div>
+      </div>"""
+        flip = k % 2
+        rows += f'<div class="subrow{" subrow--flip" if flip else ""}">{media if not flip else text}{text if not flip else media}</div>'
+
+    adv = "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in DW_ADV)
+
+    stare = PRODUCT_EXTRAS["drzwi-wewnetrzne"]["know"][:4]
+    stare = [(q, a.replace(" Do łazienek polecamy DRE WaterProof — testowana na długi kontakt z wodą.", "")) for q, a in stare]
+    faq = "".join(f"""<div class="faq__row">
+      <button class="faq__q"><span>{q}</span><span>+</span></button>
+      <div class="faq__a">{a}</div>
+    </div>""" for q, a in stare + DW_FAQ_NOWE)
+
+    insp = '<div class="gallery gallery--okna" data-lightbox>' + "".join(
+        f'<a href="assets/img/{g}.jpg" data-lightbox-item><img src="assets/img/{g}.jpg" alt="Drzwi wewnętrzne — inspiracja" loading="lazy"></a>'
+        for g in DW_INSPIRACJE) + "</div>"
+
+    rel = ""
+    for s in ["drzwi-zewnetrzne", "okna", "oslony-wewnetrzne"]:
+        rel += f"""<a href="{s}.html"><article class="card">
+        <img src="assets/img/{PROD_IMG[s]}.jpg" alt="{PROD_LABEL[s]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
+        <div><h3>{PROD_LABEL[s]}</h3></div>
+        <span class="card__more">Zobacz ofertę {I['arrow']}</span>
+      </article></a>"""
+
+    body = pagehero("dw/hero-loft", "Drzwi wewnętrzne DRE, Porta i Erkado – styl i funkcjonalność na co dzień",
+                    "Szeroki wybór wzorów, kolorów i przeszkleń, dzięki którym dopasujesz drzwi do swojego domu.", None)
+    body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
+<section class="advantages"><div class="container advantages__inner">{adv}</div></section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
+    <div class="faq">{faq}</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
+    {insp}
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Planujesz inwestycję budowlaną?",
+     "Skontaktuj się z nami — doradzimy technicznie, precyzyjnie zmierzymy otwory i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Sprawdź również inne systemy</h2>
+    <div class="grid-3">{rel}</div>
+  </div>
+</section>
+"""
+    write("drzwi-wewnetrzne.html", head("Drzwi wewnętrzne DRE, Porta i Erkado | PROMYK Wieluń",
+                                        "Drzwi wewnętrzne DRE, Porta i Erkado: przylgowe, bezprzylgowe, ukryte, przesuwne, szklane i loftowe. Pomiar i montaż — PROMYK Wieluń.")
+          + nav("drzwi-wewnetrzne") + body + footer())
 
 
 if __name__ == "__main__":
@@ -2597,6 +2719,8 @@ if __name__ == "__main__":
             build_okna()          # własny układ wg uwag klienta
         elif slug == "drzwi-zewnetrzne":
             build_drzwi_zewnetrzne()
+        elif slug == "drzwi-wewnetrzne":
+            build_drzwi_wewnetrzne()
         else:
             product_page(slug, meta)
     build_subpages()
