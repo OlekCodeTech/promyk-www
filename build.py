@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "41"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "42"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -2369,8 +2369,9 @@ DZ_WIKED_KLAMKI = [("Manitoba Black", "manitoba-black"), ("Tahoma Inox", "tahoma
 DZ_WIKED_SZYBY = [("Standard", "standard"), ("Mleczna", "mleczna"), ("Reflex grafit", "reflex-grafit"),
                   ("Lustro weneckie", "lustro-weneckie"), ("Black", "black"), ("Piaskowana + pasek", "piaskowana-pasek"),
                   ("Lacobel", "lacobel"), ("Fala", "fala")]
-DZ_WIKED_INSPIRACJE = ["wiked62", "wiked37", "wiked51", "wiked92", "wiked35", "wiked12", "wiked22", "wiked29",
-                       "wiked99", "wiked101", "wiked96", "wiked07"]
+DZ_WIKED_INSPIRACJE = ["drzwi/insp-antracyt", "wiked62", "drzwi/insp-czarne", "wiked37",
+                       "drzwi/insp-granat", "wiked92", "drzwi/insp-czarne-drewno", "wiked07",
+                       "drzwi/insp-szalwia", "wiked51", "wiked12", "wiked35"]
 DZ_SMART = [("Otwieranie telefonem", "Otwierasz drzwi z aplikacji — także wtedy, gdy nie ma Cię w domu."),
             ("Dostęp dla bliskich", "Dajesz dostęp wybranym osobom i decydujesz, kiedy mogą wejść."),
             ("Podgląd i historia", "Sprawdzasz w telefonie, czy drzwi są zamknięte i kiedy były otwierane."),
@@ -2462,13 +2463,13 @@ def build_drzwi_zewnetrzne():
         f'<figure data-filter="{p}"{"" if p == DZ_WIKED_PALETY[0][0] else " hidden"}><img src="assets/img/drzwi/wiked-kolor-{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
         for p, n, f in DZ_WIKED_KOLORY) + "</div>")
 
-    uchwyty = ('<h4 class="palette-title">Pochwyty</h4>' + tiles(DZ_WIKED_POCHWYTY, lambda f: f"drzwi/wiked-pochwyt-{f}", "pick-grid--sq")
-               + '<h4 class="palette-title">Klamki</h4>' + tiles(DZ_WIKED_KLAMKI, lambda f: f"drzwi/wiked-klamka-{f}", "pick-grid--sq")
-               + """<div class="step-text">
+    uchwyty = ("""<div class="step-text step-text--top">
         <h4>Które rozwiązanie sprawdzi się lepiej?</h4>
         <p><strong>Klamka</strong> to klasyczne i uniwersalne rozwiązanie. Jest wygodna w codziennym użytkowaniu, dostępna w wielu kształtach i kolorach, dzięki czemu łatwo dopasować ją do stylu drzwi oraz pozostałych elementów stolarki.</p>
         <p><strong>Pochwyt</strong> to propozycja dla osób, które cenią nowoczesny design. Doskonale komponuje się z prostymi, minimalistycznymi drzwiami. To doskonały wybór dla osób, które szukają niestandardowych rozwiązań i chcą wyróżnić wejście do swojego domu.</p>
-      </div>""")
+      </div>"""
+               + '<h4 class="palette-title">Pochwyty</h4>' + tiles(DZ_WIKED_POCHWYTY, lambda f: f"drzwi/wiked-pochwyt-{f}", "pick-grid--sq")
+               + '<h4 class="palette-title">Klamki</h4>' + tiles(DZ_WIKED_KLAMKI, lambda f: f"drzwi/wiked-klamka-{f}", "pick-grid--sq"))
 
     smart_pts = "".join(f'<span class="smart__pin" style="left:{x}%;top:{y}%" title="{t}">{n}</span>' for n, x, y, t in DZ_SMART_PUNKTY)
     smart_legend = "".join(f'<li><span>{n}</span>{t}</li>' for n, x, y, t in DZ_SMART_PUNKTY)
@@ -2515,7 +2516,7 @@ def build_drzwi_zewnetrzne():
     {step(2, "Kolekcja i wzór", tabs + modele)}
     {step(3, "Kolor", palety + '<p class="step-note">Oraz pełny wzornik RAL K7 Classic.</p>')}
     {step(4, "Pochwyty i klamki", uchwyty)}
-    {step(5, "Przeszklenie", tiles(DZ_WIKED_SZYBY, lambda f: f"drzwi/wiked-szyba-{f}", "pick-grid--sq") + '<div class="step-text"><p>Przeszklenie w drzwiach zewnętrznych to sposób na doświetlenie wnętrza naturalnym światłem i nadanie wejściu wyjątkowego charakteru. Wybór szyby zależy od tego, ile światła chcesz wpuścić do wnętrza i jaką prywatność chcesz zachować. Do wyboru są różne rodzaje szkła, dzięki którym można dopasować drzwi zarówno do nowoczesnej, jak i klasycznej architektury domu.</p></div>')}
+    {step(5, "Przeszklenie", '<div class="step-text step-text--top"><p>Przeszklenie w drzwiach zewnętrznych to sposób na doświetlenie wnętrza naturalnym światłem i nadanie wejściu wyjątkowego charakteru. Wybór szyby zależy od tego, ile światła chcesz wpuścić do wnętrza i jaką prywatność chcesz zachować. Do wyboru są różne rodzaje szkła, dzięki którym można dopasować drzwi zarówno do nowoczesnej, jak i klasycznej architektury domu.</p></div>' + tiles(DZ_WIKED_SZYBY, lambda f: f"drzwi/wiked-szyba-{f}", "pick-grid--sq"))}
   </div>
 </section>
 
