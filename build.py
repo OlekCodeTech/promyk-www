@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "38"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "39"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -2121,35 +2121,269 @@ def build_okna():
           + nav("okna") + body + footer())
 
 
-# ================================================================ DRZWI ZEWNĘTRZNE (uwagi klienta 19.10.2026) ----
+# ================================================================ DRZWI ZEWNĘTRZNE (uwagi klienta 19–20.10.2026) ----
 DZ_WIKED_TECH = [("Alu Hybrid", "86 mm", "alu-hybrid"), ("Termo Prestige", "86 mm", "termo-prestige"),
                  ("Optimum", "76 mm", "optimum"), ("Prima", "64 mm", "prima")]
 DZ_WIKED_KOLEKCJE = ["3D", "Glass", "Klasyk", "Royal", "Rustik", "Softline"]
-DZ_WIKED_WZORY = ["wiked04", "wiked62", "wiked26", "wiked37", "wiked46", "wiked12", "wiked71", "wiked84"]
-DZ_WIKED_KOLORY = [("Morning White", "morning-white"), ("Light Grey", "light-grey"), ("Concrete", "concrete"),
-                   ("Obsidian Gray", "obsidian-gray"), ("Nightfall", "nightfall"), ("Blackout", "blackout"),
-                   ("Truffle", "truffle"), ("Red Velvet", "red-velvet"), ("Sage", "sage"), ("Forest Green", "forest-green"),
-                   ("Blue Mist", "blue-mist"), ("Dark Mint", "dark-mint"), ("Złoty Dąb", "zloty-dab"),
-                   ("Winchester", "winchester"), ("Orzech", "orzech"), ("Antracyt Struktura", "antracyt-struktura")]
+DZ_WIKED_MODELE = [
+    ('3D', '3D01', '3d-3d01'),
+    ('3D', '3D02', '3d-3d02'),
+    ('3D', '3D03', '3d-3d03'),
+    ('3D', '3D04', '3d-3d04'),
+    ('3D', '3D05', '3d-3d05'),
+    ('3D', '3D06', '3d-3d06'),
+    ('3D', '3D07', '3d-3d07'),
+    ('3D', '3D08', '3d-3d08'),
+    ('Glass', 'GD01a', 'glass-gd01a'),
+    ('Glass', 'GD01b', 'glass-gd01b'),
+    ('Glass', 'GD01c', 'glass-gd01c'),
+    ('Glass', 'GD02a', 'glass-gd02a'),
+    ('Glass', 'GD02b', 'glass-gd02b'),
+    ('Glass', 'GD03a', 'glass-gd03a'),
+    ('Glass', 'GD04', 'glass-gd04'),
+    ('Glass', 'GL01', 'glass-gl01'),
+    ('Glass', 'GL01a', 'glass-gl01a'),
+    ('Glass', 'GL02', 'glass-gl02'),
+    ('Glass', 'GL02a', 'glass-gl02a'),
+    ('Glass', 'GL02b', 'glass-gl02b'),
+    ('Glass', 'GL02c', 'glass-gl02c'),
+    ('Glass', 'GL03', 'glass-gl03'),
+    ('Glass', 'GL03a', 'glass-gl03a'),
+    ('Glass', 'GL03b', 'glass-gl03b'),
+    ('Glass', 'GL03c', 'glass-gl03c'),
+    ('Glass', 'GF01', 'glass-gf01'),
+    ('Glass', 'GF01a', 'glass-gf01a'),
+    ('Glass', 'GF02', 'glass-gf02'),
+    ('Glass', 'GF02a', 'glass-gf02a'),
+    ('Glass', 'GF02b', 'glass-gf02b'),
+    ('Glass', 'GF02c', 'glass-gf02c'),
+    ('Glass', 'GF03', 'glass-gf03'),
+    ('Glass', 'GF03a', 'glass-gf03a'),
+    ('Glass', 'GF03b', 'glass-gf03b'),
+    ('Glass', 'GF03c', 'glass-gf03c'),
+    ('Glass', 'GF04', 'glass-gf04'),
+    ('Glass', 'GF05', 'glass-gf05'),
+    ('Glass', 'GF06', 'glass-gf06'),
+    ('Glass', 'GF07', 'glass-gf07'),
+    ('Klasyk', '1', 'klasyk-1'),
+    ('Klasyk', '3', 'klasyk-3'),
+    ('Klasyk', '4', 'klasyk-4'),
+    ('Klasyk', '5', 'klasyk-5'),
+    ('Klasyk', '6', 'klasyk-6'),
+    ('Klasyk', '8', 'klasyk-8'),
+    ('Klasyk', '9', 'klasyk-9'),
+    ('Klasyk', '12', 'klasyk-12'),
+    ('Klasyk', '12c', 'klasyk-12c'),
+    ('Klasyk', '13', 'klasyk-13'),
+    ('Klasyk', '14', 'klasyk-14'),
+    ('Klasyk', '21', 'klasyk-21'),
+    ('Klasyk', '21a', 'klasyk-21a'),
+    ('Klasyk', '22', 'klasyk-22'),
+    ('Klasyk', '23', 'klasyk-23'),
+    ('Klasyk', '23a', 'klasyk-23a'),
+    ('Klasyk', '24', 'klasyk-24'),
+    ('Klasyk', '25', 'klasyk-25'),
+    ('Klasyk', '25a', 'klasyk-25a'),
+    ('Klasyk', '25b', 'klasyk-25b'),
+    ('Klasyk', '25c', 'klasyk-25c'),
+    ('Klasyk', '26', 'klasyk-26'),
+    ('Klasyk', '26a', 'klasyk-26a'),
+    ('Klasyk', '26b', 'klasyk-26b'),
+    ('Klasyk', '26c', 'klasyk-26c'),
+    ('Klasyk', '26d', 'klasyk-26d'),
+    ('Klasyk', '26e', 'klasyk-26e'),
+    ('Klasyk', '26f', 'klasyk-26f'),
+    ('Klasyk', '26g', 'klasyk-26g'),
+    ('Klasyk', '26h', 'klasyk-26h'),
+    ('Klasyk', '26i', 'klasyk-26i'),
+    ('Klasyk', '26j', 'klasyk-26j'),
+    ('Klasyk', '26k', 'klasyk-26k'),
+    ('Klasyk', '27', 'klasyk-27'),
+    ('Klasyk', '28', 'klasyk-28'),
+    ('Klasyk', '29a', 'klasyk-29a'),
+    ('Klasyk', '30', 'klasyk-30'),
+    ('Klasyk', '30a', 'klasyk-30a'),
+    ('Klasyk', '30b', 'klasyk-30b'),
+    ('Klasyk', '31', 'klasyk-31'),
+    ('Klasyk', '31a', 'klasyk-31a'),
+    ('Klasyk', '32', 'klasyk-32'),
+    ('Klasyk', '32a', 'klasyk-32a'),
+    ('Klasyk', '32b', 'klasyk-32b'),
+    ('Klasyk', '34', 'klasyk-34'),
+    ('Klasyk', '36', 'klasyk-36'),
+    ('Klasyk', '37', 'klasyk-37'),
+    ('Klasyk', '37a', 'klasyk-37a'),
+    ('Klasyk', '38', 'klasyk-38'),
+    ('Klasyk', '38a', 'klasyk-38a'),
+    ('Klasyk', '39', 'klasyk-39'),
+    ('Klasyk', '40', 'klasyk-40'),
+    ('Klasyk', '40a', 'klasyk-40a'),
+    ('Klasyk', '41', 'klasyk-41'),
+    ('Klasyk', '41a', 'klasyk-41a'),
+    ('Klasyk', '39a', 'klasyk-39a'),
+    ('Klasyk', '39b', 'klasyk-39b'),
+    ('Klasyk', '41b', 'klasyk-41b'),
+    ('Klasyk', '42', 'klasyk-42'),
+    ('Klasyk', '43', 'klasyk-43'),
+    ('Klasyk', '43a', 'klasyk-43a'),
+    ('Klasyk', '43b', 'klasyk-43b'),
+    ('Klasyk', '43c', 'klasyk-43c'),
+    ('Klasyk', '44', 'klasyk-44'),
+    ('Klasyk', '44a', 'klasyk-44a'),
+    ('Klasyk', '44b', 'klasyk-44b'),
+    ('Klasyk', '44c', 'klasyk-44c'),
+    ('Klasyk', '45', 'klasyk-45'),
+    ('Klasyk', '47', 'klasyk-47'),
+    ('Klasyk', '48', 'klasyk-48'),
+    ('Klasyk', '49', 'klasyk-49'),
+    ('Klasyk', '50', 'klasyk-50'),
+    ('Royal', 'RL1', 'royal-rl1'),
+    ('Royal', 'RL2a', 'royal-rl2a'),
+    ('Royal', 'RL2b', 'royal-rl2b'),
+    ('Royal', 'RL3', 'royal-rl3'),
+    ('Royal', 'RL3a', 'royal-rl3a'),
+    ('Royal', 'RL3b', 'royal-rl3b'),
+    ('Royal', 'RL4', 'royal-rl4'),
+    ('Royal', 'RL4a', 'royal-rl4a'),
+    ('Royal', 'RL4b', 'royal-rl4b'),
+    ('Royal', 'RL5', 'royal-rl5'),
+    ('Royal', 'RL5a', 'royal-rl5a'),
+    ('Royal', 'RL5b', 'royal-rl5b'),
+    ('Royal', 'RL6', 'royal-rl6'),
+    ('Royal', 'RL6a', 'royal-rl6a'),
+    ('Royal', 'RL7', 'royal-rl7'),
+    ('Royal', 'RL7b', 'royal-rl7b'),
+    ('Royal', 'RL7a', 'royal-rl7a'),
+    ('Rustik', 'ML01', 'rustik-ml01'),
+    ('Rustik', 'ML02', 'rustik-ml02'),
+    ('Rustik', 'ML03', 'rustik-ml03'),
+    ('Rustik', 'WL01', 'rustik-wl01'),
+    ('Rustik', 'WL02', 'rustik-wl02'),
+    ('Rustik', 'WL03', 'rustik-wl03'),
+    ('Softline', 'S1', 'softline-s1'),
+    ('Softline', 'S2', 'softline-s2'),
+    ('Softline', 'S3', 'softline-s3'),
+    ('Softline', 'S4', 'softline-s4'),
+    ('Softline', 'S5', 'softline-s5'),
+    ('Softline', 'S6', 'softline-s6'),
+    ('Softline', 'S7', 'softline-s7'),
+]   # (kolekcja, nazwa modelu, plik) — modele ze strony wiked.pl
+DZ_WIKED_PALETY = [("nd", "Natural Decor"), ("cs", "Crystal Sky"), ("tt", "Top Trends")]
+DZ_WIKED_KOLORY = [
+    ('nd', 'Dąb Bagienny', 'dab-bagienny'),
+    ('nd', 'Dąb Bielony', 'dab-bielony'),
+    ('nd', 'Orzech', 'orzech'),
+    ('nd', 'Srebrno-szary', 'srebrno-szary'),
+    ('nd', 'Winchester', 'winchester'),
+    ('nd', 'Woodec Dąb Toffee', 'woodec-dab-toffee'),
+    ('nd', 'Woodec Dąb Turner', 'woodec-dab-turner'),
+    ('nd', 'Złoty Dąb', 'zloty-dab'),
+    ('nd', 'Antracyt Gładki', 'antracyt-gladki'),
+    ('nd', 'Antracyt Jedwabny', 'antracyt-jedwabny'),
+    ('nd', 'Antracyt Struktura', 'antracyt-struktura'),
+    ('nd', 'Biały Mat', 'bialy-mat'),
+    ('nd', 'Czarny Mat', 'czarny-mat'),
+    ('cs', 'Azure', 'azure'),
+    ('cs', 'Basalt White', 'basalt-white'),
+    ('cs', 'Carbon', 'carbon'),
+    ('cs', 'Cobalt Blue', 'cobalt-blue'),
+    ('cs', 'Coffee&Milk', 'coffee-milk'),
+    ('cs', 'Dark Bronze', 'dark-bronze'),
+    ('cs', 'Dark Grey', 'dark-grey'),
+    ('cs', 'Dark Mint', 'dark-mint'),
+    ('cs', 'Graphite Black', 'graphite-black'),
+    ('cs', 'Grey Aluminium', 'grey-aluminium'),
+    ('cs', 'Lagoon', 'lagoon'),
+    ('cs', 'Limestone', 'limestone'),
+    ('cs', 'Lunar Glow', 'lunar-glow'),
+    ('cs', 'Magnolia Blossom', 'magnolia-blossom'),
+    ('cs', 'Medium Grey', 'medium-grey'),
+    ('cs', 'Moss', 'moss'),
+    ('cs', 'Rusty Bronze', 'rusty-bronze'),
+    ('cs', 'Savana', 'savana'),
+    ('cs', 'Silver Grey', 'silver-grey'),
+    ('tt', 'Morning White', 'morning-white'),
+    ('tt', 'Arctic White', 'arctic-white'),
+    ('tt', 'Light Grey', 'light-grey'),
+    ('tt', 'Grey Stone', 'grey-stone'),
+    ('tt', 'Skyline Gray', 'skyline-gray'),
+    ('tt', 'Silver Mist', 'silver-mist'),
+    ('tt', 'Ash', 'ash'),
+    ('tt', 'Concrete', 'concrete'),
+    ('tt', 'Solid Gray', 'solid-gray'),
+    ('tt', 'Obsidian Gray', 'obsidian-gray'),
+    ('tt', 'Nightfall', 'nightfall'),
+    ('tt', 'Moss Stone', 'moss-stone'),
+    ('tt', 'Soft Quartz', 'soft-quartz'),
+    ('tt', 'Truffle', 'truffle'),
+    ('tt', 'Chocolate Brown', 'chocolate-brown'),
+    ('tt', 'Red Velvet', 'red-velvet'),
+    ('tt', 'Blackout', 'blackout'),
+    ('tt', 'Blue Mist', 'blue-mist'),
+    ('tt', 'Ink', 'ink'),
+    ('tt', 'Sage', 'sage'),
+    ('tt', 'Forest Green', 'forest-green'),
+]   # (paleta, nazwa, plik)
 DZ_WIKED_POCHWYTY = [("Alfa", "alfa"), ("Alfa Vision Inox", "alfa-vision-inox"), ("Beta", "beta"),
                      ("Beta + czytnik linii papilarnych", "beta-czytnik"), ("Queen", "queen"), ("Stripe Inox", "stripe-inox"),
                      ("Toro Inox + LED", "toro-inox-led"), ("Fusion z podświetleniem", "fusion-led")]
+DZ_WIKED_KLAMKI = [("Manitoba Black", "manitoba-black"), ("Tahoma Inox", "tahoma-inox"), ("Magnus Stare Złoto", "magnus-stare-zloto"),
+                   ("Prime Black", "prime-black"), ("Prestige Inox", "prestige-inox"), ("Lava Black", "lava-black"),
+                   ("King Black", "king-black"), ("Quadro Inox", "quadro-inox")]
 DZ_WIKED_SZYBY = [("Standard", "standard"), ("Mleczna", "mleczna"), ("Reflex grafit", "reflex-grafit"),
                   ("Lustro weneckie", "lustro-weneckie"), ("Black", "black"), ("Piaskowana + pasek", "piaskowana-pasek"),
                   ("Lacobel", "lacobel"), ("Fala", "fala")]
+DZ_WIKED_INSPIRACJE = ["wiked04", "wiked62", "wiked26", "wiked37", "wiked46", "wiked12", "wiked71", "wiked84",
+                       "wiked81", "wiked88", "wiked55", "wiked31"]
+DZ_SMART = [("Otwieranie telefonem", "Otwierasz drzwi z aplikacji — także wtedy, gdy nie ma Cię w domu."),
+            ("Dostęp dla bliskich", "Dajesz dostęp wybranym osobom i decydujesz, kiedy mogą wejść."),
+            ("Podgląd i historia", "Sprawdzasz w telefonie, czy drzwi są zamknięte i kiedy były otwierane."),
+            ("Światło po zmroku", "Podświetlenie LED włączasz jednym kliknięciem.")]
+DZ_SMART_PUNKTY = [(1, 68, 24, "Naświetle z podświetleniem"), (2, 47, 82, "Podświetlany próg"),
+                   (3, 38.5, 58, "Podświetlenie pochwytu"), (4, 38.5, 36, "Przycisk w pochwycie — otwierasz bez klucza")]
 DZ_ERKADO_TECH = [("Thermo 64", "64 mm", "thermo-64"), ("Thermo 78", "78 mm", "thermo-78"),
                   ("Thermo Hot 78", "78 mm", "thermo-hot-78"), ("Thermo Hot 88", "88 mm", "thermo-hot-88")]
 DZ_ERKADO_MODELE = [("Arendal", "arendal"), ("Utrecht", "utrecht"), ("Helmond", "helmond"), ("Lahti", "lahti"),
                     ("Alta", "alta"), ("Rotterdam", "rotterdam"), ("Bazylea", "bazylea"), ("Linden", "linden"),
-                    ("Horn", "horn"), ("Fryburg", "fryburg"), ("Wels", "wels"), ("Lutter", "lutter")]
-DZ_ERKADO_KOLORY = [("Biały mat", "bialy-mat"), ("Antracyt jedwabny", "antracyt-jedwabny"), ("Czarny", "czarny"),
-                    ("Dąb antracyt", "dab-antracyt"), ("Dąb turner", "dab-turner"), ("Orzech", "orzech")]
+                    ("Horn", "horn"), ("Fryburg", "fryburg"), ("Wels", "wels"), ("Lutter", "lutter"),
+                    ("Leimen", "leimen"), ("Amberg", "amberg"), ("Lucerna", "lucerna"), ("Singen", "singen"),
+                    ("Selters", "selters"), ("Langen", "langen")]
+DZ_ERKADO_KOLORY = [("Antracyt jedwabny", "antracyt-jedwabny"), ("Biały mat", "bialy-mat"), ("Dąb turner", "dab-turner"),
+                    ("Dąb antracyt", "dab-antracyt"), ("Orzech", "orzech"), ("Czarny", "czarny"), ("Złoty dąb", "zloty-dab"),
+                    ("Winchester", "winchester"), ("Antracyt struktura", "antracyt-struktura"), ("Antracyt gładki", "antracyt-gladki"),
+                    ("Szary", "szary"), ("Dąb bagienny", "dab-bagienny")]
 DZ_ADV_WIKED = [("Bezpieczeństwo", "Ochrona antywłamaniowa do klasy RC2", "lock"),
                 ("Ciepło", "Izolacyjność cieplna Ud od 0,54 W/m²K", "thermo"),
                 ("Wzornictwo", "Setki wzorów i dowolna kolorystyka", "sparkle")]
 DZ_ADV_ERKADO = [("Ciepło", "Ud od 0,60 W/m²K w technologii Thermo Hot 88", "thermo"),
                  ("Bezpieczeństwo", "Zamek listwowy i bolce antywyważeniowe w standardzie", "lock"),
                  ("Na wymiar", "Dopasowanie do otworu w murze co do 1 cm", "ruler")]
+DZ_FAQ = [
+    ("Jak dobrać drzwi do stylu domu?",
+     "<p><strong>Domy tradycyjne i dworkowe</strong> – klasyczne wzory, przeszklenia ze szprosami, okleiny drewnopodobne i stylowe klamki podkreślają ponadczasowy wygląd elewacji.</p>"
+     "<p><strong>Domy rustykalne</strong> – drzwi w kolorach naturalnego drewna doskonale komponują się z kamieniem i drewnianymi elementami.</p>"
+     "<p><strong>Nowoczesna architektura</strong> – gładkie lub frezowane skrzydła w kolorze antracytu lub czerni, długie pochwyty i podświetlenie LED podkreślają minimalistyczny charakter budynku.</p>"),
+    ("Na co zwrócić uwagę przy wyborze drzwi zewnętrznych?",
+     "<p>Ważne są parametry termoizolacyjne, bezpieczeństwo, trwałość, odporność na warunki atmosferyczne oraz wygląd dopasowany do elewacji i stylu budynku.</p>"),
+    ("Czy drzwi zewnętrzne można dopasować kolorystycznie do okien i bramy garażowej?",
+     "<p>Tak, dobierając drzwi, można uwzględnić kolorystykę okien, bramy garażowej i pozostałych elementów stolarki, aby uzyskać spójny wygląd całego budynku.</p>"),
+    ("Czy drzwi zewnętrzne kwalifikują się do dofinansowania w programie „Czyste Powietrze”?",
+     "<p>Tak, w przypadku standardowych drzwi zewnętrznych obowiązują wymagania techniczne dotyczące współczynnika Ud (współczynnik przenikania ciepła) — nie może on przekraczać 1,3 W/(m²·K).</p>"),
+    ("Czy można zamówić drzwi na wymiar?",
+     "<p>Tak! Drzwi są produkowane na indywidualny wymiar, dzięki czemu można idealnie dopasować je do otworu wejściowego oraz projektu budynku. Oferujemy rozwiązania dostosowane do różnych potrzeb – od standardowych drzwi po nietypowe wymiary, naświetla boczne i górne.</p>"),
+    ("Jak dobrać odpowiedni rozmiar drzwi zewnętrznych?",
+     "<p>Rozmiar drzwi należy dopasować do wymiarów otworu w ścianie oraz warunków technicznych budynku. Przy wyborze warto uwzględnić nie tylko szerokość i wysokość skrzydła, ale również ościeżnicę i sposób montażu. Przed zamówieniem drzwi najlepiej wykonać dokładny pomiar, aby mieć pewność, że będą odpowiednio dopasowane do wejścia.</p>"),
+    ("Jak rozpoznać, czy drzwi zewnętrzne są lewe czy prawe?",
+     "<p>Drzwi określamy jako lewe lub prawe, patrząc na nie od strony, z której otwierają się do nas. Jeśli zawiasy znajdują się po lewej stronie, drzwi są lewe, a jeśli po prawej — prawe.</p>"),
+    ("Czy wycena drzwi jest bezpłatna?",
+     "<p>Tak! Przygotowujemy bezpłatną wycenę drzwi na podstawie projektu lub zapytania przesłanego mailowo. Możesz również odwiedzić naszą firmę i na miejscu omówić szczegóły inwestycji oraz dobrać odpowiednie rozwiązania. Pomożemy Ci wybrać drzwi dopasowane do Twoich potrzeb i budżetu.</p>"),
+    ("Czy wykonujecie pomiar drzwi na miejscu?",
+     "<p>Tak, wykonujemy pomiary drzwi bezpośrednio u klienta, aby jak najlepiej dopasować je do budynku. Pomiar ma charakter wiążący i wiąże się z pobraniem zaliczki na poczet zamówienia. Dzięki temu możemy precyzyjnie przygotować ofertę i przejść do realizacji zamówienia.</p>"),
+    ("Czy demontujecie stare drzwi?",
+     "<p>Tak, oferujemy demontaż starych drzwi w ramach wymiany stolarki. Zakres prac ustalamy indywidualnie, aby dopasować usługę do potrzeb klienta i specyfiki budynku. Szczegóły demontażu warto omówić już na etapie przygotowywania wyceny.</p>"),
+    ("Czy zapewniacie serwis zamontowanych drzwi?",
+     "<p>Tak! Zapewniamy serwis zamontowanych drzwi, ponieważ zależy nam na długotrwałej współpracy i zadowoleniu naszych klientów. Pomagamy również w przypadku problemów z funkcjonowaniem drzwi i w razie potrzeby wykonujemy regulację.</p>"),
+]
 
 
 def build_drzwi_zewnetrzne():
@@ -2179,16 +2413,34 @@ def build_drzwi_zewnetrzne():
             f'<figure><img src="assets/img/drzwi/{prefix}-kolor-{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
             for n, f in items) + "</div>"
 
-    wzory = '<div class="pick-grid pick-grid--doors" data-lightbox>' + "".join(
-        f'<a href="assets/img/{w}.jpg" data-lightbox-item><img src="assets/img/{w}.jpg" alt="Drzwi Wikęd" loading="lazy"></a>'
-        for w in DZ_WIKED_WZORY) + "</div>"
-    kolekcje = '<div class="chips">' + "".join(f"<span>{k}</span>" for k in DZ_WIKED_KOLEKCJE) + "</div>"
+    # 02 — kolekcje Wikęd: zakładki + modele tylko z wybranej kolekcji
+    tabs = '<div class="chips chips--tabs" role="tablist">' + "".join(
+        f'<button type="button" class="{"is-active" if k == 0 else ""}" data-filter-btn="{c}">{c}</button>'
+        for k, c in enumerate(DZ_WIKED_KOLEKCJE)) + "</div>"
+    modele = '<div class="pick-grid pick-grid--doors pick-grid--contain pick-grid--models" data-lightbox data-filter-grid>' + "".join(
+        f'<a href="assets/img/drzwi/wiked-modele/{f}.jpg" data-lightbox-item data-filter="{c}"{"" if c == DZ_WIKED_KOLEKCJE[0] else " hidden"}>'
+        f'<img src="assets/img/drzwi/wiked-modele/{f}.jpg" alt="Wikęd {c} {n}" loading="lazy"><span>{n}</span></a>'
+        for c, n, f in DZ_WIKED_MODELE) + "</div>"
 
-    know = [kv for kv in PRODUCT_EXTRAS["drzwi-zewnetrzne"]["know"] if "HPL" not in kv[0]]
+    palety = "".join(
+        f'<h4 class="palette-title">{label}</h4>' + swatches([(n, f) for p, n, f in DZ_WIKED_KOLORY if p == key], "wiked")
+        for key, label in DZ_WIKED_PALETY)
+
+    uchwyty = ('<h4 class="palette-title">Pochwyty</h4>' + tiles(DZ_WIKED_POCHWYTY, lambda f: f"drzwi/wiked-pochwyt-{f}", "pick-grid--sq")
+               + '<h4 class="palette-title">Klamki</h4>' + tiles(DZ_WIKED_KLAMKI, lambda f: f"drzwi/wiked-klamka-{f}", "pick-grid--sq"))
+
+    smart_pts = "".join(f'<span class="smart__pin" style="left:{x}%;top:{y}%" title="{t}">{n}</span>' for n, x, y, t in DZ_SMART_PUNKTY)
+    smart_legend = "".join(f'<li><span>{n}</span>{t}</li>' for n, x, y, t in DZ_SMART_PUNKTY)
+    smart_list = "".join(f'<li><strong>{t}</strong><p>{d}</p></li>' for t, d in DZ_SMART)
+
+    insp = '<div class="gallery gallery--okna" data-lightbox>' + "".join(
+        f'<a href="assets/img/{g}.jpg" data-lightbox-item><img src="assets/img/{g}.jpg" alt="Drzwi Wikęd — inspiracja" loading="lazy"></a>'
+        for g in DZ_WIKED_INSPIRACJE) + "</div>"
+
     faq = "".join(f"""<div class="faq__row">
       <button class="faq__q"><span>{q}</span><span>+</span></button>
       <div class="faq__a">{a}</div>
-    </div>""" for q, a in know)
+    </div>""" for q, a in DZ_FAQ)
 
     rel = ""
     for s in ["okna", "bramy-garazowe", "drzwi-wewnetrzne"]:
@@ -2198,49 +2450,83 @@ def build_drzwi_zewnetrzne():
         <span class="card__more">Zobacz ofertę {I['arrow']}</span>
       </article></a>"""
 
-    body = pagehero("wiked92", "Wikęd i Erkado – drzwi dopasowane do Twojego domu",
-                    "Postaw na drzwi, które łączą estetykę z funkcjonalnością i podkreślają charakter Twojego domu już od samego wejścia.", None)
-    body += f"""<section class="section">
+    # nagłówek jak na wiked.pl: tekst wjeżdża linijkami, obok wysoki film „wejście do domu”
+    body = f"""<section class="door-hero">
+  <div class="container door-hero__inner">
+    <div class="door-hero__text">
+      <h1><span class="rv"><span>Wikęd i Erkado –</span></span><span class="rv"><span>drzwi dopasowane</span></span><span class="rv"><span>do Twojego domu</span></span></h1>
+      <p class="rv-fade">Postaw na drzwi, które łączą estetykę z funkcjonalnością i podkreślają charakter Twojego domu już od samego wejścia.</p>
+      <div class="door-hero__btns rv-fade">
+        <a class="btn btn--primary" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+        <a class="btn btn--outline" href="#wiked">Wybierz drzwi krok po kroku</a>
+      </div>
+    </div>
+    <div class="door-hero__media">
+      <video autoplay muted loop playsinline preload="metadata" poster="assets/img/drzwi/wiked-wejscie.jpg">
+        <source src="assets/img/drzwi/wiked-wejscie.webm" type="video/webm">
+        <source src="assets/img/drzwi/wiked-wejscie.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight-bottom" id="wiked">
   <div class="container">
     <div class="brand-split">
       <div class="brand-split__text">
-        <img class="brand-split__logo" src="assets/img/partners/wiked.svg?v={ASSET_VER}" alt="Wikęd">
+        <img class="brand-split__logo" src="assets/img/drzwi/wiked-logo.png" alt="Wikęd">
         <p>Wikęd to polski producent drzwi zewnętrznych, który łączy nowoczesne wzornictwo z solidnym wykonaniem. Szeroka oferta modeli, kolorów i dodatków pozwala dopasować drzwi do stylu każdego domu, zapewniając estetykę, komfort i bezpieczeństwo na co dzień.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--primary" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a></div>
       </div>
-      <div class="brand-split__media">
-        <video autoplay muted loop playsinline preload="metadata" poster="assets/img/drzwi/wiked-wejscie.jpg">
-          <source src="assets/img/drzwi/wiked-wejscie.webm" type="video/webm">
-          <source src="assets/img/drzwi/wiked-wejscie.mp4" type="video/mp4">
-        </video>
-      </div>
+      <div class="brand-split__media"><img src="assets/img/wiked20.jpg" alt="Drzwi Wikęd — wejście do domu"></div>
     </div>
 
     <h2 class="h-sec steps-title">Wybierz drzwi Wikęd krok po kroku</h2>
     {step(1, "Technologia", tech_cards(DZ_WIKED_TECH, "wiked"))}
-    {step(2, "Styl i wzór", kolekcje + wzory)}
-    {step(3, "Kolor", swatches(DZ_WIKED_KOLORY, "wiked") + '<p class="step-note">Oraz pełny wzornik RAL K7 Classic.</p>')}
-    {step(4, "Pochwyt", tiles(DZ_WIKED_POCHWYTY, lambda f: f"drzwi/wiked-pochwyt-{f}", "pick-grid--sq"))}
+    {step(2, "Kolekcja i wzór", tabs + modele)}
+    {step(3, "Kolor", palety + '<p class="step-note">Oraz pełny wzornik RAL K7 Classic.</p>')}
+    {step(4, "Pochwyty i klamki", uchwyty)}
     {step(5, "Przeszklenie", tiles(DZ_WIKED_SZYBY, lambda f: f"drzwi/wiked-szyba-{f}", "pick-grid--sq"))}
+  </div>
+</section>
+
+<section class="section section--soft">
+  <div class="container smart">
+    <div class="smart__text">
+      <h2 class="h-sec">Drzwi SMART — otwierasz telefonem</h2>
+      <ul class="smart__list">{smart_list}</ul>
+      <a class="btn btn--primary" href="kontakt.html">Zapytaj o drzwi SMART {I['arrow']}</a>
+    </div>
+    <div class="smart__media">
+      <div class="smart__img"><img src="assets/img/drzwi/wiked-smart.jpg" alt="Drzwi Wikęd SMART z podświetleniem LED" loading="lazy">{smart_pts}</div>
+      <ol class="smart__legend">{smart_legend}</ol>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight-bottom">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
+    {insp}
   </div>
 </section>
 <section class="advantages"><div class="container advantages__inner">{adv_html(DZ_ADV_WIKED)}</div></section>
 
-<section class="section">
+<section class="section section--tight-bottom" id="erkado">
   <div class="container">
     <div class="brand-split">
       <div class="brand-split__text">
-        <img class="brand-split__logo" src="assets/img/partners/erkado.svg?v={ASSET_VER}" alt="Erkado">
+        <img class="brand-split__logo" src="assets/img/drzwi/erkado-logo.png" alt="Erkado">
         <p>Erkado to polski producent drzwi z ponad 50-letnim doświadczeniem, oferujący szeroki wybór modeli łączących nowoczesny design z funkcjonalnością. Bogata oferta pozwoli Ci wybrać drzwi odpowiadające Twoim oczekiwaniom.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--primary" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a></div>
       </div>
-      <div class="brand-split__media"><img src="assets/img/drzwi/erkado-wizualizacja.jpg" alt="Drzwi Erkado — wizualizacja"></div>
+      <div class="brand-split__media"><img src="assets/img/drzwi/erkado-glowne.jpg" alt="Drzwi stalowe Erkado — detal klamki"></div>
     </div>
 
     <h2 class="h-sec steps-title">Wybierz drzwi Erkado krok po kroku</h2>
     {step(1, "Technologia", tech_cards(DZ_ERKADO_TECH, "erkado"))}
     {step(2, "Model", tiles(DZ_ERKADO_MODELE, lambda f: f"drzwi/erkado-model-{f}", "pick-grid--doors pick-grid--contain"))}
-    {step(3, "Kolor", swatches(DZ_ERKADO_KOLORY, "erkado") + '<p class="step-note">Oraz m.in. złoty dąb, winchester, dąb bagienny, sosna górska i antracyt struktura.</p>')}
+    {step(3, "Kolor", swatches(DZ_ERKADO_KOLORY, "erkado"))}
   </div>
 </section>
 <section class="advantages"><div class="container advantages__inner">{adv_html(DZ_ADV_ERKADO)}</div></section>
@@ -2263,7 +2549,7 @@ def build_drzwi_zewnetrzne():
 </section>
 """
     write("drzwi-zewnetrzne.html", head("Drzwi zewnętrzne Wikęd i Erkado | PROMYK Wieluń",
-                                        "Drzwi zewnętrzne Wikęd (Alu Hybrid, Termo Prestige, Optimum, Prima) i Erkado (Thermo 64–88). Kolory, pochwyty, przeszklenia — doradztwo i montaż PROMYK Wieluń.")
+                                        "Drzwi zewnętrzne Wikęd (Alu Hybrid, Termo Prestige, Optimum, Prima) i Erkado (Thermo 64–88). Kolekcje, kolory, pochwyty, klamki, drzwi SMART — doradztwo i montaż PROMYK Wieluń.")
           + nav("drzwi-zewnetrzne") + body + footer())
 
 

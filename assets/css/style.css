@@ -1020,3 +1020,53 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
   .tech-card img { height: 160px; }
   .step-block__no { font-size: 32px; }
 }
+
+/* ---------- Drzwi: nagłówek jak na wiked.pl (napis wjeżdża, obok film) ---------- */
+.door-hero { background: var(--soft); overflow: hidden; }
+.door-hero__inner { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; min-height: 640px; }
+.door-hero__text h1 { font-size: 60px; font-weight: 800; line-height: 1.06; letter-spacing: -.02em; margin: 0 0 24px; }
+.door-hero__text p { font-size: 20px; line-height: 1.6; color: #3a3f45; margin: 0 0 32px; max-width: 520px; }
+.door-hero__btns { display: flex; gap: 12px; flex-wrap: wrap; }
+.door-hero__media { align-self: stretch; margin-right: calc(-1 * var(--gutter)); }
+.door-hero__media video { width: 100%; height: 100%; min-height: 640px; object-fit: cover; display: block; }
+.rv { display: block; overflow: hidden; }
+.rv > span { display: inline-block; transform: translateY(105%); animation: rvUp .9s cubic-bezier(.2,.7,.2,1) forwards; }
+.rv:nth-child(2) > span { animation-delay: .12s; }
+.rv:nth-child(3) > span { animation-delay: .24s; }
+.rv-fade { opacity: 0; animation: rvFade .8s ease .45s forwards; }
+.door-hero__btns.rv-fade { animation-delay: .6s; }
+@keyframes rvUp { to { transform: translateY(0); } }
+@keyframes rvFade { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .rv > span, .rv-fade { animation: none; transform: none; opacity: 1; } }
+.section--tight-bottom { padding-bottom: 40px; }
+.palette-title { font-size: 17px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--accent-text); margin: 28px 0 16px; }
+.step-block .palette-title:first-of-type { margin-top: 0; }
+.chips--tabs button { border: 1px solid var(--line); border-radius: 999px; padding: 10px 20px; font-weight: 700; font-size: 15px; background: #fff; cursor: pointer; transition: .18s ease; }
+.chips--tabs button:hover { border-color: var(--ink); }
+.chips--tabs button.is-active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.pick-grid--models a[hidden] { display: none; }
+.brand-split__logo { height: 72px; width: auto; display: block; margin: 0 0 28px; }
+.smart { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.smart__list { list-style: none; margin: 28px 0 32px; padding: 0; display: grid; gap: 20px; }
+.smart__list li { border-left: 3px solid var(--accent); padding-left: 18px; }
+.smart__list strong { font-family: var(--font-head); font-size: 19px; }
+.smart__list p { margin: 4px 0 0; color: #3a3f45; font-size: 17px; }
+.smart__img { position: relative; border-radius: var(--r-lg); overflow: hidden; }
+.smart__img img { width: 100%; display: block; }
+.smart__pin { position: absolute; transform: translate(-50%, -50%); width: 34px; height: 34px; border-radius: 17px; background: rgba(21,23,25,.75); color: #fff; font-weight: 800; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.6); font-size: 15px; box-shadow: 0 0 0 6px rgba(255,255,255,.12); }
+.smart__legend { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+.smart__legend li { display: flex; gap: 10px; align-items: center; font-size: 15px; color: #3a3f45; }
+.smart__legend span { flex: none; width: 24px; height: 24px; border-radius: 12px; background: var(--ink); color: #fff; font-size: 13px; font-weight: 800; display: grid; place-items: center; }
+@media (max-width: 1024px) {
+  .door-hero__inner, .smart { grid-template-columns: 1fr; }
+  .door-hero__inner { min-height: 0; padding-top: 48px; gap: 32px; }
+  .door-hero__media { margin: 0 calc(-1 * var(--gutter)); }
+  .door-hero__media video { min-height: 0; height: auto; aspect-ratio: 1 / 1; }
+  .door-hero__text h1 { font-size: 44px; }
+}
+@media (max-width: 780px) {
+  .door-hero__text h1 { font-size: 34px; }
+  .door-hero__text p { font-size: 17px; }
+  .smart__legend { grid-template-columns: 1fr; }
+  .brand-split__logo { height: 56px; }
+}

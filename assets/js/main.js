@@ -115,16 +115,17 @@ document.querySelectorAll('[data-lightbox]').forEach(function (gal) {
     '<button class="lightbox__btn lightbox__close" aria-label="Zamknij">&times;</button>' +
     '<span class="lightbox__count"></span>';
   document.body.appendChild(box);
-  var img = box.querySelector('.lightbox__img'), count = box.querySelector('.lightbox__count'), cur = 0;
+  var img = box.querySelector('.lightbox__img'), count = box.querySelector('.lightbox__count'), cur = 0, list = items;
   function show(i) {
-    cur = (i + items.length) % items.length;
-    img.src = items[cur].getAttribute('href');
-    img.alt = (items[cur].querySelector('img') || {}).alt || '';
-    count.textContent = (cur + 1) + ' / ' + items.length;
+    cur = (i + list.length) % list.length;
+    img.src = list[cur].getAttribute('href');
+    img.alt = (list[cur].querySelector('img') || {}).alt || '';
+    count.textContent = (cur + 1) + ' / ' + list.length;
   }
   function open(i) { show(i); box.classList.add('is-open'); document.body.style.overflow = 'hidden'; }
   function close() { box.classList.remove('is-open'); document.body.style.overflow = ''; }
-  items.forEach(function (a, i) { a.addEventListener('click', function (e) { e.preventDefault(); open(i); }); });
+  function visible() { return items.filter(function (a) { return !a.hidden; }); }
+  items.forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); var v = visible(); list = v; open(v.indexOf(a)); }); });
   box.querySelector('.lightbox__prev').addEventListener('click', function (e) { e.stopPropagation(); show(cur - 1); });
   box.querySelector('.lightbox__next').addEventListener('click', function (e) { e.stopPropagation(); show(cur + 1); });
   box.querySelector('.lightbox__close').addEventListener('click', close);
@@ -141,5 +142,18 @@ document.querySelectorAll('[data-lightbox]').forEach(function (gal) {
     if (x0 === null) return;
     var dx = e.changedTouches[0].clientX - x0; x0 = null;
     if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1));
+  });
+});
+
+// zakładki filtrujące (np. kolekcje Wikęd: po kliknięciu widać tylko modele z danej kolekcji)
+document.querySelectorAll('[data-filter-grid]').forEach(function (grid) {
+  var block = grid.parentElement;
+  var btns = block.querySelectorAll('[data-filter-btn]');
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.getAttribute('data-filter-btn');
+      btns.forEach(function (x) { x.classList.toggle('is-active', x === b); });
+      grid.querySelectorAll('[data-filter]').forEach(function (a) { a.hidden = a.getAttribute('data-filter') !== f; });
+    });
   });
 });
