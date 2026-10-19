@@ -1024,12 +1024,12 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 /* ---------- Drzwi: nagłówek jak na wiked.pl (napis wjeżdża, obok film) ---------- */
 .door-hero { background: var(--soft); overflow: hidden; }
 .door-hero__inner { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; min-height: 640px; }
-.door-hero__text h1 { font-size: 60px; font-weight: 800; line-height: 1.06; letter-spacing: -.02em; margin: 0 0 24px; }
+.door-hero__text h1 { font-size: 60px; font-weight: 800; line-height: 1.08; letter-spacing: -.02em; margin: 0 0 24px; }
 .door-hero__text p { font-size: 20px; line-height: 1.6; color: #3a3f45; margin: 0 0 32px; max-width: 520px; }
 .door-hero__btns { display: flex; gap: 12px; flex-wrap: wrap; }
 .door-hero__media { align-self: stretch; margin-right: calc(-1 * var(--gutter)); }
 .door-hero__media video { width: 100%; height: 100%; min-height: 640px; object-fit: cover; display: block; }
-.rv { display: block; overflow: hidden; }
+.rv { display: block; overflow: hidden; padding-bottom: .14em; margin-bottom: -.14em; }
 .rv > span { display: inline-block; transform: translateY(105%); animation: rvUp .9s cubic-bezier(.2,.7,.2,1) forwards; }
 .rv:nth-child(2) > span { animation-delay: .12s; }
 .rv:nth-child(3) > span { animation-delay: .24s; }
