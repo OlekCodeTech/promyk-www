@@ -1070,3 +1070,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
   .smart__legend { grid-template-columns: 1fr; }
   .brand-split__logo { height: 56px; }
 }
+
+.swatches-grid figure[hidden] { display: none; }
+.step-text { margin-top: 28px; max-width: 900px; }
+.step-text h4 { font-size: 20px; font-weight: 800; margin: 0 0 10px; }
+.step-text p { margin: 0 0 10px; font-size: 17px; line-height: 1.7; color: #3a3f45; }

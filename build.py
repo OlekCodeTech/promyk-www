@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "40"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "41"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -2124,8 +2124,8 @@ def build_okna():
 # ================================================================ DRZWI ZEWNĘTRZNE (uwagi klienta 19–20.10.2026) ----
 DZ_WIKED_TECH = [("Alu Hybrid", "86 mm", "alu-hybrid"), ("Termo Prestige", "86 mm", "termo-prestige"),
                  ("Optimum", "76 mm", "optimum"), ("Prima", "64 mm", "prima")]
-DZ_WIKED_KOLEKCJE = ["3D", "Glass", "Klasyk", "Royal", "Rustik", "Softline"]
-DZ_WIKED_MODELE = [
+DZ_WIKED_KOLEKCJE = ["3D", "Future", "Glass", "Klasyk", "Royal", "Rustik", "Softline"]
+DZ_WIKED_MODELE = [   # (kolekcja, nazwa modelu, plik) — modele ze strony wiked.pl
     ('3D', '3D01', '3d-3d01'),
     ('3D', '3D02', '3d-3d02'),
     ('3D', '3D03', '3d-3d03'),
@@ -2267,7 +2267,43 @@ DZ_WIKED_MODELE = [
     ('Softline', 'S5', 'softline-s5'),
     ('Softline', 'S6', 'softline-s6'),
     ('Softline', 'S7', 'softline-s7'),
-]   # (kolekcja, nazwa modelu, plik) — modele ze strony wiked.pl
+    ('Future', 'FI01a', 'future-fi01a'),
+    ('Future', 'FI01b', 'future-fi01b'),
+    ('Future', 'FI01c', 'future-fi01c'),
+    ('Future', 'FI01d', 'future-fi01d'),
+    ('Future', 'FI02a', 'future-fi02a'),
+    ('Future', 'FI02b', 'future-fi02b'),
+    ('Future', 'FI03a', 'future-fi03a'),
+    ('Future', 'FI03b', 'future-fi03b'),
+    ('Future', 'FI04a', 'future-fi04a'),
+    ('Future', 'FI04b', 'future-fi04b'),
+    ('Future', 'FI04c', 'future-fi04c'),
+    ('Future', 'FI04d', 'future-fi04d'),
+    ('Future', 'FI04e', 'future-fi04e'),
+    ('Future', 'FI05a', 'future-fi05a'),
+    ('Future', 'FI05b', 'future-fi05b'),
+    ('Future', 'FI05c', 'future-fi05c'),
+    ('Future', 'FI05d', 'future-fi05d'),
+    ('Future', 'FI05e', 'future-fi05e'),
+    ('Future', 'FI06a', 'future-fi06a'),
+    ('Future', 'FI06b', 'future-fi06b'),
+    ('Future', 'FI06d', 'future-fi06d'),
+    ('Future', 'FI06e', 'future-fi06e'),
+    ('Future', 'FI07a', 'future-fi07a'),
+    ('Future', 'FI07b', 'future-fi07b'),
+    ('Future', 'FI07c', 'future-fi07c'),
+    ('Future', 'FI07d', 'future-fi07d'),
+    ('Future', 'FI07e', 'future-fi07e'),
+    ('Future', 'FI08a', 'future-fi08a'),
+    ('Future', 'FI08b', 'future-fi08b'),
+    ('Future', 'FI10a', 'future-fi10a'),
+    ('Future', 'FI10b', 'future-fi10b'),
+    ('Future', 'FI11', 'future-fi11'),
+    ('Future', 'FI12', 'future-fi12'),
+    ('Future', 'FI13', 'future-fi13'),
+    ('Future', 'FI14', 'future-fi14'),
+    ('Future', 'FI15', 'future-fi15'),
+]
 DZ_WIKED_PALETY = [("nd", "Natural Decor"), ("cs", "Crystal Sky"), ("tt", "Top Trends")]
 DZ_WIKED_KOLORY = [
     ('nd', 'Dąb Bagienny', 'dab-bagienny'),
@@ -2333,8 +2369,8 @@ DZ_WIKED_KLAMKI = [("Manitoba Black", "manitoba-black"), ("Tahoma Inox", "tahoma
 DZ_WIKED_SZYBY = [("Standard", "standard"), ("Mleczna", "mleczna"), ("Reflex grafit", "reflex-grafit"),
                   ("Lustro weneckie", "lustro-weneckie"), ("Black", "black"), ("Piaskowana + pasek", "piaskowana-pasek"),
                   ("Lacobel", "lacobel"), ("Fala", "fala")]
-DZ_WIKED_INSPIRACJE = ["wiked04", "wiked62", "wiked26", "wiked37", "wiked46", "wiked12", "wiked71", "wiked84",
-                       "wiked81", "wiked88", "wiked55", "wiked31"]
+DZ_WIKED_INSPIRACJE = ["wiked62", "wiked37", "wiked51", "wiked92", "wiked35", "wiked12", "wiked22", "wiked29",
+                       "wiked99", "wiked101", "wiked96", "wiked07"]
 DZ_SMART = [("Otwieranie telefonem", "Otwierasz drzwi z aplikacji — także wtedy, gdy nie ma Cię w domu."),
             ("Dostęp dla bliskich", "Dajesz dostęp wybranym osobom i decydujesz, kiedy mogą wejść."),
             ("Podgląd i historia", "Sprawdzasz w telefonie, czy drzwi są zamknięte i kiedy były otwierane."),
@@ -2351,7 +2387,8 @@ DZ_ERKADO_MODELE = [("Arendal", "arendal"), ("Utrecht", "utrecht"), ("Helmond", 
 DZ_ERKADO_KOLORY = [("Antracyt jedwabny", "antracyt-jedwabny"), ("Biały mat", "bialy-mat"), ("Dąb turner", "dab-turner"),
                     ("Dąb antracyt", "dab-antracyt"), ("Orzech", "orzech"), ("Czarny", "czarny"), ("Złoty dąb", "zloty-dab"),
                     ("Winchester", "winchester"), ("Antracyt struktura", "antracyt-struktura"), ("Antracyt gładki", "antracyt-gladki"),
-                    ("Szary", "szary"), ("Dąb bagienny", "dab-bagienny")]
+                    ("Szary", "szary"), ("Dąb bagienny", "dab-bagienny"), ("Dąb surowy", "dab-surowy"),
+                    ("Dąb średni brąz", "dab-sredni-braz"), ("Sosna górska", "sosna-gorska"), ("Dąb naturalny", "dab-naturalny")]
 DZ_ADV_WIKED = [("Bezpieczeństwo", "Ochrona antywłamaniowa do klasy RC2", "lock"),
                 ("Ciepło", "Izolacyjność cieplna Ud od 0,54 W/m²K", "thermo"),
                 ("Wzornictwo", "Setki wzorów i dowolna kolorystyka", "sparkle")]
@@ -2359,10 +2396,6 @@ DZ_ADV_ERKADO = [("Ciepło", "Ud od 0,60 W/m²K w technologii Thermo Hot 88", "t
                  ("Bezpieczeństwo", "Zamek listwowy i bolce antywyważeniowe w standardzie", "lock"),
                  ("Na wymiar", "Dopasowanie do otworu w murze co do 1 cm", "ruler")]
 DZ_FAQ = [
-    ("Jak dobrać drzwi do stylu domu?",
-     "<p><strong>Domy tradycyjne i dworkowe</strong> – klasyczne wzory, przeszklenia ze szprosami, okleiny drewnopodobne i stylowe klamki podkreślają ponadczasowy wygląd elewacji.</p>"
-     "<p><strong>Domy rustykalne</strong> – drzwi w kolorach naturalnego drewna doskonale komponują się z kamieniem i drewnianymi elementami.</p>"
-     "<p><strong>Nowoczesna architektura</strong> – gładkie lub frezowane skrzydła w kolorze antracytu lub czerni, długie pochwyty i podświetlenie LED podkreślają minimalistyczny charakter budynku.</p>"),
     ("Na co zwrócić uwagę przy wyborze drzwi zewnętrznych?",
      "<p>Ważne są parametry termoizolacyjne, bezpieczeństwo, trwałość, odporność na warunki atmosferyczne oraz wygląd dopasowany do elewacji i stylu budynku.</p>"),
     ("Czy drzwi zewnętrzne można dopasować kolorystycznie do okien i bramy garażowej?",
@@ -2422,12 +2455,20 @@ def build_drzwi_zewnetrzne():
         f'<img src="assets/img/drzwi/wiked-modele/{f}.jpg" alt="Wikęd {c} {n}" loading="lazy"><span>{n}</span></a>'
         for c, n, f in DZ_WIKED_MODELE) + "</div>"
 
-    palety = "".join(
-        f'<h4 class="palette-title">{label}</h4>' + swatches([(n, f) for p, n, f in DZ_WIKED_KOLORY if p == key], "wiked")
-        for key, label in DZ_WIKED_PALETY)
+    palety = ('<div class="chips chips--tabs" role="tablist">' + "".join(
+        f'<button type="button" class="{"is-active" if k == 0 else ""}" data-filter-btn="{key}">{label}</button>'
+        for k, (key, label) in enumerate(DZ_WIKED_PALETY)) + "</div>"
+        + '<div class="swatches-grid" data-filter-grid>' + "".join(
+        f'<figure data-filter="{p}"{"" if p == DZ_WIKED_PALETY[0][0] else " hidden"}><img src="assets/img/drzwi/wiked-kolor-{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
+        for p, n, f in DZ_WIKED_KOLORY) + "</div>")
 
     uchwyty = ('<h4 class="palette-title">Pochwyty</h4>' + tiles(DZ_WIKED_POCHWYTY, lambda f: f"drzwi/wiked-pochwyt-{f}", "pick-grid--sq")
-               + '<h4 class="palette-title">Klamki</h4>' + tiles(DZ_WIKED_KLAMKI, lambda f: f"drzwi/wiked-klamka-{f}", "pick-grid--sq"))
+               + '<h4 class="palette-title">Klamki</h4>' + tiles(DZ_WIKED_KLAMKI, lambda f: f"drzwi/wiked-klamka-{f}", "pick-grid--sq")
+               + """<div class="step-text">
+        <h4>Które rozwiązanie sprawdzi się lepiej?</h4>
+        <p><strong>Klamka</strong> to klasyczne i uniwersalne rozwiązanie. Jest wygodna w codziennym użytkowaniu, dostępna w wielu kształtach i kolorach, dzięki czemu łatwo dopasować ją do stylu drzwi oraz pozostałych elementów stolarki.</p>
+        <p><strong>Pochwyt</strong> to propozycja dla osób, które cenią nowoczesny design. Doskonale komponuje się z prostymi, minimalistycznymi drzwiami. To doskonały wybór dla osób, które szukają niestandardowych rozwiązań i chcą wyróżnić wejście do swojego domu.</p>
+      </div>""")
 
     smart_pts = "".join(f'<span class="smart__pin" style="left:{x}%;top:{y}%" title="{t}">{n}</span>' for n, x, y, t in DZ_SMART_PUNKTY)
     smart_legend = "".join(f'<li><span>{n}</span>{t}</li>' for n, x, y, t in DZ_SMART_PUNKTY)
@@ -2451,26 +2492,9 @@ def build_drzwi_zewnetrzne():
       </article></a>"""
 
     # nagłówek jak na wiked.pl: tekst wjeżdża linijkami, obok wysoki film „wejście do domu”
-    body = f"""<section class="door-hero">
-  <div class="container door-hero__inner">
-    <div class="door-hero__text">
-      <h1><span class="rv"><span>Wikęd i Erkado –</span></span><span class="rv"><span>drzwi dopasowane</span></span><span class="rv"><span>do Twojego domu</span></span></h1>
-      <p class="rv-fade">Postaw na drzwi, które łączą estetykę z funkcjonalnością i podkreślają charakter Twojego domu już od samego wejścia.</p>
-      <div class="door-hero__btns rv-fade">
-        <a class="btn btn--primary" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
-        <a class="btn btn--outline" href="#wiked">Wybierz drzwi krok po kroku</a>
-      </div>
-    </div>
-    <div class="door-hero__media">
-      <video autoplay muted loop playsinline preload="metadata" poster="assets/img/drzwi/wiked-wejscie.jpg">
-        <source src="assets/img/drzwi/wiked-wejscie.webm" type="video/webm">
-        <source src="assets/img/drzwi/wiked-wejscie.mp4" type="video/mp4">
-      </video>
-    </div>
-  </div>
-</section>
-
-<section class="section section--tight-bottom" id="wiked">
+    body = pagehero("wiked92", "Wikęd i Erkado – drzwi dopasowane do Twojego domu",
+                    "Postaw na drzwi, które łączą estetykę z funkcjonalnością i podkreślają charakter Twojego domu już od samego wejścia.", None)
+    body += f"""<section class="section section--tight-bottom" id="wiked">
   <div class="container">
     <div class="brand-split">
       <div class="brand-split__text">
@@ -2478,7 +2502,12 @@ def build_drzwi_zewnetrzne():
         <p>Wikęd to polski producent drzwi zewnętrznych, który łączy nowoczesne wzornictwo z solidnym wykonaniem. Szeroka oferta modeli, kolorów i dodatków pozwala dopasować drzwi do stylu każdego domu, zapewniając estetykę, komfort i bezpieczeństwo na co dzień.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--primary" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a></div>
       </div>
-      <div class="brand-split__media"><img src="assets/img/wiked20.jpg" alt="Drzwi Wikęd — wejście do domu"></div>
+      <div class="brand-split__media">
+        <video autoplay muted loop playsinline preload="metadata" poster="assets/img/drzwi/wiked-wejscie.jpg">
+          <source src="assets/img/drzwi/wiked-wejscie.webm" type="video/webm">
+          <source src="assets/img/drzwi/wiked-wejscie.mp4" type="video/mp4">
+        </video>
+      </div>
     </div>
 
     <h2 class="h-sec steps-title">Wybierz drzwi Wikęd krok po kroku</h2>
@@ -2486,7 +2515,7 @@ def build_drzwi_zewnetrzne():
     {step(2, "Kolekcja i wzór", tabs + modele)}
     {step(3, "Kolor", palety + '<p class="step-note">Oraz pełny wzornik RAL K7 Classic.</p>')}
     {step(4, "Pochwyty i klamki", uchwyty)}
-    {step(5, "Przeszklenie", tiles(DZ_WIKED_SZYBY, lambda f: f"drzwi/wiked-szyba-{f}", "pick-grid--sq"))}
+    {step(5, "Przeszklenie", tiles(DZ_WIKED_SZYBY, lambda f: f"drzwi/wiked-szyba-{f}", "pick-grid--sq") + '<div class="step-text"><p>Przeszklenie w drzwiach zewnętrznych to sposób na doświetlenie wnętrza naturalnym światłem i nadanie wejściu wyjątkowego charakteru. Wybór szyby zależy od tego, ile światła chcesz wpuścić do wnętrza i jaką prywatność chcesz zachować. Do wyboru są różne rodzaje szkła, dzięki którym można dopasować drzwi zarówno do nowoczesnej, jak i klasycznej architektury domu.</p></div>')}
   </div>
 </section>
 
@@ -2520,7 +2549,7 @@ def build_drzwi_zewnetrzne():
         <p>Erkado to polski producent drzwi z ponad 50-letnim doświadczeniem, oferujący szeroki wybór modeli łączących nowoczesny design z funkcjonalnością. Bogata oferta pozwoli Ci wybrać drzwi odpowiadające Twoim oczekiwaniom.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn--primary" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a></div>
       </div>
-      <div class="brand-split__media"><img src="assets/img/drzwi/erkado-glowne.jpg" alt="Drzwi stalowe Erkado — detal klamki"></div>
+      <div class="brand-split__media"><img src="assets/img/drzwi/erkado-glowne.jpg" alt="Drzwi stalowe Erkado — detal pochwytu"></div>
     </div>
 
     <h2 class="h-sec steps-title">Wybierz drzwi Erkado krok po kroku</h2>
