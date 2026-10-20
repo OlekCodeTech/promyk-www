@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "43"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "44"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -2590,7 +2590,7 @@ DW_ROWS = [
      ["Klasyczne rozwiązanie z widoczną przylgą na krawędzi skrzydła.",
       "Uniwersalny wygląd pasujący do wielu aranżacji.",
       "Sprawdzony wybór do tradycyjnych i nowoczesnych pomieszczeń."],
-     "dre_binito50", "katalog-dre.pdf"),
+     "dw/przylgowe", "katalog-dre.pdf"),
     ("Drzwi bezprzylgowe",
      ["Minimalistyczny design z gładką krawędzią skrzydła.",
       "Po zamknięciu tworzą jedną płaszczyznę z ościeżnicą.",
@@ -2606,7 +2606,7 @@ DW_ROWS = [
      ["Praktyczne rozwiązanie, które pozwala zaoszczędzić miejsce w pomieszczeniu.",
       "Szeroki wybór wzorów, kolorów i przeszkleń.",
       "Idealne do nowoczesnych mieszkań, garderób i pomieszczeń, w których liczy się funkcjonalność."],
-     "dw/przesuwne", "katalog-erkado-wewnetrzne.pdf"),
+     "dw/przesuwne-belka", "katalog-erkado-wewnetrzne.pdf"),
     ("Drzwi szklane i loftowe",
      ["Nowoczesne wzornictwo, które przyciąga uwagę i podkreśla charakter wnętrza.",
       "Szklane skrzydła, także z czarnymi ramami i szprosami w stylu loftowym.",
@@ -2616,9 +2616,9 @@ DW_ROWS = [
 DW_ADV = [("Wzory i kolory", "Kolekcje DRE, Porta i Erkado — od klasyki po loft", "palette"),
           ("Dopasowanie do wnętrza", "Drzwi przylgowe, bezprzylgowe, ukryte, przesuwne i szklane", "sparkle"),
           ("Pomiar i montaż", "Pomagamy na każdym etapie — od wyboru po montaż", "ruler")]
-DW_INSPIRACJE = ["dre_city2", "dw/insp-erkado-0", "dre_nella6", "dw/insp-erkado-4",
-                 "dre_saraeco2", "dw/insp-erkado-10", "dre_seco1", "dw/insp-erkado-14",
-                 "dw/insp-erkado-1", "dw/insp-erkado-13", "dw/insp-erkado-20", "dw/hero-loft"]
+DW_INSPIRACJE = ["dw/przylgowe", "dre_binito50", "dw/przesuwne-belka", "dre_nestor11",
+                 "dw/przesuwne-dab", "dre_saraeco", "dw/przylgowe-2", "dre_nella6",
+                 "dw/szklane-loftowe", "dw/insp-erkado-20", "dw/insp-erkado-4", "dw/insp-erkado-10"]
 DW_FAQ_NOWE = [
     ("Jak dobrać kolor drzwi do podłogi i ścian?",
      "<p>Kolor drzwi warto dopasować do podłogi, ścian i stylu całego wnętrza. Nie musi być identyczny – ważne, aby poszczególne elementy dobrze ze sobą współgrały.</p>"
