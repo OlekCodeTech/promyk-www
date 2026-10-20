@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "47"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "48"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -57,7 +57,7 @@ PRODUCTS = [
     ("drzwi-zewnetrzne",  "Drzwi zewnętrzne",   "Wikęd / Erkado / MK-DOOR", "wiked57"),
     ("drzwi-wewnetrzne",  "Drzwi wewnętrzne",   "DRE / Porta / Erkado", "dre_binito50"),
     ("rolety-zewnetrzne", "Rolety zewnętrzne",  "Produkcja własna",   "al30_rol"),
-    ("pergole",           "Pergole",            "Selt",               "pergola1"),
+    ("pergole",           "Pergole",            "Aluprof",            "perg/sb400"),
     ("bramy-garazowe",    "Bramy garażowe",     "Nice / AVO / Aluprof", "brama_antracyt"),
     ("markizy",           "Markizy",            "Selt",               "katalog/markiza-palladio-dom"),
     ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Produkcja własna",   "plisy"),
@@ -1873,7 +1873,7 @@ for _p, _meta in PRODUCT_DATA.items():
 def build_subpages():
     """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
     for parent, meta in PRODUCT_DATA.items():
-        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne"):   # bez podstron 3. poziomu (uwagi klienta)
+        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole"):   # bez podstron 3. poziomu (uwagi klienta)
             continue
         details = SUB_DETAILS.get(parent, [])
         for k, row in enumerate(meta["rows"]):
@@ -2965,6 +2965,115 @@ def build_parapety():
           + nav("parapety") + body + footer())
 
 
+# ================================================================ PERGOLE (uwagi klienta 20.10.2026) ----
+PERG_ROWS = [
+    ("Pergola SB400",
+     ["Lamele aluminiowe sterowane elektrycznie w zakresie 0–120°",
+      "Konstrukcja z profili aluminiowych, przekrój słupa 85 mm x 150 mm",
+      "Wbudowany system odprowadzania wody",
+      "Możliwość zastosowania oświetlenia LED",
+      "Sterowanie za pomocą pilota, istnieje możliwość podłączenia pod smart home",
+      "W standardzie występuje w trzech kolorach: białym, grafitowym i antracytowym. Istnieje również możliwość zamówienia pergoli w innym wybranym kolorze z palety RAL.",
+      "Możliwość wykonania na indywidualny wymiar"], "perg/sb400"),
+    ("Pergola SB350",
+     ["Lamele aluminiowe sterowane elektrycznie w zakresie 0–120°",
+      "Konstrukcja z profili aluminiowych, przekrój słupa 85 mm x 150 mm",
+      "Wbudowany system odprowadzania wody",
+      "Sterowanie za pomocą pilota, istnieje możliwość podłączenia pod smart home",
+      "Występuje w dwóch kolorach: białym i antracytowym.",
+      "Dostępna wyłącznie w określonych wariantach wymiarowych"], "perg/sb350"),
+    ("Pergola SB400R",
+     ["Moduł dachowy z ramą",
+      "Produkt przeznaczony do montażu na istniejącej zabudowie, bez własnej konstrukcji nośnej",
+      "Lamele z aluminium o regulacji 0–120°",
+      "Sterowanie za pomocą pilota, istnieje możliwość podłączenia pod smart home",
+      "W standardzie występuje w trzech kolorach: białym, grafitowym i antracytowym. Istnieje również możliwość zamówienia w innym wybranym kolorze z palety RAL.",
+      "Możliwość wykonania na indywidualny wymiar"], "perg/sb400r"),
+]
+PERG_ADV = [("Regulacja", "Lamele obrotowe 0–120° — dozowanie światła i wentylacji", "sun"),
+            ("Wytrzymałość", "Aluminium ekstrudowane, odporność na silny wiatr", "shield"),
+            ("Rozbudowa", "Screeny ZIP, przeszklenia i oświetlenie LED", "cog")]
+PERG_FAQ = [
+    ("Czy pergola chroni przed deszczem i słońcem?",
+     "Tak, pergole Aluprof Sun System zapewniają ochronę przed słońcem, a dzięki ruchomym lamelom dachowym pozwalają regulować ilość światła docierającego na taras. Po zamknięciu lameli dach tworzy osłonę przed deszczem, a odpowiednio zaprojektowany system odprowadzania wody pomaga odprowadzić ją poza zadaszoną przestrzeń. Dzięki temu możesz korzystać z tarasu w różnych warunkach pogodowych."),
+    ("W jakich wymiarach dostępne są pergole?",
+     "Pergola SB 350 występuje w standardowych wymiarach: szerokość 3,5 m, a do wyboru są cztery wysięgi: 3,4 m, 3,85 m, 4,3 m oraz 4,75 m. Pergola SB 400 może zostać wykonana na indywidualny wymiar - pojedynczy moduł może mieć szerokość do 4 m i wysięg do 7 m."),
+    ("Czy pergolę można zamontować przy istniejącym tarasie?",
+     "Tak, pergolę można zamontować przy istniejącym tarasie. Przed montażem należy jednak sprawdzić, czy podłoże jest odpowiednio stabilne i wytrzymałe, aby zapewnić bezpieczne zamocowanie konstrukcji. Sposób montażu dobieramy do warunków na miejscu oraz możliwości technicznych."),
+    ("Czy do pergoli można zamontować osłony boczne?",
+     "Tak, pergole można wyposażyć w dodatkowe osłony boczne, które zwiększają komfort korzystania z tarasu. Do wyboru są m.in. refleksole typu ZIP, chroniące przed słońcem i wiatrem."),
+    ("Pergola SB 350 a SB 400 – czym się różnią?",
+     "Główna różnica polega na możliwościach dopasowania wymiarów i sposobie montażu. SB 350 to model o standardowych wymiarach, natomiast SB 400 można wykonać na indywidualny wymiar."),
+    ("Czy na dachu pergoli gromadzi się woda deszczowa?",
+     "Nie, przy prawidłowo działającym systemie odwodnienia woda deszczowa nie powinna zalegać na dachu pergoli. Po zamknięciu lameli woda spływa do zintegrowanych rynien, a następnie jest odprowadzana przez system odpływowy ukryty w konstrukcji."),
+]
+PERG_INSPIRACJE = [f"perg/insp-{i:02d}" for i in range(1, 13)]
+
+
+def build_pergole():
+    rows = ""
+    for k, (title, bullets, img) in enumerate(PERG_ROWS):
+        li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+        media = f'<div><img src="assets/img/{img}.jpg" alt="{title} — Aluprof Sun Shading Solutions" loading="lazy"></div>'
+        text = f"""<div class="subrow__text">
+        <h2>{title}</h2>
+        <ul class="bullets">{li}</ul>
+        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+      </div>"""
+        flip = k % 2
+        rows += f'<div class="subrow{" subrow--flip" if flip else ""}">{media if not flip else text}{text if not flip else media}</div>'
+
+    adv = "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in PERG_ADV)
+    faq = "".join(f"""<div class="faq__row">
+      <button class="faq__q"><span>{q}</span><span>+</span></button>
+      <div class="faq__a"><p>{a}</p></div>
+    </div>""" for q, a in PERG_FAQ)
+    insp = '<div class="gallery gallery--okna" data-lightbox>' + "".join(
+        f'<a href="assets/img/{g}.jpg" data-lightbox-item><img src="assets/img/{g}.jpg" alt="Pergola Aluprof Sun Shading Solutions — inspiracja" loading="lazy"></a>'
+        for g in PERG_INSPIRACJE) + "</div>"
+    rel = ""
+    for sl in ["markizy", "oslony-zewnetrzne", "rolety-zewnetrzne"]:
+        rel += f"""<a href="{sl}.html"><article class="card">
+        <img src="assets/img/{PROD_IMG[sl]}.jpg" alt="{PROD_LABEL[sl]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
+        <div><h3>{PROD_LABEL[sl]}</h3></div>
+        <span class="card__more">Zobacz ofertę {I['arrow']}</span>
+      </article></a>"""
+
+    body = pagehero("perg/hero", "Pergole Aluprof Sun Shading Solutions – komfortowy wypoczynek na świeżym powietrzu",
+                    "Wyposażone w ruchome lamele dachowe, umożliwiają regulację ilości światła słonecznego. Więcej cienia, więcej komfortu i więcej przyjemności z wypoczynku na tarasie.", None)
+    body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
+<section class="advantages"><div class="container advantages__inner">{adv}</div></section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
+    <div class="faq">{faq}</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
+    {insp}
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Planujesz zadaszenie tarasu?",
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Sprawdź również inne systemy</h2>
+    <div class="grid-3">{rel}</div>
+  </div>
+</section>
+"""
+    write("pergole.html", head("Pergole Aluprof Sun Shading Solutions — SB400, SB350, SB400R | PROMYK Wieluń",
+                               "Pergole lamelowe Aluprof Sun Shading Solutions: SB400, SB350 i moduł dachowy SB400R. Lamele 0–120°, odprowadzanie wody, LED, smart home — PROMYK Wieluń.")
+          + nav("pergole") + body + footer())
+
+
 if __name__ == "__main__":
     print("Generuję strony PROMYK...")
     build_index()
@@ -2983,6 +3092,8 @@ if __name__ == "__main__":
             build_drzwi_wewnetrzne()
         elif slug == "rolety-zewnetrzne":
             build_rolety_zewnetrzne()
+        elif slug == "pergole":
+            build_pergole()
         else:
             product_page(slug, meta)
     build_parapety()
