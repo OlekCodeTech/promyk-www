@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "48"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "49"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -59,9 +59,9 @@ PRODUCTS = [
     ("rolety-zewnetrzne", "Rolety zewnętrzne",  "Produkcja własna",   "al30_rol"),
     ("pergole",           "Pergole",            "Aluprof",            "perg/sb400"),
     ("bramy-garazowe",    "Bramy garażowe",     "Nice / AVO / Aluprof", "brama_antracyt"),
-    ("markizy",           "Markizy",            "Selt",               "katalog/markiza-palladio-dom"),
+    ("markizy",           "Markizy",            "Aluprof",            "katalog/markiza-palladio-dom"),
     ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Produkcja własna",   "plisy"),
-    ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Selt / Aluprof",     "katalog/screeny-dom"),
+    ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Aluprof",            "katalog/screeny-dom"),
     ("moskitiery",        "Moskitiery",         "Produkcja własna",   "al25"),
 ]
 PROD_LABEL = {s: t for s, t, _b, _i in PRODUCTS}
@@ -77,7 +77,6 @@ PARTNERS = [
     ("aluprof", "Aluprof", "https://aluprof.com"),
     ("somfy", "Somfy", "https://www.somfy.pl"),
     ("nice", "Nice", "https://www.niceforyou.com/pl"),
-    ("selt", "Selt", "https://selt.com"),
     ("mk-door", "MK-DOOR", None),
     ("wiked", "Wikęd", "https://wiked.pl"),
     ("dre", "DRE", "https://dre.pl"),
@@ -541,7 +540,7 @@ def build_oferta():
         ("Porta — katalog 2026", "10 linii wzorniczych, drzwi akustyczne i wilgocioodporne", "katalog-porta.pdf"),
         ("AVO — bramy garażowe 2026", "Bramy segmentowe Base Line – Elegant ISO 60, automatyka ADO", "katalog-avo-bramy.pdf"),
         ("Nice — napędy Spider i Spido", "Siłowniki do bram segmentowych i uchylnych, Wi-Fi, Yubii", "katalog-nice-napedy.pdf"),
-        ("Katalog Selt", "Pergole, markizy i żaluzje fasadowe", "katalog-selt.pdf"),
+        ("Aluprof Sun Shading Solutions — pergole 2026", "Pergole lamelowe SB400, SB350, SB400R i doposażenia", "katalog-aluprof-pergole.pdf"),
         ("Cennik orientacyjny PROMYK", "Ceny typowych rozwiązań", "cennik-promyk.pdf"),
     ]
     cat = ""
@@ -1340,10 +1339,10 @@ PRODUCT_DATA = {
   related=["okna", "drzwi-zewnetrzne", "rolety-zewnetrzne"]),
 
 "markizy": dict(
-  hero="katalog/markiza-palladio-taras", h1="Markizy tarasowe i balkonowe Selt", title="Markizy tarasowe Selt — kaseta pełna, wysięg do 4 m, Somfy | PROMYK Wieluń",
-  desc="Markizy tarasowe Selt w pełnej kasecie (wysięg do 4 m), balkonowe i pionowe. Tkanina akrylowa 300 g/m², automatyka Somfy.",
-  intro="Markizy Selt z tkaniną akrylową 300 g/m² i napędami Somfy z czujnikami pogodowymi.",
-  producers=["selt", "somfy"],
+  hero="katalog/markiza-palladio-taras", h1="Markizy tarasowe i balkonowe Aluprof", title="Markizy tarasowe Aluprof — kaseta pełna, wysięg do 4 m, Somfy | PROMYK Wieluń",
+  desc="Markizy tarasowe Aluprof w pełnej kasecie (wysięg do 4 m), balkonowe i pionowe. Tkanina akrylowa 300 g/m², automatyka Somfy.",
+  intro="Markizy Aluprof z tkaniną akrylową 300 g/m² i napędami Somfy z czujnikami pogodowymi.",
+  producers=["aluprof", "somfy"],
   adv=[("Ochrona", "Redukcja nagrzewania tarasu i wnętrza, filtr UV", "sun"),
        ("Automatyka", "Czujnik wiatru zwija markizę automatycznie", "wind"),
        ("Tkaniny", "Akryl 300 g/m² impregnowany — odporny na płowienie", "shield")],
@@ -1409,8 +1408,8 @@ PRODUCT_DATA = {
   hero="katalog/screeny-taras", h1="Osłony zewnętrzne — refleksole, żaluzje fasadowe, sunbreaker",
   title="Refleksole ZIP, żaluzje fasadowe C-80/Z-90 i sunbreaker | PROMYK Wieluń",
   desc="Refleksole screen ZIP, żaluzje fasadowe C-80/Z-90, sunbreakery i moskitiery plisowane. Automatyka Somfy. Wieluń i okolice.",
-  intro="Osłony zatrzymujące ciepło przed szybą (Selt / Aluprof) — najskuteczniejsza ochrona przed przegrzewaniem.",
-  producers=["selt", "aluprof", "somfy"],
+  intro="Osłony zatrzymujące ciepło przed szybą (Aluprof) — najskuteczniejsza ochrona przed przegrzewaniem.",
+  producers=["aluprof", "somfy"],
   adv=[("Skuteczność", "Zatrzymanie większości energii słonecznej przed szybą", "sun"),
        ("Energooszczędność", "Mniejsze zużycie klimatyzacji latem", "thermo"),
        ("Automatyka", "Somfy io + czujniki nasłonecznienia", "cog")],
@@ -1664,7 +1663,7 @@ PRODUCT_EXTRAS = {
 "markizy": dict(
   specs=None,
   brands=[
-    ("selt", "Selt", [
+    ("aluprof", "Aluprof", [
       "Markizy tarasowe w pełnej kasecie — wysięg do 4 m",
       "Szerokości do 7 m (sprzęgane do 12 m)",
       "Ponad 100 tkanin akrylowych 300 g/m²"]),
@@ -1710,11 +1709,9 @@ PRODUCT_EXTRAS = {
 "oslony-zewnetrzne": dict(
   specs=None,
   brands=[
-    ("selt", "Selt", [
-      "Refleksole screen z prowadnicami ZIP — do 6 m szerokości",
-      "Tkaniny serge o różnym stopniu otwarcia (1–5%)",
-      "Kasety 85–150 mm, kolory RAL"]),
     ("aluprof", "Aluprof", [
+      "Refleksole screen z prowadnicami ZIP — do 6 m szerokości",
+      "Tkaniny serge o różnym stopniu otwarcia (1–5%), kasety 85–150 mm, kolory RAL",
       "Żaluzje fasadowe C-80 / Z-90",
       "Prowadzenie linkowe lub szynowe, zabudowa podtynkowa"]),
     ("somfy", "Somfy", [
@@ -2995,9 +2992,9 @@ PERG_ADV = [("Regulacja", "Lamele obrotowe 0–120° — dozowanie światła i w
             ("Rozbudowa", "Screeny ZIP, przeszklenia i oświetlenie LED", "cog")]
 PERG_FAQ = [
     ("Czy pergola chroni przed deszczem i słońcem?",
-     "Tak, pergole Aluprof Sun System zapewniają ochronę przed słońcem, a dzięki ruchomym lamelom dachowym pozwalają regulować ilość światła docierającego na taras. Po zamknięciu lameli dach tworzy osłonę przed deszczem, a odpowiednio zaprojektowany system odprowadzania wody pomaga odprowadzić ją poza zadaszoną przestrzeń. Dzięki temu możesz korzystać z tarasu w różnych warunkach pogodowych."),
+     "Tak, pergole Aluprof Sun Shading Solutions zapewniają ochronę przed słońcem, a dzięki ruchomym lamelom dachowym pozwalają regulować ilość światła docierającego na taras. Po zamknięciu lameli dach tworzy osłonę przed deszczem, a odpowiednio zaprojektowany system odprowadzania wody pomaga odprowadzić ją poza zadaszoną przestrzeń. Dzięki temu możesz korzystać z tarasu w różnych warunkach pogodowych."),
     ("W jakich wymiarach dostępne są pergole?",
-     "Pergola SB 350 występuje w standardowych wymiarach: szerokość 3,5 m, a do wyboru są cztery wysięgi: 3,4 m, 3,85 m, 4,3 m oraz 4,75 m. Pergola SB 400 może zostać wykonana na indywidualny wymiar - pojedynczy moduł może mieć szerokość do 4 m i wysięg do 7 m."),
+     "Pergola SB 350 występuje w standardowych wymiarach: szerokość 3,5 m, a do wyboru są cztery wysięgi: 3,6 m, 4,0 m, 4,4 m oraz 4,8 m. Pergola SB 400 może zostać wykonana na indywidualny wymiar - pojedynczy moduł może mieć szerokość do 4 m i wysięg do 7 m."),
     ("Czy pergolę można zamontować przy istniejącym tarasie?",
      "Tak, pergolę można zamontować przy istniejącym tarasie. Przed montażem należy jednak sprawdzić, czy podłoże jest odpowiednio stabilne i wytrzymałe, aby zapewnić bezpieczne zamocowanie konstrukcji. Sposób montażu dobieramy do warunków na miejscu oraz możliwości technicznych."),
     ("Czy do pergoli można zamontować osłony boczne?",
@@ -3007,7 +3004,7 @@ PERG_FAQ = [
     ("Czy na dachu pergoli gromadzi się woda deszczowa?",
      "Nie, przy prawidłowo działającym systemie odwodnienia woda deszczowa nie powinna zalegać na dachu pergoli. Po zamknięciu lameli woda spływa do zintegrowanych rynien, a następnie jest odprowadzana przez system odpływowy ukryty w konstrukcji."),
 ]
-PERG_INSPIRACJE = [f"perg/insp-{i:02d}" for i in range(1, 13)]
+PERG_INSPIRACJE = [f"perg/insp-{i:02d}" for i in (1, 2, 3, 4, 13, 6, 7, 8, 9, 10, 11, 12)]  # 05 = V ZiiiP, nie w ofercie
 
 
 def build_pergole():
@@ -3040,7 +3037,7 @@ def build_pergole():
         <span class="card__more">Zobacz ofertę {I['arrow']}</span>
       </article></a>"""
 
-    body = pagehero("perg/hero", "Pergole Aluprof Sun Shading Solutions – komfortowy wypoczynek na świeżym powietrzu",
+    body = pagehero("perg/hero", "Pergole Aluprof Sun Shading Solutions",
                     "Wyposażone w ruchome lamele dachowe, umożliwiają regulację ilości światła słonecznego. Więcej cienia, więcej komfortu i więcej przyjemności z wypoczynku na tarasie.", None)
     body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
 <section class="advantages"><div class="container advantages__inner">{adv}</div></section>
