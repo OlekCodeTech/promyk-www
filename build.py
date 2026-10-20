@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "45"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "46"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -53,6 +53,7 @@ I = {
 # ------------------------------------------------------------- produkty ----
 PRODUCTS = [
     ("okna",              "Okna",               "VEKA / Aluprof",     "al39"),
+    ("parapety",          "Parapety",           "Jaro-Max",           "parapety/w-marmur"),
     ("drzwi-zewnetrzne",  "Drzwi zewnętrzne",   "Wikęd / Erkado / MK-DOOR", "wiked57"),
     ("drzwi-wewnetrzne",  "Drzwi wewnętrzne",   "DRE / Porta / Erkado", "dre_binito50"),
     ("rolety-zewnetrzne", "Rolety zewnętrzne",  "Produkcja własna",   "al30_rol"),
@@ -83,7 +84,7 @@ PARTNERS = [
     ("porta", "Porta", "https://www.porta.com.pl"),
     ("erkado", "Erkado", "https://erkado.pl"),
     ("avo", "AVO", "https://avogroup.eu"),
-    ("jaro-max", "Jaro-Max", None),
+    ("jaro-max", "Jaro-Max", "https://www.jaro-max.com"),
 ]
 
 HOME_REALIZACJE = [  # kolejność wg klienta: okna, drzwi, bramy, pergola/refleksole
@@ -2842,6 +2843,128 @@ def build_rolety_zewnetrzne():
           + nav("rolety-zewnetrzne") + body + footer())
 
 
+# ================================================================ PARAPETY (Jaro-Max, dopisane 20.10.2026) ----
+PARAPETY_KOLORY = {
+    'w-granit': [('Vanga', 'w-granit-01'), ('Blue Night', 'w-granit-02'), ('Colonial White', 'w-granit-03'), ('Royal Black', 'w-granit-04'), ('Nero Impala', 'w-granit-05'), ('Tan Brown', 'w-granit-06'), ('China Cristal', 'w-granit-07'), ('Steel Grey', 'w-granit-08'), ('Yellow Pink', 'w-granit-09'), ('Rosa Beta', 'w-granit-10'), ('Steel Grey Lapatura', 'w-granit-11'), ('Nero Assoluto (polerowany)', 'w-granit-12'), ('Nero Assoluto (płomień i szczotka)', 'w-granit-13')],
+    'w-kwarcyt': [('Bianchissimo', 'w-kwarcyt-01'), ('Vittoria White', 'w-kwarcyt-02'), ('Navona', 'w-kwarcyt-03'), ('Blanco Paloma', 'w-kwarcyt-04'), ('Gris Ceniza', 'w-kwarcyt-06'), ('Black Nimbus', 'w-kwarcyt-07'), ('City Dark', 'w-kwarcyt-08'), ('Gris Antracita', 'w-kwarcyt-09'), ('Black Mamba', 'w-kwarcyt-10')],
+    'w-marmur': [('Polare', 'w-marmur-01'), ('Monte Bianco', 'w-marmur-02'), ('Bianco Carrara', 'w-marmur-03'), ('Perla Arte', 'w-marmur-04'), ('Beige Marfil', 'w-marmur-05'), ('Marmo White', 'w-marmur-06'), ('Baltic Grey', 'w-marmur-07'), ('Crystal White', 'w-marmur-08'), ('Botticino', 'w-marmur-09'), ('Breccia Aurora', 'w-marmur-10'), ('Calacatta Gold', 'w-marmur-11'), ('Perlato Appia', 'w-marmur-12'), ('Rosso Asiago', 'w-marmur-13'), ('Beige Luna', 'w-marmur-14'), ('Giorgione', 'w-marmur-15'), ('White Iceberg', 'w-marmur-16'), ('Cotone', 'w-marmur-18')],
+    'w-fornir': [('Dąb naturalny', 'w-fornir-01'), ('Winchester', 'w-fornir-02'), ('Złoty dąb', 'w-fornir-03'), ('Dąb orzech', 'w-fornir-04'), ('Stary złoty dąb', 'w-fornir-05'), ('Dąb orzech ciemny', 'w-fornir-06'), ('Dąb mahoń', 'w-fornir-07'), ('Dąb bielony', 'w-fornir-08'), ('Dąb grafit', 'w-fornir-09')],
+    'w-laminat': [('Cream Beige', 'w-laminat-01'), ('Subtle Nude', 'w-laminat-02'), ('Subtle Taupe', 'w-laminat-03'), ('Biały mat', 'w-laminat-04'), ('Biały połysk', 'w-laminat-05'), ('Marmur jasny', 'w-laminat-06'), ('Beton ciemny', 'w-laminat-07'), ('Granit szary', 'w-laminat-08'), ('Dąb Ribbeck', 'w-laminat-09'), ('Jasny dąb', 'w-laminat-10'), ('Dąb Sonoma', 'w-laminat-11'), ('Dąb naturalny', 'w-laminat-12'), ('Orzech Lanzado', 'w-laminat-13'), ('Winchester', 'w-laminat-14'), ('Beton', 'w-laminat-15'), ('Dąb vintage', 'w-laminat-16'), ('Białe drewno', 'w-laminat-17'), ('Dąb Watan', 'w-laminat-18'), ('Dąb London', 'w-laminat-19'), ('Dąb Argos', 'w-laminat-20'), ('Jabłoń', 'w-laminat-21'), ('Złoty dąb', 'w-laminat-22'), ('Antracyt', 'w-laminat-23')],
+    'w-lakier': [('Perła łuska', 'w-lakier-01'), ('Biały mat', 'w-lakier-02'), ('Biały połysk', 'w-lakier-03'), ('Biały wysoki połysk', 'w-lakier-04'), ('Czarny mat', 'w-lakier-05'), ('Marmurek czarny', 'w-lakier-06'), ('Marmurek biały', 'w-lakier-07'), ('Antracyt RAL 7016 półmat', 'w-lakier-08')],
+    'w-pcv': [('Biały', 'w-pcv-01'), ('Marmur', 'w-pcv-02'), ('Orzech', 'w-pcv-03'), ('Złoty dąb', 'w-pcv-04'), ('Dąb skandynawski', 'w-pcv-05'), ('Winchester', 'w-pcv-06'), ('Grafit', 'w-pcv-07')],
+    'z-granit': [('Vanga', 'z-granit-01'), ('Blue Night', 'z-granit-02'), ('Colonial White', 'z-granit-03'), ('Royal Black', 'z-granit-04'), ('Nero Impala', 'z-granit-05'), ('Tan Brown', 'z-granit-06'), ('China Cristal', 'z-granit-07'), ('Steel Grey', 'z-granit-08'), ('Yellow Pink', 'z-granit-09'), ('Rosa Beta', 'z-granit-10'), ('Imperial White', 'z-granit-11'), ('Steel Grey Lapatura', 'z-granit-12'), ('Nero Assoluto (polerowany)', 'z-granit-13'), ('Nero Assoluto (płomień i szczotka)', 'z-granit-14')],
+    'z-contour': [('RAL 1011', 'z-contour-01'), ('RAL 7016', 'z-contour-02'), ('RAL 7024', 'z-contour-03'), ('RAL 8003', 'z-contour-04'), ('RAL 8017', 'z-contour-05'), ('RAL 8019', 'z-contour-06'), ('RAL 8028', 'z-contour-07'), ('RAL 9016', 'z-contour-08'), ('RAL 9005', 'z-contour-09')],
+    'z-alu': [('Ciemny brąz RAL 8019', 'z-alu-01'), ('Gładki antracyt RAL 7016', 'z-alu-02'), ('Biały RAL 9016', 'z-alu-03')],
+    'z-aluplytka': [('Biały RAL 9016', 'z-aluplytka-01'), ('Gładki antracyt RAL 7016', 'z-aluplytka-02'), ('Miedź antyczna', 'z-aluplytka-03'), ('Antracyt antyczny', 'z-aluplytka-04'), ('Złoto antyczne', 'z-aluplytka-05'), ('Dąb antyczny', 'z-aluplytka-06'), ('Jasny brąz RAL 8017', 'z-aluplytka-07'), ('JM 8230 drobna struktura', 'z-aluplytka-08'), ('RAL 7016 drobna struktura', 'z-aluplytka-09'), ('RAL 9006 drobna struktura', 'z-aluplytka-10'), ('RAL 9005 drobna struktura', 'z-aluplytka-11'), ('Ciemny brąz RAL 8019', 'z-aluplytka-12')],
+    'z-stal': [('Ciemny brąz RAL 8019', 'z-stal-01'), ('Jasny brąz RAL 8017', 'z-stal-02'), ('Gładki antracyt RAL 7016', 'z-stal-03'), ('Srebrny RAL 9006', 'z-stal-04'), ('Biały RAL 9010', 'z-stal-05')],
+    'z-staldrewno': [('Winchester', 'z-staldrewno-01'), ('Złoty dąb', 'z-staldrewno-02'), ('Orzech', 'z-staldrewno-03'), ('Dąb naturalny', 'z-staldrewno-04')],
+}
+PARAPETY_TYPY = {
+    "wewnetrzne": [
+        ("w-granit", "Granitowe", "Kamień naturalny — bardzo twardy, odporny na ścieranie, wilgoć i temperaturę. Każdy parapet ma niepowtarzalny rysunek.", "Grubość 20 lub 30 mm"),
+        ("w-kwarcyt", "Kwarcytowe", "Konglomerat z 90–95% kamienia naturalnego — podwyższona odporność na zarysowania, wilgoć i wysoką temperaturę, modne jednolite barwy.", "Grubość 20 lub 30 mm"),
+        ("w-marmur", "Marmurowe", "Konglomerat marmurowy — szlachetny wygląd marmuru w nowoczesnym wydaniu i szeroka paleta jasnych, ciepłych odcieni.", "Grubość 20 lub 30 mm"),
+        ("w-fornir", "MDF fornirowane", "Płyta MDF z naturalną okleiną z drewna — ciepły charakter, łatwy do zgrania z podłogą, drzwiami i meblami.", "Grubość 20 mm"),
+        ("w-laminat", "MDF laminowane", "Płyta MDF oklejana laminatem — odporna na zarysowania, wilgoć i UV. Ponad 20 dekorów: od bieli, przez beton, po drewno.", "Grubość 20, 25 lub 30 mm"),
+        ("w-lakier", "MDF lakierowane", "Wodoodporna płyta MDF z gładką, lakierowaną powierzchnią — biel, czerń i antracyt, w macie lub w połysku.", "Grubość 20, 25 lub 30 mm"),
+        ("w-pcv", "PCV", "Komorowe profile PCV pokryte okleiną — lekkie, praktyczne i ekonomiczne rozwiązanie.", "Długość do 6 m"),
+    ],
+    "zewnetrzne": [
+        ("z-granit", "Granitowe", "Mrozoodporny i praktycznie nienasiąkliwy granit — klasyczny, kamienny wygląd na lata, bez specjalnej konserwacji.", "Grubość 20 lub 30 mm"),
+        ("z-contour", "JM External Contour", "Nowoczesne parapety z blachy aluminiowej lub stalowej o wyrazistym konturze, lakierowane proszkowo.", "Dowolny kolor z palety RAL"),
+        ("z-alu", "Aluminiowe", "Lekka i trwała blacha aluminiowa 1 lub 1,5 mm, odporna na korozję. Profil Standard lub Soft.", "3 kolory podstawowe lub dowolny RAL"),
+        ("z-aluplytka", "Alu-Płytka", "Aluminium z przetłoczeniami imitującymi płytkę klinkierową — świetnie pasuje do elewacji z cegły i klinkieru.", "Profil Contour lub Soft"),
+        ("z-stal", "Stalowe", "Blacha stalowa 0,7 mm powlekana poliestrem — sprawdzone, ekonomiczne rozwiązanie odporne na warunki atmosferyczne.", "Szerokości 100–400 mm, także na wymiar"),
+        ("z-staldrewno", "Stalowe drewnopodobne", "Stal z trwałą okleiną drewnopodobną — parapet w kolorze okien w okleinie.", "Profil Standard lub Soft"),
+    ],
+}
+PARAPETY_ADV = [("Na wymiar", "Szerokość, długość, narożniki i wykończenie krawędzi dopasowane do okna", "ruler"),
+                ("Spójne kolory", "Kamień, dekory drewnopodobne i kolory RAL zgrane ze stolarką", "palette"),
+                ("Sprawdzony producent", "Parapety Jaro-Max — kamień, MDF, PCV, stal i aluminium", "shield")]
+PARAPETY_FAQ = [
+    ("Jaki parapet wewnętrzny wybrać?",
+     "Jeśli zależy Ci na trwałości i odporności na wilgoć, np. w kuchni czy łazience, najlepiej sprawdzą się parapety kamienne — granitowe albo z konglomeratu kwarcytowego lub marmurowego. Parapety MDF i PCV to cieplejszy w odbiorze, lżejszy i bardziej ekonomiczny wybór z szeroką gamą kolorów gładkich i drewnopodobnych."),
+    ("Czym różni się granit od konglomeratu?",
+     "Granit to kamień w pełni naturalny — każdy parapet ma niepowtarzalny rysunek, a żyłki czy drobne przebarwienia są jego naturalną cechą. Konglomerat powstaje z kruszywa kamiennego połączonego żywicą, dzięki czemu ma bardziej jednolity, powtarzalny kolor."),
+    ("Jaki parapet zewnętrzny wybrać?",
+     "Najczęściej wybierane są parapety stalowe i aluminiowe — lekkie, trwałe i dostępne w wielu kolorach, także drewnopodobnych i z palety RAL. Do elewacji z cegły lub klinkieru dobrze pasuje Alu-Płytka, do nowoczesnych projektów JM External Contour, a granit tam, gdzie liczy się klasyczny, kamienny wygląd."),
+    ("Czy parapety są wykonywane na wymiar?",
+     "Tak. Parapety przygotowujemy na wymiar otworu okiennego — dobieramy szerokość, długość, rodzaj narożników i wykończenie krawędzi, a do parapetów zewnętrznych pasujące zaślepki i łączniki."),
+    ("Czy warto zamówić parapety razem z oknami?",
+     "Tak — wtedy łatwiej zgrać kolor parapetów ze stolarką i elewacją oraz dopasować ich wymiary do okien. Wszystko ustalisz w jednym miejscu, u jednego doradcy."),
+]
+
+
+def build_parapety():
+    def grupa(key, title, lead):
+        typy = PARAPETY_TYPY[key]
+        cards = "".join(f"""<article class="sill-card">
+        <img src="assets/img/parapety/{k}.jpg" alt="{title} — {n.lower()}" loading="lazy">
+        <div><h3>{n}</h3><p>{d}</p><small>{t}</small></div>
+      </article>""" for k, n, d, t in typy)
+        tabs = '<div class="chips chips--tabs" role="tablist">' + "".join(
+            f'<button type="button" class="{"is-active" if i == 0 else ""}" data-filter-btn="{k}">{n}</button>'
+            for i, (k, n, _d, _t) in enumerate(typy)) + "</div>"
+        grid = '<div class="sill-swatches" data-filter-grid>' + "".join(
+            f'<figure data-filter="{k}"{"" if i == 0 else " hidden"}><img src="assets/img/parapety/kolor-{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
+            for i, (k, _n, _d, _t) in enumerate(typy) for n, f in PARAPETY_KOLORY[k]) + "</div>"
+        return f"""<div class="section-header"><div class="section-header__left"><h2 class="h-sec">{title}</h2></div></div>
+    <p class="sill-lead">{lead}</p>
+    <div class="sill-types{" sill-types--3" if len(typy) % 3 == 0 else ""}">{cards}</div>
+    <h4 class="palette-title">Dostępne kolory</h4>
+    <div>{tabs}{grid}</div>"""
+
+    adv = "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in PARAPETY_ADV)
+    faq = "".join(f"""<div class="faq__row">
+      <button class="faq__q"><span>{q}</span><span>+</span></button>
+      <div class="faq__a"><p>{a}</p></div>
+    </div>""" for q, a in PARAPETY_FAQ)
+    rel = ""
+    for sl in ["okna", "rolety-zewnetrzne", "moskitiery"]:
+        rel += f"""<a href="{sl}.html"><article class="card">
+        <img src="assets/img/{PROD_IMG[sl]}.jpg" alt="{PROD_LABEL[sl]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
+        <div><h3>{PROD_LABEL[sl]}</h3></div>
+        <span class="card__more">Zobacz ofertę {I['arrow']}</span>
+      </article></a>"""
+
+    body = pagehero("parapety/hero", "Parapety Jaro-Max – praktyczne i piękne wykończenie okna",
+                    "Parapety wewnętrzne i zewnętrzne z kamienia, konglomeratu, MDF, PCV, stali i aluminium — dopasujesz je do stolarki okiennej, elewacji i charakteru wnętrza.", None)
+    body += f"""<section class="section">
+  <div class="container">
+    {grupa("wewnetrzne", "Parapety wewnętrzne", "Parapety wewnętrzne wykańczają ścianę pod oknem i są ważnym elementem aranżacji. Do wyboru kamień naturalny, konglomeraty oraz ciepłe w odbiorze MDF i PCV.")}
+  </div>
+</section>
+<section class="section section--soft">
+  <div class="container">
+    {grupa("zewnetrzne", "Parapety zewnętrzne", "Parapet zewnętrzny odprowadza wodę z dala od elewacji i chroni ją przed zawilgoceniem, dlatego musi być trwały i odporny na warunki atmosferyczne.")}
+    <p class="colors-note">Parapety aluminiowe, stalowe i External Contour mogą być też lakierowane proszkowo na dowolny kolor z palety RAL — w macie, satynie lub strukturze.</p>
+  </div>
+</section>
+<section class="advantages"><div class="container advantages__inner">{adv}</div></section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
+    <div class="faq">{faq}</div>
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Dobierzemy parapety do Twoich okien",
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Sprawdź również inne systemy</h2>
+    <div class="grid-3">{rel}</div>
+  </div>
+</section>
+"""
+    write("parapety.html", head("Parapety wewnętrzne i zewnętrzne Jaro-Max | PROMYK Wieluń",
+                                "Parapety Jaro-Max: granitowe, kwarcytowe, marmurowe, MDF, PCV, stalowe, aluminiowe, Alu-Płytka i External Contour. Kolory i wymiary na zamówienie — PROMYK Wieluń.")
+          + nav("parapety") + body + footer())
+
+
 if __name__ == "__main__":
     print("Generuję strony PROMYK...")
     build_index()
@@ -2862,5 +2985,6 @@ if __name__ == "__main__":
             build_rolety_zewnetrzne()
         else:
             product_page(slug, meta)
+    build_parapety()
     build_subpages()
     print("Gotowe.")
