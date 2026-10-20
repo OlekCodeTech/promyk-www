@@ -1078,3 +1078,11 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 
 .step-text--top { margin: 0 0 28px; }
 .step-text--top + .palette-title { margin-top: 0; }
+
+/* ---------- Rolety: sekcja TaHoma + notka o kolorach ---------- */
+.tahoma { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.tahoma__media img { width: 100%; height: auto; display: block; }
+.tahoma__text { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+.tahoma__text p { margin: 0; font-size: 18px; line-height: 1.75; color: #3a3f45; }
+.colors-note { margin: 28px 0 0; font-size: 17px; color: #3a3f45; }
+@media (max-width: 1024px) { .tahoma { grid-template-columns: 1fr; gap: 32px; } }

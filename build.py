@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "44"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "45"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -1149,7 +1149,7 @@ def product_page(slug, meta):
 
 {extras_html}
 {cta("Doradztwo i wycena", "Planujesz inwestycję budowlaną?",
-     "Skontaktuj się z nami — doradzimy technicznie, precyzyjnie zmierzymy otwory i przygotujemy kalkulację cenową.")}
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
 
 <section class="section related">
   <div class="container">
@@ -1872,7 +1872,7 @@ for _p, _meta in PRODUCT_DATA.items():
 def build_subpages():
     """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
     for parent, meta in PRODUCT_DATA.items():
-        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne"):   # bez podstron 3. poziomu (uwagi klienta)
+        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne"):   # bez podstron 3. poziomu (uwagi klienta)
             continue
         details = SUB_DETAILS.get(parent, [])
         for k, row in enumerate(meta["rows"]):
@@ -2107,7 +2107,7 @@ def build_okna():
 </section>
 
 {cta("Doradztwo i wycena", "Planujesz inwestycję budowlaną?",
-     "Skontaktuj się z nami — doradzimy technicznie, precyzyjnie zmierzymy otwory i przygotujemy kalkulację cenową.")}
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
 
 <section class="section related">
   <div class="container">
@@ -2570,7 +2570,7 @@ def build_drzwi_zewnetrzne():
 </section>
 
 {cta("Doradztwo i wycena", "Planujesz inwestycję budowlaną?",
-     "Skontaktuj się z nami — doradzimy technicznie, precyzyjnie zmierzymy otwory i przygotujemy kalkulację cenową.")}
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
 
 <section class="section related">
   <div class="container">
@@ -2616,9 +2616,9 @@ DW_ROWS = [
 DW_ADV = [("Wzory i kolory", "Kolekcje DRE, Porta i Erkado — od klasyki po loft", "palette"),
           ("Dopasowanie do wnętrza", "Drzwi przylgowe, bezprzylgowe, ukryte, przesuwne i szklane", "sparkle"),
           ("Pomiar i montaż", "Pomagamy na każdym etapie — od wyboru po montaż", "ruler")]
-DW_INSPIRACJE = ["dw/przylgowe", "dre_binito50", "dw/przesuwne-belka", "dre_nestor11",
-                 "dw/przesuwne-dab", "dre_saraeco", "dw/przylgowe-2", "dre_nella6",
-                 "dw/szklane-loftowe", "dw/insp-erkado-20", "dw/insp-erkado-4", "dw/insp-erkado-10"]
+DW_INSPIRACJE = ["dw/insp-drewno-1", "dre_binito50", "dw/przesuwne-belka", "dre_nestor11",
+                 "dw/przesuwne-dab", "dre_saraeco", "dw/insp-drewno-2", "dre_nella6",
+                 "dw/insp-drewno-3", "dw/szklane-loftowe", "dw/insp-erkado-20", "dw/insp-drewno-4"]
 DW_FAQ_NOWE = [
     ("Jak dobrać kolor drzwi do podłogi i ścian?",
      "<p>Kolor drzwi warto dopasować do podłogi, ścian i stylu całego wnętrza. Nie musi być identyczny – ważne, aby poszczególne elementy dobrze ze sobą współgrały.</p>"
@@ -2691,7 +2691,7 @@ def build_drzwi_wewnetrzne():
 </section>
 
 {cta("Doradztwo i wycena", "Planujesz inwestycję budowlaną?",
-     "Skontaktuj się z nami — doradzimy technicznie, precyzyjnie zmierzymy otwory i przygotujemy kalkulację cenową.")}
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
 
 <section class="section related">
   <div class="container">
@@ -2703,6 +2703,143 @@ def build_drzwi_wewnetrzne():
     write("drzwi-wewnetrzne.html", head("Drzwi wewnętrzne DRE, Porta i Erkado | PROMYK Wieluń",
                                         "Drzwi wewnętrzne DRE, Porta i Erkado: przylgowe, bezprzylgowe, ukryte, przesuwne, szklane i loftowe. Pomiar i montaż — PROMYK Wieluń.")
           + nav("drzwi-wewnetrzne") + body + footer())
+
+
+# ================================================================ ROLETY ZEWNĘTRZNE (uwagi klienta 20.10.2026) ----
+ROL_ROWS = [
+    ("Adaptacyjne",
+     ["Montaż na elewacji lub we wnęce — bez prac murarskich",
+      "Sterowanie ręczne lub elektryczne – wygodna obsługa dopasowana do indywidualnych potrzeb",
+      "Pancerz aluminiowy z pianką PU, prowadnice z uszczelką szczotkową",
+      "Kolory RAL i drewnopodobne spójne ze stolarką"], "al30_rol"),
+    ("Podtynkowe",
+     ["Skrzynka kryta tynkiem — niewidoczna w elewacji",
+      "Montaż warto uwzględnić już na etapie projektowania budynku.",
+      "Dedykowane do budynków energooszczędnych i pasywnych",
+      "Dostęp serwisowy przez klapę rewizyjną"], "rol/podtynkowe"),
+    ("Sterowanie",
+     ["Możliwość wyboru obsługi ręcznej (linka) lub elektrycznej",
+      "Wyłączniki naścienne i piloty wielokanałowe",
+      "Możliwość ustawienia godzin podnoszenia i opuszczania rolet",
+      "Sterowanie grupowe - jednoczesna obsługa kilku rolet za pomocą jednego urządzenia.",
+      "Centrala TaHoma (Somfy) – inteligentne zarządzanie roletami za pomocą aplikacji"], "rol/sterowanie"),
+]
+ROL_ADV = [("Komfort latem i zimą", "Mniej nagrzewania w upały i mniejsze straty ciepła zimą", "thermo"),
+           ("Bezpieczeństwo i prywatność", "Dodatkowa osłona okien przed wzrokiem i włamaniem", "lock"),
+           ("Wygodna obsługa", "Ręcznie, przyciskiem, pilotem lub z aplikacji", "cog")]
+ROL_KOLORY_STD = [("bialy", "Biały"), ("szary", "Szary"), ("antracyt", "Szary antracyt"), ("bezowy", "Beżowy"),
+                  ("brazowy", "Brązowy"), ("ciemnobrazowy", "Ciemnobrązowy"), ("srebrny", "Srebrny")]
+ROL_KOLORY_DREWNO = [("jasny-dab", "Jasny dąb"), ("dab-slodowy", "Dąb słodowy"), ("zloty-dab", "Złoty dąb"),
+                     ("orzech", "Orzech"), ("winchester", "Winchester"), ("wenge", "Wenge"), ("mahon", "Mahoń")]
+ROL_FAQ = [
+    ("Czy rolety zewnętrzne można zamontować w istniejącym budynku?",
+     "Tak, rolety zewnętrzne można zamontować również w istniejących budynkach. W takim przypadku najczęściej wybierane są rolety adaptacyjne, które nie wymagają ingerencji w konstrukcję ścian i można je dopasować do elewacji."),
+    ("Który system do jakiego domu?",
+     "Na etapie budowy najlepsze są rolety podtynkowe (niewidoczne skrzynki). W budynku wykończonym jedyną nieinwazyjną opcją są adaptacyjne — montowane na elewacji lub we wnęce."),
+    ("Kiedy najlepiej zaplanować montaż rolet podtynkowych?",
+     "Montaż rolet podtynkowych najlepiej uwzględnić już na etapie projektowania budynku. Pozwala to odpowiednio przygotować otwory okienne i zaplanować ocieplenie elewacji, aby estetycznie ukryć skrzynki rolet."),
+    ("Czy rolety zewnętrzne wymagają podłączenia do prądu?",
+     "Nie zawsze. Rolety zewnętrzne mogą być obsługiwane ręcznie (za pomocą linki) lub elektrycznie. Tylko w przypadku sterowania elektrycznego konieczne jest zasilanie."),
+    ("Czy rolety zewnętrzne chronią przed nagrzewaniem pomieszczeń latem?",
+     "Tak, rolety zewnętrzne skutecznie ograniczają nagrzewanie pomieszczeń latem, ponieważ zatrzymują część promieni słonecznych przed szybą. Dzięki temu we wnętrzach można utrzymać przyjemniejszą temperaturę nawet podczas upałów."),
+    ("Czy rolety zewnętrzne pomagają utrzymać ciepło zimą?",
+     "Tak, rolety zewnętrzne tworzą dodatkową warstwę izolacyjną, która pomaga ograniczyć straty ciepła zimą. Dzięki temu mogą poprawić komfort termiczny pomieszczeń i wspierać oszczędność energii."),
+    ("Czy roleta może mieć moskitierę?",
+     "Tak — moskitierę rolowaną można prowadzić w tych samych, łączonych prowadnicach co roletę. Nie zabiera światła, a gdy nie jest potrzebna, po prostu się ją zwija."),
+]
+
+
+def build_rolety_zewnetrzne():
+    rows = ""
+    for k, (title, bullets, img) in enumerate(ROL_ROWS):
+        li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+        media = f'<div><img src="assets/img/{img}.jpg" alt="Rolety zewnętrzne — {title.lower()}" loading="lazy"></div>'
+        text = f"""<div class="subrow__text">
+        <h2>{title}</h2>
+        <ul class="bullets">{li}</ul>
+        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+      </div>"""
+        flip = k % 2
+        rows += f'<div class="subrow{" subrow--flip" if flip else ""}">{media if not flip else text}{text if not flip else media}</div>'
+
+    adv = "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in ROL_ADV)
+
+    def swatches(items):
+        return '<div class="swatches-grid">' + "".join(
+            f'<figure><img src="assets/img/rol/kolor-{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
+            for f, n in items) + "</div>"
+
+    faq = "".join(f"""<div class="faq__row">
+      <button class="faq__q"><span>{q}</span><span>+</span></button>
+      <div class="faq__a"><p>{a}</p></div>
+    </div>""" for q, a in ROL_FAQ)
+
+    rel = ""
+    for s in ["okna", "oslony-zewnetrzne", "moskitiery"]:
+        rel += f"""<a href="{s}.html"><article class="card">
+        <img src="assets/img/{PROD_IMG[s]}.jpg" alt="{PROD_LABEL[s]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
+        <div><h3>{PROD_LABEL[s]}</h3></div>
+        <span class="card__more">Zobacz ofertę {I['arrow']}</span>
+      </article></a>"""
+
+    tahoma_li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in [
+        "Sterowanie roletami z telefonu — w domu i poza nim",
+        "Scenariusze uruchamiane jednym dotknięciem, np. „Wyjście z domu” lub „Dobranoc”",
+        "Harmonogramy podnoszenia i opuszczania rolet o wybranych godzinach",
+        "Rolety, brama, markiza i oświetlenie w jednej aplikacji",
+        "Obsługa głosowa przez Asystenta Google i Amazon Alexa"])
+
+    body = pagehero("rol/hero", "Rolety zewnętrzne Aluprof – nowoczesne rozwiązania dla Twojego domu",
+                    "Aluminiowe profile wypełnione pianką pomagają ograniczyć straty ciepła, chronią przed nadmiernym nasłonecznieniem i zapewniają mieszkańcom większy komfort na co dzień.", None)
+    body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
+<section class="advantages"><div class="container advantages__inner">{adv}</div></section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="tahoma">
+      <div class="tahoma__media"><img src="assets/img/rol/tahoma-switch.png" alt="Centrala Somfy TaHoma switch i aplikacja w telefonie" loading="lazy"></div>
+      <div class="tahoma__text">
+        <h2 class="h-sec">Inteligentny dom z TaHoma® (Somfy)</h2>
+        <p>TaHoma® switch to centrala Somfy, która łączy rolety z innymi urządzeniami w domu. Sterujesz nimi z aplikacji w telefonie, a zaprogramowane scenariusze same podnoszą i opuszczają rolety o odpowiedniej porze — także wtedy, gdy nie ma Cię w domu.</p>
+        <ul class="bullets">{tahoma_li}</ul>
+        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Kolory rolet</h2></div></div>
+    <h4 class="palette-title">Kolory standardowe</h4>
+    {swatches(ROL_KOLORY_STD)}
+    <h4 class="palette-title">Kolory drewnopodobne</h4>
+    {swatches(ROL_KOLORY_DREWNO)}
+    <p class="colors-note">Dostępne są również inne, niestandardowe kolory — zapytaj nas o szczegóły.</p>
+  </div>
+</section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
+    <div class="faq">{faq}</div>
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Planujesz inwestycję budowlaną?",
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Sprawdź również inne systemy</h2>
+    <div class="grid-3">{rel}</div>
+  </div>
+</section>
+"""
+    write("rolety-zewnetrzne.html", head("Rolety zewnętrzne Aluprof — adaptacyjne i podtynkowe, sterowanie Somfy TaHoma | PROMYK Wieluń",
+                                         "Rolety zewnętrzne Aluprof: adaptacyjne i podtynkowe, sterowanie ręczne, elektryczne i z aplikacji Somfy TaHoma. Kolory standardowe i drewnopodobne — PROMYK Wieluń.")
+          + nav("rolety-zewnetrzne") + body + footer())
 
 
 if __name__ == "__main__":
@@ -2721,6 +2858,8 @@ if __name__ == "__main__":
             build_drzwi_zewnetrzne()
         elif slug == "drzwi-wewnetrzne":
             build_drzwi_wewnetrzne()
+        elif slug == "rolety-zewnetrzne":
+            build_rolety_zewnetrzne()
         else:
             product_page(slug, meta)
     build_subpages()
