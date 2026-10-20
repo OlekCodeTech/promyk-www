@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "46"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "47"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -2717,7 +2717,7 @@ ROL_ROWS = [
      ["Skrzynka kryta tynkiem — niewidoczna w elewacji",
       "Montaż warto uwzględnić już na etapie projektowania budynku.",
       "Dedykowane do budynków energooszczędnych i pasywnych",
-      "Dostęp serwisowy przez klapę rewizyjną"], "rol/podtynkowe"),
+      "Dostęp serwisowy przez klapę rewizyjną"], "rol/podtynkowe-aluprof"),
     ("Sterowanie",
      ["Możliwość wyboru obsługi ręcznej (linka) lub elektrycznej",
       "Wyłączniki naścienne i piloty wielokanałowe",
@@ -2791,7 +2791,7 @@ def build_rolety_zewnetrzne():
         "Rolety, brama, markiza i oświetlenie w jednej aplikacji",
         "Obsługa głosowa przez Asystenta Google i Amazon Alexa"])
 
-    body = pagehero("rol/hero", "Rolety zewnętrzne Aluprof – nowoczesne rozwiązania dla Twojego domu",
+    body = pagehero("rol/hero-wnetrze", "Rolety zewnętrzne Aluprof – nowoczesne rozwiązania dla Twojego domu",
                     "Aluminiowe profile wypełnione pianką pomagają ograniczyć straty ciepła, chronią przed nadmiernym nasłonecznieniem i zapewniają mieszkańcom większy komfort na co dzień.", None)
     body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
 <section class="advantages"><div class="container advantages__inner">{adv}</div></section>
