@@ -120,7 +120,8 @@ document.querySelectorAll('[data-lightbox]').forEach(function (gal) {
     cur = (i + list.length) % list.length;
     img.src = list[cur].getAttribute('href');
     img.alt = (list[cur].querySelector('img') || {}).alt || '';
-    count.textContent = (cur + 1) + ' / ' + list.length;
+    var cap = list[cur].getAttribute('data-caption');
+    count.textContent = (cap ? cap + '  ·  ' : '') + (cur + 1) + ' / ' + list.length;
   }
   function open(i) { show(i); box.classList.add('is-open'); document.body.style.overflow = 'hidden'; }
   function close() { box.classList.remove('is-open'); document.body.style.overflow = ''; }

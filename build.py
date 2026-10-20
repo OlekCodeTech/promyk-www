@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "49"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "51"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -2887,8 +2887,8 @@ PARAPETY_FAQ = [
      "Najczęściej wybierane są parapety stalowe i aluminiowe — lekkie, trwałe i dostępne w wielu kolorach, także drewnopodobnych i z palety RAL. Do elewacji z cegły lub klinkieru dobrze pasuje Alu-Płytka, do nowoczesnych projektów JM External Contour, a granit tam, gdzie liczy się klasyczny, kamienny wygląd."),
     ("Czy parapety są wykonywane na wymiar?",
      "Tak. Parapety przygotowujemy na wymiar otworu okiennego — dobieramy szerokość, długość, rodzaj narożników i wykończenie krawędzi, a do parapetów zewnętrznych pasujące zaślepki i łączniki."),
-    ("Czy warto zamówić parapety razem z oknami?",
-     "Tak — wtedy łatwiej zgrać kolor parapetów ze stolarką i elewacją oraz dopasować ich wymiary do okien. Wszystko ustalisz w jednym miejscu, u jednego doradcy."),
+    ("Kiedy najlepiej zamontować parapety zewnętrzne?",
+     "Parapety zewnętrzne najlepiej zamontować na etapie ocieplania elewacji, przed wykonaniem końcowej warstwy tynku. Pozwala to prawidłowo osadzić parapet, wykonać szczelne połączenia i ograniczyć ryzyko przedostawania się wody pod ocieplenie."),
 ]
 
 
@@ -2896,18 +2896,18 @@ def build_parapety():
     def grupa(key, title, lead):
         typy = PARAPETY_TYPY[key]
         cards = "".join(f"""<article class="sill-card">
-        <img src="assets/img/parapety/{k}.jpg" alt="{title} — {n.lower()}" loading="lazy">
+        <a href="assets/img/parapety/{k}.jpg" data-lightbox-item><img src="assets/img/parapety/{k}.jpg" alt="{title} — {n.lower()}" loading="lazy"></a>
         <div><h3>{n}</h3><p>{d}</p><small>{t}</small></div>
       </article>""" for k, n, d, t in typy)
         tabs = '<div class="chips chips--tabs" role="tablist">' + "".join(
             f'<button type="button" class="{"is-active" if i == 0 else ""}" data-filter-btn="{k}">{n}</button>'
             for i, (k, n, _d, _t) in enumerate(typy)) + "</div>"
-        grid = '<div class="sill-swatches" data-filter-grid>' + "".join(
-            f'<figure data-filter="{k}"{"" if i == 0 else " hidden"}><img src="assets/img/parapety/kolor-{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
+        grid = '<div class="sill-swatches" data-filter-grid data-lightbox>' + "".join(
+            f'<a href="assets/img/parapety/kolor-{f}-lg.jpg" data-lightbox-item data-caption="{_n} — {n}" data-filter="{k}"{"" if i == 0 else " hidden"}><img src="assets/img/parapety/kolor-{f}.jpg" alt="{_n} — {n}" loading="lazy"><span>{n}</span></a>'
             for i, (k, _n, _d, _t) in enumerate(typy) for n, f in PARAPETY_KOLORY[k]) + "</div>"
         return f"""<div class="section-header"><div class="section-header__left"><h2 class="h-sec">{title}</h2></div></div>
     <p class="sill-lead">{lead}</p>
-    <div class="sill-types{" sill-types--3" if len(typy) % 3 == 0 else ""}">{cards}</div>
+    <div class="sill-types{" sill-types--3" if len(typy) % 3 == 0 else ""}" data-lightbox>{cards}</div>
     <h4 class="palette-title">Dostępne kolory</h4>
     <div>{tabs}{grid}</div>"""
 
@@ -2925,7 +2925,7 @@ def build_parapety():
         <span class="card__more">Zobacz ofertę {I['arrow']}</span>
       </article></a>"""
 
-    body = pagehero("parapety/hero", "Parapety Jaro-Max – praktyczne i piękne wykończenie okna",
+    body = pagehero("parapety/hero-parapet", "Parapety Jaro-Max – praktyczne i piękne wykończenie okna",
                     "Parapety wewnętrzne i zewnętrzne z kamienia, konglomeratu, MDF, PCV, stali i aluminium — dopasujesz je do stolarki okiennej, elewacji i charakteru wnętrza.", None)
     body += f"""<section class="section">
   <div class="container">
@@ -2959,7 +2959,7 @@ def build_parapety():
 """
     write("parapety.html", head("Parapety wewnętrzne i zewnętrzne Jaro-Max | PROMYK Wieluń",
                                 "Parapety Jaro-Max: granitowe, kwarcytowe, marmurowe, MDF, PCV, stalowe, aluminiowe, Alu-Płytka i External Contour. Kolory i wymiary na zamówienie — PROMYK Wieluń.")
-          + nav("parapety") + body + footer())
+          + nav("parapety") + body.replace('<section class="pagehero">', '<section class="pagehero pagehero--sill">', 1) + footer())
 
 
 # ================================================================ PERGOLE (uwagi klienta 20.10.2026) ----
