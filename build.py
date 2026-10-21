@@ -2714,7 +2714,7 @@ ROL_ROWS = [
      ["Skrzynka kryta tynkiem — niewidoczna w elewacji",
       "Montaż warto uwzględnić już na etapie projektowania budynku.",
       "Dedykowane do budynków energooszczędnych i pasywnych",
-      "Dostęp serwisowy przez klapę rewizyjną"], "rol/podtynkowe-aluprof"),
+      "Dostęp serwisowy przez klapę rewizyjną"], "rol/podtynkowe-elewacja"),
     ("Sterowanie",
      ["Możliwość wyboru obsługi ręcznej (linka) lub elektrycznej",
       "Wyłączniki naścienne i piloty wielokanałowe",
@@ -3095,11 +3095,8 @@ BR_POROWNANIE = [
     ["Sposób otwierania", "Brama unosi się pionowo i przesuwa pod sufitem", "Pancerz zwija się do skrzynki nad otworem"],
     ["Konstrukcja", "Panele 40 lub 60 mm wypełnione pianką poliuretanową", "Profile aluminiowe PA 77 wypełnione pianką poliuretanową"],
     ["Izolacja termiczna", "Bardzo dobra", "Dobra"],
-    ["Miejsce w garażu", "Wymaga wolnej przestrzeni pod sufitem i nad otworem", "Nie zajmuje miejsca pod sufitem — skrzynka 250 lub 300 mm"],
     ["Montaż", "Wewnątrz garażu, na prowadnicach", "Skrzynka po wewnętrznej lub zewnętrznej stronie garażu"],
     ["Obsługa", "Ręczna lub automatyczna — napęd paskowy", "Napęd rurowy z awaryjnym otwieraniem korbą"],
-    ["Wygląd", "Panele gładkie, z jednym lub wieloma przetłoczeniami, kolory RAL i okleiny", "Kolory standardowe i drewnopodobne"],
-    ["Najlepiej sprawdzi się", "W garażach ogrzewanych i nowych budynkach", "Przy niskim nadprożu i ograniczonej przestrzeni w garażu"],
 ]
 BR_FAQ = [
     ("Jaką bramę wybrać - segmentową czy rolowaną?",
@@ -3115,7 +3112,7 @@ BR_FAQ = [
     ("Jaka brama garażowa sprawdzi się w garażu ogrzewanym?",
      "W ogrzewanym garażu najlepiej sprawdzi się brama segmentowa z panelami o dobrych właściwościach termoizolacyjnych."),
 ]
-BR_INSPIRACJE = ["brama_antracyt", "real/brama-antracyt", "bramy/insp-avo-garaz", "real/brama-drzwi",
+BR_INSPIRACJE = ["brama_antracyt", "bramy/insp-nice-1", "bramy/insp-avo-garaz", "bramy/insp-nice-2",
                  "bramy/insp-aluprof-dom", "realizacje/bramy", "brama_avo_dom", "bramy/segmentowe-wnetrze"]
 
 
@@ -3245,7 +3242,7 @@ def build_bramy():
     kolory = '<div class="swatches-grid" data-filter-grid>' + "".join(
         f'<figure data-filter="{g}"{"" if g == BR_AVO_GRUPY[0][0] else " hidden"}><img src="assets/img/bramy/{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
         for g, n, f in BR_AVO_KOLORY) + "</div>"
-    body = pagehero("bramy/segmentowe-wnetrze", "Bramy segmentowe",
+    body = pagehero("bramy/segmentowe-hero", "Bramy segmentowe",
                     "Funkcjonalne rozwiązania, dobra izolacja termiczna i szeroki wybór wzorów oraz kolorów dopasowanych do stylu Twojego domu.", None)
     body += f"""<section class="section">
   <div class="container">
