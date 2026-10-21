@@ -3347,7 +3347,7 @@ MK_ROWS = [
     ("Markizy tarasowe",
      ["Solidna konstrukcja z ekstrudowanego aluminium",
       "Sterowanie ręczne lub elektryczne",
-      "Duże możliwości wymiarowe: szerokość do 7 m i wysięg do 3,6 m",
+      "Duże możliwości wymiarowe: szerokość do 7&nbsp;m i wysięg do 3,6&nbsp;m",
       "Możliwość dopasowania kąta nachylenia",
       "Szeroki wybór kolorów i tkanin",
       "Rozwiązania do tarasów przydomowych i lokali usługowych"], "mark/tarasowe", "markizy--markizy-tarasowe"),
@@ -3385,15 +3385,15 @@ MK_FAQ = [
 MK_TARASOWE = [
     ("Australia", "bez kasety", "mark/australia",
      "Markiza bezkasetowa — prosta, lekka konstrukcja, która świetnie sprawdza się we wnękach i pod zadaszeniem. Montaż do ściany, sufitu lub krokwi, regulacja kąta 5–60°.",
-     "Szerokość do 7 m, wysięg do 3,6 m"),
+     "Szerokość do 7&nbsp;m, wysięg do 3,6&nbsp;m"),
     ("Palladio", "półkaseta", "mark/palladio",
      "Częściowo zabudowana kaseta o minimalistycznym kształcie osłania zwiniętą tkaninę od góry. Kąt nachylenia regulowany w zakresie 5–50°, opcjonalne oświetlenie LED w ramionach.",
-     "Szerokość do 7 m, wysięg do 3,6 m"),
+     "Szerokość do 7&nbsp;m, wysięg do 3,6&nbsp;m"),
     ("Dakar", "pełna kaseta", "mark/dakar",
      "Pełna kaseta o zaokrąglonym kształcie z uszczelką — po zwinięciu tkanina i ramiona są całkowicie schowane i chronione przed deszczem i zabrudzeniami. Kąt nachylenia 5–40°.",
-     "Szerokość do 6 m, wysięg do 3,6 m"),
+     "Szerokość do 6&nbsp;m, wysięg do 3,6&nbsp;m"),
 ]
-MK_INSPIRACJE = [f"mark/insp-{i:02d}" for i in range(1, 9)]
+MK_INSPIRACJE = [f"mark/insp-{i:02d}" for i in (1, 2, 3, 4, 9, 6, 7, 8)]  # 05 = markiza pionowa, nie w ofercie
 
 
 def _mk_related(cur):
