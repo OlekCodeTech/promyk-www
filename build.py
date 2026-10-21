@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "56"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "57"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -3544,7 +3544,7 @@ OW_ROWS = [
       "Precyzyjna regulacja ilości światła",
       "Szeroka gama kolorów lameli",
       "Nowoczesny i ponadczasowy wygląd",
-      "Rozwiązanie m.in. do domu, mieszkania i biura"], "osl/aluminiowe"),
+      "Rozwiązanie m.in. do domu, mieszkania i biura"], "osl/aluminiowe-okno"),
     ("Żaluzje drewniane i bambusowe",
      ["Lamele 25 mm i 50 mm",
       "Naturalny wygląd i ponadczasowy styl",
@@ -3562,7 +3562,7 @@ OW_ROWS = [
       "Rozwiązania do okien dachowych",
       "Wygodna obsługa i łatwa regulacja",
       "Większa prywatność bez całkowitego odcinania światła",
-      "Rozwiązania m.in. do kuchni, łazienki, salonu i sypialni"], "osl/plisy"),
+      "Rozwiązania m.in. do kuchni, łazienki, salonu i sypialni"], "osl/plisy-bez"),
     ("Rolety rzymskie",
      ["Miękkie fałdy tkaniny, demontaż do prania",
       "Szeroki wybór tkanin i kolorów",
@@ -3598,7 +3598,26 @@ OW_ROWS = [
       "Różne warianty rozsuwania lameli – jednostronnie lub na boki.",
       "Idealne rozwiązanie do dużych przeszkleń, biur i sal konferencyjnych"], "osl/pionowe"),
 ]
-OW_INSPIRACJE = [f"osl/insp-{i:02d}" for i in range(1, 17)]
+OW_ADV = [("Na wymiar", "Produkcja pod wymiar każdej wnęki i skrzydła", "ruler"),
+          ("Regulacja światła", "Od pełnego zaciemnienia (blackout) po delikatne rozproszenie", "sun"),
+          ("30 lat doświadczenia", "Osłony wewnętrzne produkujemy od 30 lat", "star")]
+OW_FAQ = [
+    ("Czym różnią się rolety, plisy i żaluzje?",
+     "Rolety, plisy i żaluzje różnią się sposobem regulacji światła, budową oraz wyglądem. Rolety materiałowe tworzą jednolitą powierzchnię tkaniny i pozwalają osłonić okno, plisy można przesuwać zarówno od góry, jak i od dołu, a żaluzje umożliwiają precyzyjne sterowanie ilością światła dzięki regulowanym lamelom. Wybór zależy od oczekiwanego poziomu zaciemnienia, prywatności i stylu wnętrza."),
+    ("Jakie osłony najlepiej sprawdzą się w salonie, sypialni i kuchni?",
+     "W salonie świetnie sprawdzą się rolety materiałowe, rolety rzymskie lub żaluzje, które pozwalają dopasować ilość światła do potrzeb i stylu wnętrza. Do sypialni warto wybrać rolety zaciemniające, zapewniające komfortowy sen i większą prywatność. W kuchni najlepiej sprawdzą się praktyczne osłony, takie jak plisy czy żaluzje aluminiowe, które ułatwiają regulację światła i codzienną pielęgnację. W każdym pomieszczeniu warto dopasować osłonę do warunków i sposobu użytkowania."),
+    ("Jak dobrać kolor osłon do okien i wystroju pomieszczenia?",
+     "Kolor osłon wewnętrznych warto dopasować do odcienia okien, ścian, podłogi i mebli. Jasne tkaniny optycznie rozjaśniają wnętrze, a ciemniejsze mogą stanowić wyrazisty akcent aranżacyjny. W nowoczesnych pomieszczeniach dobrze sprawdzają się szarości, biele i beże, natomiast żaluzje drewniane wprowadzają naturalne ciepło."),
+    ("Czy osłony wewnętrzne można zamontować bez wiercenia?",
+     "Tak, wiele osłon wewnętrznych można zamontować bez wiercenia, np. przy użyciu specjalnych uchwytów zakładanych na ramę okna. Dostępność montażu bezinwazyjnego zależy od rodzaju osłony, konstrukcji okna oraz wybranego systemu mocowania."),
+    ("Jakie osłony sprawdzą się w pomieszczeniach o podwyższonej wilgotności?",
+     "Do kuchni i łazienek polecamy żaluzje aluminiowe, które dobrze sprawdzają się w pomieszczeniach narażonych na wilgoć. Są łatwe w czyszczeniu, praktyczne i pozwalają wygodnie regulować ilość światła wpadającego do wnętrza."),
+    ("Jakie osłony można zamontować na oknach dachowych?",
+     "Do okien dachowych można wybrać rolety materiałowe z jednolitą tkaniną lub plisy, które pozwalają osłonić wybraną część okna."),
+    ("Gdzie można zobaczyć dostępne kolory i wzory osłon wewnętrznych?",
+     "Osłony wewnętrzne dostępne są w bogatej gamie kolorów i wzorów – od klasycznych, stonowanych odcieni po bardziej wyraziste barwy i ciekawe struktury. Na miejscu oferujemy szeroki wybór tkanin i wzorników, dzięki którym można dopasować osłony do okien oraz wystroju wnętrza. Kolekcje są regularnie aktualizowane, dlatego warto odwiedzić nasz salon i zobaczyć aktualnie dostępne propozycje."),
+]
+OW_INSPIRACJE = [f"osl/insp-{i:02d}" for i in (1, 2, 17, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)]  # 03 = żaluzje na skosach, nie w ofercie
 
 
 def build_oslony_wewnetrzne():
@@ -3615,11 +3634,11 @@ def build_oslony_wewnetrzne():
         flip = k % 2
         rows += f'<div class="subrow{" subrow--flip" if flip else ""}">{media if not flip else text}{text if not flip else media}</div>'
     adv = "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
-      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in meta["adv"])
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in OW_ADV)
     faq = "".join(f"""<div class="faq__row">
       <button class="faq__q"><span>{q}</span><span>+</span></button>
       <div class="faq__a"><p>{a}</p></div>
-    </div>""" for q, a in PRODUCT_EXTRAS["oslony-wewnetrzne"]["know"])
+    </div>""" for q, a in OW_FAQ)
     insp = '<div class="gallery gallery--okna" data-lightbox>' + "".join(
         f'<a href="assets/img/{g}.jpg" data-lightbox-item><img src="assets/img/{g}.jpg" alt="Osłony wewnętrzne — inspiracja" loading="lazy"></a>'
         for g in OW_INSPIRACJE) + "</div>"
