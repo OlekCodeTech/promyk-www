@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "52"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "53"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -59,7 +59,7 @@ PRODUCTS = [
     ("rolety-zewnetrzne", "Rolety zewnętrzne",  "Produkcja własna",   "al30_rol"),
     ("pergole",           "Pergole",            "Aluprof",            "perg/sb400"),
     ("bramy-garazowe",    "Bramy garażowe",     "AVO / Aluprof",      "brama_antracyt"),
-    ("markizy",           "Markizy",            "Aluprof",            "katalog/markiza-palladio-dom"),
+    ("markizy",           "Markizy",            "Aluprof",            "mark/hero"),
     ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Produkcja własna",   "plisy"),
     ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Aluprof",            "katalog/screeny-dom"),
     ("moskitiery",        "Moskitiery",         "Produkcja własna",   "al25"),
@@ -1870,7 +1870,7 @@ for _p, _meta in PRODUCT_DATA.items():
 def build_subpages():
     """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
     for parent, meta in PRODUCT_DATA.items():
-        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole", "bramy-garazowe"):   # bez podstron 3. poziomu (uwagi klienta)
+        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole", "bramy-garazowe", "markizy"):   # bez podstron 3. poziomu (uwagi klienta)
             continue
         details = SUB_DETAILS.get(parent, [])
         for k, row in enumerate(meta["rows"]):
@@ -3340,6 +3340,199 @@ def build_bramy():
           + nav("bramy-garazowe") + body + footer())
 
 
+# ================================================================ MARKIZY (uwagi klienta 21.10.2026) ----
+MK_ROWS = [
+    ("Markizy tarasowe",
+     ["Solidna konstrukcja z ekstrudowanego aluminium",
+      "Sterowanie ręczne lub elektryczne",
+      "Duże możliwości wymiarowe: szerokość do 7 m i wysięg do 3,6 m",
+      "Możliwość dopasowania kąta nachylenia",
+      "Szeroki wybór kolorów i tkanin",
+      "Rozwiązania do tarasów przydomowych i lokali usługowych"], "mark/tarasowe", "markizy--markizy-tarasowe"),
+    ("Markizy balkonowe",
+     ["Montaż do balustrady balkonowej",
+      "Regulacja kąta nachylenia tkaniny",
+      "Możliwość dopasowania wymiarów do balkonu",
+      "Wygodna obsługa ręczna",
+      "Szeroki wybór kolorów tkanin",
+      "Rozwiązanie idealne na balkony w budynkach mieszkalnych"], "mark/balkonowe", "markizy--markizy-balkonowe"),
+    ("Automatyka Somfy",
+     ["Wygodne rozwijanie i zwijanie bez użycia korby",
+      "Sterowanie markizą za pomocą pilota",
+      "Możliwość integracji z systemem Smart Home",
+      "Czujnik wstrząsowy zwiększający ochronę markizy",
+      "Awaryjne zwijanie markizy korbą - w przypadku braku prądu"], "mark/automatyka", None),
+]
+MK_ADV = [("Ochrona przed słońcem", "Komfortowy cień na tarasie i balkonie", "sun"),
+          ("Wygodna obsługa", "Korba, pilot lub sterowanie Smart Home", "cog"),
+          ("Trwałe tkaniny", "Szeroki wybór kolorów, odporność na płowienie", "shield")]
+MK_FAQ = [
+    ("Kaseta pełna, półkaseta czy markiza otwarta?",
+     "Pełna kaseta chroni tkaninę i ramiona całkowicie po zwinięciu — najdłuższa żywotność poszycia. Półkaseta osłania tkaninę od góry, jest lżejsza i tańsza. Otwarta sprawdza się pod zadaszeniem, gdzie poszycie nie moknie."),
+    ("Jak dobrać wymiary markizy do tarasu?",
+     "Szerokość markizy powinna być dopasowana do wielkości tarasu i strefy, którą ma osłaniać, a jej wysięg – do oczekiwanego zakresu cienia. Przy wyborze warto uwzględnić rozmieszczenie mebli, nasłonecznienie oraz miejsce montażu. Przed zamówieniem należy upewnić się, że konstrukcja zmieści się na elewacji."),
+    ("Jak wybrać kolor tkaniny markizy?",
+     "Kolor tkaniny markizy warto dopasować do elewacji, stolarki okiennej i aranżacji tarasu. Jasne odcienie nadają przestrzeni lekkości, natomiast ciemniejsze mogą mocniej ograniczać ilość światła pod markizą."),
+    ("Czy markizę można zamontować na ocieplonej elewacji?",
+     "Tak, markizę można zamontować na ocieplonej elewacji, pod warunkiem zastosowania odpowiednich mocowań dostosowanych do rodzaju ściany i grubości ocieplenia."),
+    ("Czy markizę należy zwijać podczas silnego wiatru?",
+     "Tak, podczas silnego wiatru markizę należy zwinąć, aby uniknąć uszkodzenia tkaniny i konstrukcji. Markizy są narażone na duże obciążenia spowodowane podmuchami, dlatego należy przestrzegać zaleceń producenta dotyczących odporności na wiatr. Dodatkową ochronę może zapewnić automatyka Somfy z czujnikiem wstrząsowym, który uruchamia zwijanie markizy po wykryciu określonych warunków."),
+    ("Czy markiza chroni przed deszczem?",
+     "Markiza zapewnia przede wszystkim ochronę przed słońcem, a jej odporność na deszcz zależy od rodzaju tkaniny i konstrukcji. Nie jest przeznaczona do użytkowania podczas intensywnych opadów, które mogą obciążać materiał i prowadzić do uszkodzeń. W czasie deszczu i silnego wiatru zaleca się zwinięcie markizy zgodnie z zaleceniami producenta."),
+]
+MK_TARASOWE = [
+    ("Australia", "bez kasety", "mark/australia",
+     "Markiza bezkasetowa — prosta, lekka konstrukcja, która świetnie sprawdza się we wnękach i pod zadaszeniem. Montaż do ściany, sufitu lub krokwi, regulacja kąta 5–60°.",
+     "Szerokość do 7 m, wysięg do 3,6 m"),
+    ("Palladio", "półkaseta", "mark/palladio",
+     "Częściowo zabudowana kaseta o minimalistycznym kształcie osłania zwiniętą tkaninę od góry. Kąt nachylenia regulowany w zakresie 5–50°, opcjonalne oświetlenie LED w ramionach.",
+     "Szerokość do 7 m, wysięg do 3,6 m"),
+    ("Dakar", "pełna kaseta", "mark/dakar",
+     "Pełna kaseta o zaokrąglonym kształcie z uszczelką — po zwinięciu tkanina i ramiona są całkowicie schowane i chronione przed deszczem i zabrudzeniami. Kąt nachylenia 5–40°.",
+     "Szerokość do 6 m, wysięg do 3,6 m"),
+]
+MK_INSPIRACJE = [f"mark/insp-{i:02d}" for i in range(1, 9)]
+
+
+def _mk_related(cur):
+    out = ""
+    for slug, title, img in [("markizy--markizy-tarasowe", "Markizy tarasowe", "mark/tarasowe"),
+                             ("markizy--markizy-balkonowe", "Markizy balkonowe", "mark/balkonowe"),
+                             ("markizy", "Wszystkie markizy", "mark/hero")]:
+        if slug == cur: continue
+        out += f"""<a href="{slug}.html"><article class="card">
+        <img src="assets/img/{img}.jpg" alt="{title}" style="height:150px;object-fit:cover;border-radius:var(--r-md)" loading="lazy">
+        <div><h3>{title}</h3></div>
+        <span class="card__more">Zobacz {I['arrow']}</span>
+      </article></a>"""
+    return out
+
+
+def build_markizy():
+    rows = ""
+    for k, (title, bullets, img, more) in enumerate(MK_ROWS):
+        li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+        media = f'<div><img src="assets/img/{img}.jpg" alt="{title}" loading="lazy"></div>'
+        btn_more = f'<a class="btn btn--primary btn--sm" href="{more}.html">Więcej o tym rozwiązaniu {I["arrow"]}</a>' if more else ""
+        text = f"""<div class="subrow__text">
+        <h2>{title}</h2>
+        <ul class="bullets">{li}</ul>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          {btn_more}
+          <a class="btn btn--{"outline" if more else "primary"} btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+        </div>
+      </div>"""
+        flip = k % 2
+        rows += f'<div class="subrow{" subrow--flip" if flip else ""}">{media if not flip else text}{text if not flip else media}</div>'
+    adv = "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in MK_ADV)
+    faq = "".join(f"""<div class="faq__row">
+      <button class="faq__q"><span>{q}</span><span>+</span></button>
+      <div class="faq__a"><p>{a}</p></div>
+    </div>""" for q, a in MK_FAQ)
+    insp = '<div class="gallery gallery--okna" data-lightbox>' + "".join(
+        f'<a href="assets/img/{g}.jpg" data-lightbox-item><img src="assets/img/{g}.jpg" alt="Markiza Aluprof Sun Shading Solutions — inspiracja" loading="lazy"></a>'
+        for g in MK_INSPIRACJE) + "</div>"
+    rel = ""
+    for sl in ["pergole", "oslony-zewnetrzne", "rolety-zewnetrzne"]:
+        rel += f"""<a href="{sl}.html"><article class="card">
+        <img src="assets/img/{PROD_IMG[sl]}.jpg" alt="{PROD_LABEL[sl]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
+        <div><h3>{PROD_LABEL[sl]}</h3></div>
+        <span class="card__more">Zobacz ofertę {I['arrow']}</span>
+      </article></a>"""
+    body = pagehero("mark/hero", "Markizy Aluprof Sun Shading Solutions",
+                    "Komfortowy cień i skuteczna ochrona przed słońcem, dzięki którym możesz cieszyć się wypoczynkiem na tarasie lub balkonie nawet w upalne dni.", None)
+    body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
+<section class="advantages"><div class="container advantages__inner">{adv}</div></section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
+    <div class="faq">{faq}</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
+    {insp}
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Planujesz markizę na taras lub balkon?",
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Sprawdź również inne systemy</h2>
+    <div class="grid-3">{rel}</div>
+  </div>
+</section>
+"""
+    write("markizy.html", head("Markizy Aluprof Sun Shading Solutions — tarasowe i balkonowe | PROMYK Wieluń",
+                               "Markizy tarasowe i balkonowe Aluprof Sun Shading Solutions: bez kasety, w półkasecie i pełnej kasecie, automatyka Somfy z czujnikiem wstrząsowym — PROMYK Wieluń.")
+          + nav("markizy") + body + footer())
+
+    # ---- podstrona: markizy tarasowe
+    cards = "".join(f"""<article class="sill-card">
+        <a href="assets/img/{img}.jpg" data-lightbox-item><img src="assets/img/{img}.jpg" alt="Markiza {n} — {typ}" loading="lazy"></a>
+        <div><h3>{n} <span class="mk-type">{typ}</span></h3><p>{d}</p><small>{dim}</small></div>
+      </article>""" for n, typ, img, d, dim in MK_TARASOWE)
+    body = pagehero("mark/tarasowe", "Markizy tarasowe",
+                    "Dostępne w wersji bez kasety, z półkasetą lub w pełnej kasecie – wybierz markizę dopasowaną do Twoich potrzeb", None)
+    body += f"""<section class="section">
+  <div class="container">
+    <p class="sill-lead">Montujemy trzy rodzaje markiz tarasowych Aluprof Sun Shading Solutions. Różnią się stopniem osłonięcia zwiniętej tkaniny — od lekkiej markizy bez kasety, przez półkasetę, po pełną kasetę, która chroni tkaninę i ramiona po zwinięciu. Każdą z nich można obsługiwać ręcznie korbą lub elektrycznie, także z automatyką Somfy.</p>
+    <div class="sill-types sill-types--3" data-lightbox>{cards}</div>
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Dobierzemy markizę do Twojego tarasu",
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Zobacz również</h2>
+    <div class="grid-3">{_mk_related("markizy--markizy-tarasowe")}</div>
+  </div>
+</section>
+"""
+    write("markizy--markizy-tarasowe.html", head("Markizy tarasowe Aluprof — Australia, Palladio, Dakar | PROMYK Wieluń",
+                                                  "Markizy tarasowe Aluprof Sun Shading Solutions: Australia (bez kasety), Palladio (półkaseta) i Dakar (pełna kaseta). Szerokość do 7 m, wysięg do 3,6 m.")
+          + nav("markizy") + body + footer())
+
+    # ---- podstrona: markizy balkonowe
+    body = pagehero("mark/balkonowe", "Markizy balkonowe",
+                    "Lekka markiza montowana do balustrady — przyjemny cień i więcej prywatności na Twoim balkonie.", None)
+    body += f"""<section class="section">
+  <div class="container">
+    <div class="subrow">
+      <div class="subrow__text prose-text">
+        <h2>Italia poręczowa</h2>
+        <p>Markiza Italia poręczowa to lekka, bezkasetowa konstrukcja z ekstrudowanego aluminium, zaprojektowana z myślą o balkonach i wnękach balkonowych. Jej aluminiowe ramiona mocuje się bezpośrednio do poręczy, a uniwersalny uchwyt pozwala na montaż ścienny lub sufitowy.</p>
+        <p>Kąt nachylenia tkaniny można regulować aż do 90°, dzięki czemu markiza działa jak zadaszenie albo jak osłona od czoła balkonu. Obsługa odbywa się ręcznie, za pomocą korby. Szerokość markizy do 5 m, wysięg 0,7 m, a do wyboru jest bogata kolekcja tkanin, trzy rodzaje falban i konstrukcja w dowolnym kolorze z palety RAL.</p>
+        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+      </div>
+      <div><img src="assets/img/mark/balkonowe.jpg" alt="Markizy balkonowe Italia poręczowa" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Dobierzemy markizę do Twojego balkonu",
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Zobacz również</h2>
+    <div class="grid-3">{_mk_related("markizy--markizy-balkonowe")}</div>
+  </div>
+</section>
+"""
+    write("markizy--markizy-balkonowe.html", head("Markizy balkonowe Aluprof — Italia poręczowa | PROMYK Wieluń",
+                                                   "Markiza balkonowa Aluprof Italia poręczowa: montaż do balustrady, regulacja kąta do 90°, obsługa ręczna korbą, szerokość do 5 m.")
+          + nav("markizy") + body + footer())
+
+
 if __name__ == "__main__":
     print("Generuję strony PROMYK...")
     build_index()
@@ -3362,6 +3555,8 @@ if __name__ == "__main__":
             build_pergole()
         elif slug == "bramy-garazowe":
             build_bramy()
+        elif slug == "markizy":
+            build_markizy()
         else:
             product_page(slug, meta)
     build_parapety()

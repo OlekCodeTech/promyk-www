@@ -1138,3 +1138,5 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 .garage-anim .ga-label--sm { font-size: 12px; }
 @media (max-width: 1024px) { .garage-anim-wrap { grid-template-columns: 1fr; gap: 32px; } }
 @media (max-width: 780px) { .panel-types { grid-template-columns: 1fr; } }
+
+.mk-type { display: inline-block; margin-left: 6px; font-size: 13px; font-weight: 700; color: var(--accent-text); text-transform: uppercase; letter-spacing: .04em; }
