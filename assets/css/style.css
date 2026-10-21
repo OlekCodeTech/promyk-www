@@ -1140,3 +1140,5 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 @media (max-width: 780px) { .panel-types { grid-template-columns: 1fr; } }
 
 .mk-type { display: inline-block; margin-left: 6px; font-size: 13px; font-weight: 700; color: var(--accent-text); text-transform: uppercase; letter-spacing: .04em; }
+.pagehero--low img { object-position: center 40%; }
+.pagehero--low::after { background: linear-gradient(90deg, rgba(21,23,25,.72) 0%, rgba(21,23,25,.45) 55%, rgba(21,23,25,.2) 100%); }

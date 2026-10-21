@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "53"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "55"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -3192,7 +3192,7 @@ def build_bramy():
         <div><h3>{PROD_LABEL[sl]}</h3></div>
         <span class="card__more">Zobacz ofertę {I['arrow']}</span>
       </article></a>"""
-    body = pagehero("bramy/hero", "Bramy garażowe segmentowe i rolowane",
+    body = pagehero("bramy/hero-brama", "Bramy garażowe segmentowe i rolowane",
                     "Nowoczesne rozwiązania, które łączą wygodę użytkowania, estetykę i bezpieczeństwo Twojego garażu.", None)
     body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
 <section class="advantages"><div class="container advantages__inner">{adv}</div></section>
@@ -3228,6 +3228,7 @@ def build_bramy():
   </div>
 </section>
 """
+    body = body.replace('<section class="pagehero">', '<section class="pagehero pagehero--low">', 1)
     write("bramy-garazowe.html", head("Bramy garażowe segmentowe i rolowane — AVO i Aluprof | PROMYK Wieluń",
                                       "Bramy garażowe segmentowe AVO (panel 40 lub 60 mm) i rolowane Aluprof. Porównanie, kolory, przeszklenia, napędy i smart home — PROMYK Wieluń.")
           + nav("bramy-garazowe") + body + footer())
@@ -3242,7 +3243,7 @@ def build_bramy():
     kolory = '<div class="swatches-grid" data-filter-grid>' + "".join(
         f'<figure data-filter="{g}"{"" if g == BR_AVO_GRUPY[0][0] else " hidden"}><img src="assets/img/bramy/{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
         for g, n, f in BR_AVO_KOLORY) + "</div>"
-    body = pagehero("bramy/segmentowe-hero", "Bramy segmentowe",
+    body = pagehero("bramy/segmentowe-noc", "Bramy segmentowe",
                     "Funkcjonalne rozwiązania, dobra izolacja termiczna i szeroki wybór wzorów oraz kolorów dopasowanych do stylu Twojego domu.", None)
     body += f"""<section class="section">
   <div class="container">
@@ -3295,6 +3296,7 @@ def build_bramy():
   </div>
 </section>
 """
+    body = body.replace('<section class="pagehero">', '<section class="pagehero pagehero--low">', 1)
     write("bramy-garazowe--bramy-segmentowe.html", head("Bramy segmentowe AVO — panele 40 i 60 mm, wzory i kolory | PROMYK Wieluń",
                                                          "Bramy segmentowe AVO: panele 40 lub 60 mm z pianką PU, gładkie, z jednym lub wieloma przetłoczeniami, kolory RAL i okleiny, napęd paskowy i Somfy Smart Home.")
           + nav("bramy-garazowe") + body + footer())
