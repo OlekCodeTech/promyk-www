@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "57"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "58"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -61,7 +61,8 @@ PRODUCTS = [
     ("bramy-garazowe",    "Bramy garażowe",     "AVO / Aluprof",      "brama_antracyt"),
     ("markizy",           "Markizy",            "Aluprof",            "mark/hero"),
     ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Produkcja własna",   "osl/hero"),
-    ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Aluprof",            "katalog/screeny-dom"),
+    ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Aluprof",            "ozew/refleksole"),
+    ("zaluzje-fasadowe",  "Żaluzje fasadowe",   "Aluprof",            "fasad/hero"),
     ("moskitiery",        "Moskitiery",         "Produkcja własna",   "al25"),
 ]
 PROD_LABEL = {s: t for s, t, _b, _i in PRODUCTS}
@@ -1870,7 +1871,7 @@ for _p, _meta in PRODUCT_DATA.items():
 def build_subpages():
     """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
     for parent, meta in PRODUCT_DATA.items():
-        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole", "bramy-garazowe", "markizy", "oslony-wewnetrzne"):   # bez podstron 3. poziomu (uwagi klienta)
+        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole", "bramy-garazowe", "markizy", "oslony-wewnetrzne", "oslony-zewnetrzne"):   # bez podstron 3. poziomu (uwagi klienta)
             continue
         details = SUB_DETAILS.get(parent, [])
         for k, row in enumerate(meta["rows"]):
@@ -3681,6 +3682,296 @@ def build_oslony_wewnetrzne():
     write("oslony-wewnetrzne.html", head(meta["title"], meta["desc"]) + nav("oslony-wewnetrzne") + body + footer())
 
 
+# ================================================================ OSŁONY ZEWNĘTRZNE + ŻALUZJE FASADOWE (uwagi klienta 21.10.2026) ----
+OZ_KOLORY = ["RAL 9001 mat", "RAL 9010 mat", "RAL 9016 mat", "RAL 1013 mat", "RAL 1015 mat", "VSR 240 satyna", "RAL 7001 mat",
+             "RAL 7012 mat", "RAL 7015 mat", "RAL 7016 mat", "RAL 7021 mat", "RAL 7024 mat", "RAL 7035 mat", "RAL 7037 mat",
+             "RAL 9006 mat", "RAL 9007 mat", "FSM 71319 mat", "RAL 9005 mat", "VSR 780 mat", "RAL 8014 mat", "RAL 8016 mat",
+             "DB 703 mat", "RAL 7022 mat", "RAL 7039 mat", "RAL 7043 mat", "RAL 8003 mat", "RAL 7016 struktura",
+             "RAL 7021 struktura", "RAL 9005 struktura", "RAL 9010 struktura", "RAL 7038 mat", "RAL 7048 mat", "RAL 8003 struktura"]
+OZ_SERGE = ["Antracite Grey", "Charcoal Bronze", "Charcoal", "Grey Charcoal", "Grey", "Grey White", "Linen",
+            "Linen White", "Grey Sand", "Pure Black", "Sandstone", "Pearl Grey", "White"]
+OZ_DREWNO = ["Mahoń", "Wiśnia", "Orzech", "Złoty dąb", "Dąb słodowy", "Winchester"]
+OZ_ROWS = [
+    ("Refleksole ZIIIP 120",
+     ["Tkanina screen (Serge) – widok na zewnątrz przy jednoczesnym ograniczeniu intensywnego światła słonecznego.",
+      "Prowadzenie tkaniny w systemie ZIP - materiał jest utrzymywany w prowadnicach bocznych",
+      "Różne rodzaje tkanin – możliwość dopasowania przepuszczalności światła i widoczności na zewnątrz",
+      "Szeroka gama kolorystyczna – dopasowanie osłony do elewacji i stolarki okiennej.",
+      "Nowoczesny wygląd – minimalistyczna forma pasująca do współczesnej architektury.",
+      "Napęd elektryczny – sterowanie pilotem",
+      "Montaż na tarasie i przy oknach – możliwość osłonięcia przeszkleń oraz przestrzeni wypoczynkowej",
+      "Opuszczona działa również tak jak moskitiera"], "ozew/refleksole", "oslony-zewnetrzne--refleksole-ziiip-120"),
+    ("Sunbreaker 210",
+     ["Regulacja kąta lameli – możliwość dopasowania osłony do położenia słońca.",
+      "Nowoczesny design – podkreślenie charakteru elewacji budynku.",
+      "Solidna konstrukcja aluminiowa – trwałość i odporność na warunki atmosferyczne.",
+      "Różne warianty kolorystyczne – dopasowanie do stolarki okiennej i elewacji.",
+      "Sterowanie ręczne lub elektryczne",
+      "Element architektoniczny elewacji — montaż pionowy lub poziomy"], "ozew/sunbreaker", "oslony-zewnetrzne--sunbreaker-210"),
+]
+OZ_ADV = [("Ochrona przed słońcem", "Mniej nagrzewania wnętrz i tarasu", "sun"),
+          ("Odporność na wiatr", "Refleksole ZIIIP w najwyższej, 6. klasie odporności na wiatr", "wind"),
+          ("Wygodne sterowanie", "Napęd elektryczny i pilot", "cog")]
+OZ_FAQ = [
+    ("Czym różnią się refleksole od sunbreakerów?",
+     "Refleksole to osłony wykonane ze specjalnej tkaniny, która ogranicza dopływ promieni słonecznych, zmniejsza nagrzewanie i może zachować widok na zewnątrz. Sunbreakery to osłony z aluminiowych lameli, które chronią przed słońcem i pozwalają kontrolować ilość światła docierającego do wnętrza. Oba rozwiązania sprawdzają się przy przeszkleniach i w przestrzeniach zewnętrznych, a wybór zależy od oczekiwanego efektu i sposobu użytkowania."),
+    ("Czy refleksole można zamontować na tarasie?",
+     "Tak, refleksole można zamontować na tarasie, np. jako osłony boczne, które ograniczają nasłonecznienie i poprawiają komfort wypoczynku."),
+    ("Jak dobrać stopień przepuszczalności tkaniny w refleksolach?",
+     "Dobór tkaniny do refleksoli zależy od stopnia nasłonecznienia oraz oczekiwanego poziomu ochrony przed słońcem. Tkaniny o większej przepuszczalności pozwalają zachować lepszy widok na zewnątrz i dostęp naturalnego światła, natomiast te o gęstszym splocie skuteczniej ograniczają ilość światła docierającego do wnętrza."),
+    ("Czy refleksole i sunbreakery można zatrzymać na dowolnej wysokości?",
+     "Tak, refleksole z napędem elektrycznym można zazwyczaj zatrzymać na dowolnej wysokości, dopasowując stopień osłonięcia do aktualnych potrzeb. W przypadku sunbreakerów możliwość ustawienia zależy od zastosowanego systemu – regulowane lamele pozwalają kontrolować ilość światła i stopień zacienienia. Dostępne funkcje zależą od wybranego modelu i sposobu sterowania."),
+    ("Czy refleksole i sunbreakery są odporne na warunki atmosferyczne?",
+     "Tak, refleksole i sunbreakery są przystosowane do użytkowania na zewnątrz i odporne na typowe warunki atmosferyczne."),
+    ("Czy refleksole i sunbreakery można podnosić i opuszczać?",
+     "Refleksole można podnosić i opuszczać, dostosowując poziom osłonięcia do aktualnych potrzeb. W przypadku sunbreakerów nie ma takiej możliwości. Są zamontowane na stałe, można jedynie regulować kąt nachylenia lameli."),
+]
+OZ_INSPIRACJE = [f"ozew/insp-{i:02d}" for i in range(1, 9)]
+
+ZF_ROWS = [
+    ("Żaluzje fasadowe samonośne",
+     ["Do fasad słupowo-ryglowych i montażu bezpośrednio do muru",
+      "Widoczna kaseta CUBE lub OVAL jako detal architektoniczny elewacji",
+      "Modułowa konstrukcja — osłony o dużych szerokościach",
+      "Maksymalne wymiary: 5 × 4 m"], "fasad/samonosne"),
+    ("Żaluzje fasadowe adaptacyjne",
+     ["Do budynków istniejących — bez ingerencji w warstwę docieplenia",
+      "Skrzynka z blachy osłonowej w kilku wariantach",
+      "Montaż we wnęce okiennej lub natynkowy",
+      "Maksymalne wymiary: 5 × 5 m"], "fasad/adaptacyjne"),
+    ("Żaluzje fasadowe podtynkowe",
+     ["Montaż na etapie budowy lub generalnego remontu",
+      "Kaseta BOX całkowicie ukryta pod ociepleniem i tynkiem",
+      "Minimalistyczne wykończenie elewacji",
+      "Maksymalne wymiary: 5 × 5 m"], "fasad/podtynkowe"),
+]
+ZF_ADV = [("Kontrola światła", "Płynna regulacja kąta lameli", "sun"),
+          ("Komfort termiczny", "Mniej nagrzewania latem i mniejsze straty ciepła zimą", "thermo"),
+          ("Automatyka", "Sterowanie z telefonu, automatyczne zwijanie przy wietrze", "cog")]
+ZF_FAQ = [
+    ("Lamela C80 czy Z90 — czym się różnią?",
+     "Lamele C80 są obustronnie wywinięte, sztywne i odporne na wiatr — obracają się w zakresie 0–180°. Lamele Z90 lepiej zaciemniają, mają uszczelkę wygłuszającą i obracają się w zakresie 0–90°."),
+    ("Który system żaluzji fasadowych wybrać?",
+     "W nowym budynku lub przy generalnym remoncie najlepiej sprawdzą się żaluzje podtynkowe, ukryte pod ociepleniem. W budynku istniejącym wybiera się zwykle żaluzje adaptacyjne, które nie wymagają ingerencji w docieplenie, a przy fasadach słupowo-ryglowych — samonośne."),
+    ("Czy żaluzje fasadowe mogą działać automatycznie?",
+     "Tak. Żaluzje fasadowe wyposaża się w napęd elektryczny, a z czujnikami pogodowymi mogą same opuszczać się w słońcu i zwijać przy silnym wietrze. Można nimi sterować także z telefonu lub tabletu."),
+]
+ZF_INSPIRACJE = [f"fasad/insp-{i:02d}" for i in range(1, 10)]
+
+
+def _sunbreaker_anim():
+    """Przekrój: eliptyczne pióra Sunbreakera obracają się 0–90° (SVG/SMIL)."""
+    blades = ""
+    for i in range(6):
+        cy = 60 + 48 * i
+        blades += (f'<g transform="translate(330 {cy})"><path class="sb-blade" d="M-46,0 C-30,-11 30,-11 46,0 C30,11 -30,11 -46,0 Z">'
+                   f'<animateTransform attributeName="transform" type="rotate" values="0;0;80;80;0" keyTimes="0;0.15;0.45;0.75;1" '
+                   f'dur="8s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;.45 0 .25 1;0 0 1 1;.45 0 .25 1"/></path></g>')
+    return f"""<svg class="garage-anim" viewBox="0 0 640 360" role="img" aria-label="Animacja: obrót piór Sunbreakera 210">
+  <circle cx="90" cy="70" r="26" class="sb-sun"/>
+  <line x1="130" y1="90" x2="250" y2="150" class="sb-ray"/><line x1="130" y1="120" x2="250" y2="210" class="sb-ray"/><line x1="120" y1="150" x2="250" y2="270" class="sb-ray"/>
+  <line x1="330" y1="30" x2="330" y2="330" class="sb-guide"/>
+  {blades}
+  <text x="420" y="345" class="ga-label">wnętrze</text>
+  <text x="60" y="345" class="ga-label">na zewnątrz</text>
+  <text x="410" y="70" class="ga-label ga-label--sm">pióra obracają się o 0–90°</text>
+</svg>"""
+
+
+def _rel_cards(items):
+    out = ""
+    for slug, title, img in items:
+        out += f"""<a href="{slug}.html"><article class="card">
+        <img src="assets/img/{img}.jpg" alt="{title}" style="height:150px;object-fit:cover;border-radius:var(--r-md)" loading="lazy">
+        <div><h3>{title}</h3></div>
+        <span class="card__more">Zobacz {I['arrow']}</span>
+      </article></a>"""
+    return out
+
+
+def _rows_html(rows, more_ok=True):
+    out = ""
+    for k, row in enumerate(rows):
+        title, bullets, img = row[0], row[1], row[2]
+        more = row[3] if len(row) > 3 else None
+        li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+        media = f'<div><img src="assets/img/{img}.jpg" alt="{title}" loading="lazy"></div>'
+        btns = (f'<a class="btn btn--primary btn--sm" href="{more}.html">Więcej o tym rozwiązaniu {I["arrow"]}</a>'
+                f'<a class="btn btn--outline btn--sm" href="kontakt.html">Zapytaj o wycenę {I["arrow"]}</a>') if more else \
+               f'<a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I["arrow"]}</a>'
+        text = f"""<div class="subrow__text">
+        <h2>{title}</h2>
+        <ul class="bullets">{li}</ul>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">{btns}</div>
+      </div>"""
+        flip = k % 2
+        out += f'<div class="subrow{" subrow--flip" if flip else ""}">{media if not flip else text}{text if not flip else media}</div>'
+    return out
+
+
+def _std_sections(adv, faq, insp, cta_h, related):
+    adv_h = "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in adv)
+    faq_h = "".join(f"""<div class="faq__row">
+      <button class="faq__q"><span>{q}</span><span>+</span></button>
+      <div class="faq__a"><p>{a}</p></div>
+    </div>""" for q, a in faq)
+    insp_h = '<div class="gallery gallery--okna" data-lightbox>' + "".join(
+        f'<a href="assets/img/{g}.jpg" data-lightbox-item><img src="assets/img/{g}.jpg" alt="Inspiracja" loading="lazy"></a>' for g in insp) + "</div>"
+    rel = ""
+    for sl in related:
+        rel += f"""<a href="{sl}.html"><article class="card">
+        <img src="assets/img/{PROD_IMG[sl]}.jpg" alt="{PROD_LABEL[sl]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
+        <div><h3>{PROD_LABEL[sl]}</h3></div>
+        <span class="card__more">Zobacz ofertę {I['arrow']}</span>
+      </article></a>"""
+    return f"""<section class="advantages"><div class="container advantages__inner">{adv_h}</div></section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
+    <div class="faq">{faq_h}</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
+    {insp_h}
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", cta_h, "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Sprawdź również inne systemy</h2>
+    <div class="grid-3">{rel}</div>
+  </div>
+</section>
+"""
+
+
+def _swatch_grid(items):
+    return '<div class="swatches-grid">' + "".join(
+        f'<figure><img src="assets/img/{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>' for f, n in items) + "</div>"
+
+
+def build_oslony_zewnetrzne():
+    body = pagehero("ozew/hero", "Osłony zewnętrzne - refleksole i sunbreaker",
+                    "Skuteczna ochrona przed słońcem i nowoczesny design. Idealne rozwiązanie do osłaniania przeszkleń oraz tworzenia komfortowej, zacienionej przestrzeni na tarasie.", None)
+    body += f"""<section class="section section--tight-bottom"><div class="container">{_rows_html(OZ_ROWS)}</div></section>
+""" + _std_sections(OZ_ADV, OZ_FAQ, OZ_INSPIRACJE, "Planujesz osłony przy pergoli lub przeszkleniach?", ["pergole", "zaluzje-fasadowe", "markizy"])
+    write("oslony-zewnetrzne.html", head("Osłony zewnętrzne — refleksole ZIIIP 120 i Sunbreaker 210 Aluprof | PROMYK Wieluń",
+                                         "Refleksole ZIIIP 120 z tkaniną Serge 600 i ruchome Sunbreakery 210 Aluprof — ochrona przed słońcem przy przeszkleniach i pergolach. PROMYK Wieluń.")
+          + nav("oslony-zewnetrzne") + body + footer())
+
+    kol = [(f"ozew/kolor-{i:02d}", n) for i, n in enumerate(OZ_KOLORY, 1)]
+    # ---- refleksole
+    body = pagehero("ozew/refleksole", "Refleksole ZIIIP 120", "Ochrona przed słońcem bez rezygnacji z widoku na zewnątrz.", None)
+    body += f"""<section class="section">
+  <div class="container">
+    <div class="subrow">
+      <div class="subrow__text prose-text">
+        <p>Refleksol to zewnętrzna roleta z tkaniny screen prowadzonej w systemie ZIP: zgrzewany brzeg tkaniny biegnie w prowadnicy, utrzymując pełne naprężenie — osłona pracuje przy silnym wietrze bez łopotania i szczelnie domyka światło przy krawędziach.</p>
+        <p>Refleksole ZIIIP 120 można wykonać w szerokości do <strong>7&nbsp;m</strong> i wysokości do <strong>4&nbsp;m</strong>. Najczęściej montujemy je przy pergolach — jako boczne osłony tarasu — oraz przy dużych przeszkleniach. Całkowicie opuszczona osłona działa również jak moskitiera.</p>
+        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+      </div>
+      <div><img src="assets/img/ozew/refleksol-wnetrze.jpg" alt="Refleksol ZIIIP 120 przy dużym przeszkleniu" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Tkaniny Serge 600</h2></div></div>
+    {_swatch_grid([(f"ozew/serge-{i:02d}", n) for i, n in enumerate(OZ_SERGE, 1)])}
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Kolory konstrukcji</h2></div></div>
+    {_swatch_grid(kol)}
+  </div>
+</section>
+{cta("Doradztwo i wycena", "Dobierzemy refleksole do Twojej pergoli lub okien", "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Zobacz również</h2>
+    <div class="grid-3">{_rel_cards([("oslony-zewnetrzne--sunbreaker-210", "Sunbreaker 210", "ozew/sunbreaker"), ("oslony-zewnetrzne", "Wszystkie osłony zewnętrzne", "ozew/hero"), ("pergole", "Pergole", "perg/sb400")])}</div>
+  </div>
+</section>
+"""
+    write("oslony-zewnetrzne--refleksole-ziiip-120.html", head("Refleksole ZIIIP 120 Aluprof — tkaniny Serge 600, kolory | PROMYK Wieluń",
+                                                              "Refleksole ZIIIP 120: tkanina screen Serge 600 w prowadnicach ZIP, szerokość do 7 m, wysokość do 4 m, 33 kolory konstrukcji. Montaż przy pergolach i przeszkleniach.")
+          + nav("oslony-zewnetrzne") + body + footer())
+
+    # ---- sunbreaker
+    warianty = '<div class="panel-types panel-types--2" data-lightbox>' + "".join(
+        f'<a href="assets/img/{f}.jpg" data-lightbox-item><img src="assets/img/{f}.jpg" alt="Sunbreaker 210 — {n.lower()}" loading="lazy"><span>{n}</span></a>'
+        for n, f in [("Montaż poziomy", "ozew/sb-poziomy"), ("Montaż pionowy", "ozew/sb-pionowy")]) + "</div>"
+    body = pagehero("ozew/sunbreaker", "Sunbreaker 210", "Ruchome lamele aluminiowe — pełna kontrola nad światłem i cieniem.", None)
+    body += f"""<section class="section">
+  <div class="container">
+    <div class="garage-anim-wrap">
+      <div>{_sunbreaker_anim()}</div>
+      <div class="subrow__text prose-text">
+        <h2>Ruchome pióra 210 mm</h2>
+        <p>Sunbreaker 210 w wersji ruchomej to zewnętrzna osłona z wielkogabarytowych, eliptycznych piór aluminiowych o szerokości 210 mm, prowadzonych w bocznych prowadnicach. Pióra obracają się w zakresie do 90° — silnikiem liniowym albo ręcznie — dzięki czemu ilość światła i cienia dopasujesz do pory dnia i położenia słońca. W pozycji zamkniętej specjalny kształt pióra chroni także przed opadami.</p>
+        <p>System montuje się poziomo lub pionowo, także jako ściana pergoli. Maksymalna szerokość piór to 4&nbsp;m, a wysokość systemu do 6,02&nbsp;m.</p>
+        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Montaż poziomy i pionowy</h2></div></div>
+    {warianty}
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Kolory konstrukcji</h2></div></div>
+    {_swatch_grid(kol)}
+    <h4 class="palette-title">Kolory drewnopodobne (za dopłatą)</h4>
+    {_swatch_grid([(f"ozew/drewno-{i:02d}", n) for i, n in enumerate(OZ_DREWNO, 1)])}
+  </div>
+</section>
+{cta("Doradztwo i wycena", "Dobierzemy Sunbreaker do Twojej elewacji lub pergoli", "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Zobacz również</h2>
+    <div class="grid-3">{_rel_cards([("oslony-zewnetrzne--refleksole-ziiip-120", "Refleksole ZIIIP 120", "ozew/refleksole"), ("oslony-zewnetrzne", "Wszystkie osłony zewnętrzne", "ozew/hero"), ("pergole", "Pergole", "perg/sb400")])}</div>
+  </div>
+</section>
+"""
+    write("oslony-zewnetrzne--sunbreaker-210.html", head("Sunbreaker 210 ruchomy Aluprof — pióra 210 mm, obrót 0–90° | PROMYK Wieluń",
+                                                         "Ruchomy Sunbreaker 210 Aluprof: eliptyczne pióra 210 mm z regulacją kąta do 90°, montaż poziomy lub pionowy, szerokość do 4 m, kolory RAL i drewnopodobne.")
+          + nav("oslony-zewnetrzne") + body + footer())
+
+
+def build_zaluzje_fasadowe():
+    body = pagehero("fasad/hero", "Żaluzje fasadowe Aluprof",
+                    "Precyzyjna kontrola światła i cienia oraz nowoczesny, spójny charakter elewacji.", None)
+    body += f"""<section class="section section--tight-bottom"><div class="container">{_rows_html(ZF_ROWS)}</div></section>
+<section class="section section--soft">
+  <div class="container">
+    <div class="subrow">
+      <div class="subrow__text prose-text">
+        <h2>Lamele C80 i Z90</h2>
+        <p>Lamele żaluzji wykonane są z blachy aluminiowej. Lamele typu C są obustronnie wywinięte, sztywne i odporne na wiatr — obracają się w zakresie 0–180°. Lamele typu Z lepiej zaciemniają, mają uszczelkę wygłuszającą i obracają się w zakresie 0–90°.</p>
+        <p>Prowadnice z uszczelkami tłumiącymi ograniczają hałas pracy, a napęd elektryczny z automatyką pozwala sterować żaluzjami z telefonu i automatycznie zwijać je przy silnym wietrze.</p>
+      </div>
+      <div><img src="assets/img/fasad/insp-02.jpg" alt="Żaluzje fasadowe Aluprof na elewacji domu" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+""" + _std_sections(ZF_ADV, ZF_FAQ, ZF_INSPIRACJE, "Planujesz żaluzje fasadowe?", ["oslony-zewnetrzne", "rolety-zewnetrzne", "okna"])
+    write("zaluzje-fasadowe.html", head("Żaluzje fasadowe Aluprof — samonośne, adaptacyjne, podtynkowe | PROMYK Wieluń",
+                                        "Żaluzje fasadowe Aluprof z lamelami C80 i Z90: samonośne, adaptacyjne i podtynkowe, z napędem elektrycznym i automatyką. PROMYK Wieluń.")
+          + nav("zaluzje-fasadowe") + body + footer())
+
+
 if __name__ == "__main__":
     print("Generuję strony PROMYK...")
     build_index()
@@ -3707,8 +3998,11 @@ if __name__ == "__main__":
             build_markizy()
         elif slug == "oslony-wewnetrzne":
             build_oslony_wewnetrzne()
+        elif slug == "oslony-zewnetrzne":
+            build_oslony_zewnetrzne()
         else:
             product_page(slug, meta)
     build_parapety()
+    build_zaluzje_fasadowe()
     build_subpages()
     print("Gotowe.")

@@ -1142,3 +1142,10 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 .mk-type { display: inline-block; margin-left: 6px; font-size: 13px; font-weight: 700; color: var(--accent-text); text-transform: uppercase; letter-spacing: .04em; }
 .pagehero--low img { object-position: center 40%; }
 .pagehero--low::after { background: linear-gradient(90deg, rgba(21,23,25,.72) 0%, rgba(21,23,25,.45) 55%, rgba(21,23,25,.2) 100%); }
+
+.panel-types--2 { grid-template-columns: repeat(2, 1fr); }
+.panel-types--2 img { aspect-ratio: 4 / 3; object-fit: contain; background: #fff; }
+.garage-anim .sb-blade { fill: #44607b; stroke: #2f3237; stroke-width: 1.5; }
+.garage-anim .sb-guide { stroke: #c9ced4; stroke-width: 3; stroke-dasharray: 6 5; }
+.garage-anim .sb-sun { fill: #f2c14e; }
+.garage-anim .sb-ray { stroke: #f2c14e; stroke-width: 3; stroke-linecap: round; opacity: .7; }
