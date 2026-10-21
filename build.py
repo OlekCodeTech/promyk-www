@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "55"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "56"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -60,7 +60,7 @@ PRODUCTS = [
     ("pergole",           "Pergole",            "Aluprof",            "perg/sb400"),
     ("bramy-garazowe",    "Bramy garażowe",     "AVO / Aluprof",      "brama_antracyt"),
     ("markizy",           "Markizy",            "Aluprof",            "mark/hero"),
-    ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Produkcja własna",   "plisy"),
+    ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Produkcja własna",   "osl/hero"),
     ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Aluprof",            "katalog/screeny-dom"),
     ("moskitiery",        "Moskitiery",         "Produkcja własna",   "al25"),
 ]
@@ -1870,7 +1870,7 @@ for _p, _meta in PRODUCT_DATA.items():
 def build_subpages():
     """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
     for parent, meta in PRODUCT_DATA.items():
-        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole", "bramy-garazowe", "markizy"):   # bez podstron 3. poziomu (uwagi klienta)
+        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole", "bramy-garazowe", "markizy", "oslony-wewnetrzne"):   # bez podstron 3. poziomu (uwagi klienta)
             continue
         details = SUB_DETAILS.get(parent, [])
         for k, row in enumerate(meta["rows"]):
@@ -3535,6 +3535,133 @@ def build_markizy():
           + nav("markizy") + body + footer())
 
 
+# ================================================================ OSŁONY WEWNĘTRZNE (uwagi klienta 21.10.2026) ----
+OW_ROWS = [
+    ("Żaluzje aluminiowe",
+     ["Lamele 16 mm, 25 mm i 50 mm",
+      "Odporne na wilgoć — kuchnie i łazienki",
+      "Obsługa sznurkiem lub łańcuszkiem, opcja napędu elektrycznego",
+      "Precyzyjna regulacja ilości światła",
+      "Szeroka gama kolorów lameli",
+      "Nowoczesny i ponadczasowy wygląd",
+      "Rozwiązanie m.in. do domu, mieszkania i biura"], "osl/aluminiowe"),
+    ("Żaluzje drewniane i bambusowe",
+     ["Lamele 25 mm i 50 mm",
+      "Naturalny wygląd i ponadczasowy styl",
+      "Precyzyjna regulacja ilości światła",
+      "Bogata gama kolorów i odcieni drewna",
+      "Dopasowanie do wnętrz nowoczesnych i klasycznych",
+      "Możliwość sterowania ręcznego lub elektrycznego",
+      "Efekt przytulnego wnętrza",
+      "Rozwiązanie m.in. do salonu, sypialni i gabinetu"], "osl/drewniane"),
+    ("Plisy",
+     ["System dwukierunkowy góra-dół — zasłonisz dowolny fragment szyby",
+      "Dopasowanie do okien o standardowych i nietypowych kształtach",
+      "Tkaniny transparentne, przyciemniające i blackout z powłoką perłową",
+      "Nowoczesny i minimalistyczny wygląd",
+      "Rozwiązania do okien dachowych",
+      "Wygodna obsługa i łatwa regulacja",
+      "Większa prywatność bez całkowitego odcinania światła",
+      "Rozwiązania m.in. do kuchni, łazienki, salonu i sypialni"], "osl/plisy"),
+    ("Rolety rzymskie",
+     ["Miękkie fałdy tkaniny, demontaż do prania",
+      "Szeroki wybór tkanin i kolorów",
+      "Szycie na wymiar",
+      "Efekt dekoracyjnych zakładek",
+      "Możliwość wyboru grubości i faktury materiału",
+      "Estetyczna alternatywa dla klasycznych zasłon",
+      "Możliwość zdjęcia tkaniny do prania",
+      "Rozwiązanie m.in. do salonu, sypialni i jadalni"], "osl/rzymskie"),
+    ("Rolety materiałowe",
+     ["Warianty montażu: w kasecie, nakładane na ramę okna lub na ścianie",
+      "Tkaniny gładkie, wzorzyste i dekoracyjne",
+      "Estetyczne osłonięcie okna bez ciężkich zasłon",
+      "Połączenie funkcjonalności z prostym designem",
+      "Rozwiązania do okien dachowych",
+      "Różne stopnie przepuszczalności światła",
+      "Rozwiązania m.in. do salonu, sypialni i biura"], "osl/materialowe"),
+    ("Rolety dzień-noc",
+     ["Naprzemienne pasy transparentne i zaciemniające",
+      "Płynna regulacja światła bez podnoszenia rolety",
+      "Szeroki wybór kolorów i wzorów",
+      "Nowoczesny wygląd i dekoracyjny charakter",
+      "Delikatne rozproszenie światła słonecznego",
+      "Estetyczna alternatywa dla tradycyjnych firan i zasłon",
+      "Montaż w kasecie, na ramie okna lub na ścianie",
+      "Rozwiązanie m.in. do salonu, sypialni"], "osl/dzien-noc"),
+    ("Żaluzje pionowe",
+     ["Pasy 89 / 127 mm z regulacją kąta obrotu",
+      "Możliwość obracania lameli o 180°",
+      "Szeroki wybór kolorów i tkanin",
+      "Płynne przesuwanie lameli na boki",
+      "Możliwość osłonięcia przeszkleń od podłogi do sufitu",
+      "Różne warianty rozsuwania lameli – jednostronnie lub na boki.",
+      "Idealne rozwiązanie do dużych przeszkleń, biur i sal konferencyjnych"], "osl/pionowe"),
+]
+OW_INSPIRACJE = [f"osl/insp-{i:02d}" for i in range(1, 17)]
+
+
+def build_oslony_wewnetrzne():
+    meta = PRODUCT_DATA["oslony-wewnetrzne"]
+    rows = ""
+    for k, (title, bullets, img) in enumerate(OW_ROWS):
+        li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+        media = f'<div><img src="assets/img/{img}.jpg" alt="{title}" loading="lazy"></div>'
+        text = f"""<div class="subrow__text">
+        <h2>{title}</h2>
+        <ul class="bullets">{li}</ul>
+        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+      </div>"""
+        flip = k % 2
+        rows += f'<div class="subrow{" subrow--flip" if flip else ""}">{media if not flip else text}{text if not flip else media}</div>'
+    adv = "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in meta["adv"])
+    faq = "".join(f"""<div class="faq__row">
+      <button class="faq__q"><span>{q}</span><span>+</span></button>
+      <div class="faq__a"><p>{a}</p></div>
+    </div>""" for q, a in PRODUCT_EXTRAS["oslony-wewnetrzne"]["know"])
+    insp = '<div class="gallery gallery--okna" data-lightbox>' + "".join(
+        f'<a href="assets/img/{g}.jpg" data-lightbox-item><img src="assets/img/{g}.jpg" alt="Osłony wewnętrzne — inspiracja" loading="lazy"></a>'
+        for g in OW_INSPIRACJE) + "</div>"
+    rel = ""
+    for sl in ["okna", "moskitiery", "oslony-zewnetrzne"]:
+        rel += f"""<a href="{sl}.html"><article class="card">
+        <img src="assets/img/{PROD_IMG[sl]}.jpg" alt="{PROD_LABEL[sl]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
+        <div><h3>{PROD_LABEL[sl]}</h3></div>
+        <span class="card__more">Zobacz ofertę {I['arrow']}</span>
+      </article></a>"""
+    body = pagehero("osl/hero", meta["h1"],
+                    "Dobierz rozwiązanie do swojego wnętrza, wybierając spośród różnych materiałów, kolorów i sposobów regulacji światła.", None)
+    body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
+<section class="advantages"><div class="container advantages__inner">{adv}</div></section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
+    <div class="faq">{faq}</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
+    {insp}
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Dobierzemy osłony do Twojego wnętrza",
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Sprawdź również inne systemy</h2>
+    <div class="grid-3">{rel}</div>
+  </div>
+</section>
+"""
+    write("oslony-wewnetrzne.html", head(meta["title"], meta["desc"]) + nav("oslony-wewnetrzne") + body + footer())
+
+
 if __name__ == "__main__":
     print("Generuję strony PROMYK...")
     build_index()
@@ -3559,6 +3686,8 @@ if __name__ == "__main__":
             build_bramy()
         elif slug == "markizy":
             build_markizy()
+        elif slug == "oslony-wewnetrzne":
+            build_oslony_wewnetrzne()
         else:
             product_page(slug, meta)
     build_parapety()
