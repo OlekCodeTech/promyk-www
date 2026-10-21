@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "51"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "52"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -58,7 +58,7 @@ PRODUCTS = [
     ("drzwi-wewnetrzne",  "Drzwi wewnętrzne",   "DRE / Porta / Erkado", "dre_binito50"),
     ("rolety-zewnetrzne", "Rolety zewnętrzne",  "Produkcja własna",   "al30_rol"),
     ("pergole",           "Pergole",            "Aluprof",            "perg/sb400"),
-    ("bramy-garazowe",    "Bramy garażowe",     "Nice / AVO / Aluprof", "brama_antracyt"),
+    ("bramy-garazowe",    "Bramy garażowe",     "AVO / Aluprof",      "brama_antracyt"),
     ("markizy",           "Markizy",            "Aluprof",            "katalog/markiza-palladio-dom"),
     ("oslony-wewnetrzne", "Osłony wewnętrzne",  "Produkcja własna",   "plisy"),
     ("oslony-zewnetrzne", "Osłony zewnętrzne",  "Aluprof",            "katalog/screeny-dom"),
@@ -1870,7 +1870,7 @@ for _p, _meta in PRODUCT_DATA.items():
 def build_subpages():
     """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
     for parent, meta in PRODUCT_DATA.items():
-        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole"):   # bez podstron 3. poziomu (uwagi klienta)
+        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole", "bramy-garazowe"):   # bez podstron 3. poziomu (uwagi klienta)
             continue
         details = SUB_DETAILS.get(parent, [])
         for k, row in enumerate(meta["rows"]):
@@ -3071,6 +3071,278 @@ def build_pergole():
           + nav("pergole") + body + footer())
 
 
+# ================================================================ BRAMY GARAŻOWE (uwagi klienta 21.10.2026) ----
+BR_AVO_KOLORY = [('podst', 'RAL 7016', 'avo-kolor-01'), ('podst', 'RAL 9016', 'avo-kolor-02'), ('pref', '703M', 'avo-kolor-03'), ('pref', 'RAL 8014', 'avo-kolor-04'), ('pref', 'RAL 9005', 'avo-kolor-05'), ('pref', 'RAL 9006', 'avo-kolor-06'), ('pref', 'RAL 9007', 'avo-kolor-07'), ('avo', 'Antracyt okienny', 'avo-kolor-08'), ('avo', 'Orzech', 'avo-kolor-09'), ('avo', 'Złoty dąb', 'avo-kolor-10'), ('g1', 'Antracyt gładki', 'avo-kolor-11'), ('g1', 'Brąz czekoladowy', 'avo-kolor-12'), ('g1', 'Cedr szary / Dąb antyczny', 'avo-kolor-13'), ('g1', 'Espresso Ash 3D', 'avo-kolor-14'), ('g1', 'Złoty dąb jasny', 'avo-kolor-15'), ('g1', 'Ciemny dąb', 'avo-kolor-16'), ('g1', 'Dąb bagienny', 'avo-kolor-17'), ('g1', 'Dąb naturalny', 'avo-kolor-18'), ('g1', 'Mahoń', 'avo-kolor-19'), ('g1', 'Sosna antyczna', 'avo-kolor-20'), ('g1', 'Szary', 'avo-kolor-21'), ('g1', 'Winchester', 'avo-kolor-22'), ('g1', 'Bazaltowoszary', 'avo-kolor-23'), ('g2', 'Antracytowoszary mat', 'avo-kolor-24'), ('g2', 'Beżowoszary mat', 'avo-kolor-25'), ('g2', 'Kasztanowy brąz mat', 'avo-kolor-26'), ('g2', 'Zielonoszary mat', 'avo-kolor-27'), ('g2', 'Antracyt szczotkowany', 'avo-kolor-28'), ('g2', 'Biały mat', 'avo-kolor-29'), ('g2', 'Czarny mat', 'avo-kolor-30'), ('g2', 'Dąb czarny palony', 'avo-kolor-31'), ('g2', 'Dąb Shefield', 'avo-kolor-32'), ('g2', 'Kremowy gładki', 'avo-kolor-33'), ('g2', 'Szary mat', 'avo-kolor-34'), ('g2', 'Umbra brąz mat', 'avo-kolor-35'), ('g2', 'Ciemnoszary mat DB 703', 'avo-kolor-36'), ('g2', 'Woodec Dąb Turner Malt', 'avo-kolor-37'), ('g2', 'Woodec Dąb Turner Toffee', 'avo-kolor-38'), ('g2', 'Woodec Sosna Jura', 'avo-kolor-39'), ('g2', 'Kwarcowoszary gładki', 'avo-kolor-40')]
+BR_AVO_GRUPY = [("podst", "Podstawowe"), ("pref", "Preferowane"), ("avo", "Dekory AVO"), ("g1", "Dekory grupa I"), ("g2", "Dekory grupa II")]
+BR_ROL_KOLORY = [("bialy", "Biały"), ("srebrny", "Srebrny"), ("brazowy", "Brązowy"), ("ciemnobrazowy", "Ciemnobrązowy"),
+                 ("antracyt", "Szary antracyt"), ("szary", "Szary"), ("zloty-dab", "Złoty dąb"), ("orzech", "Orzech")]
+BR_ROWS = [
+    ("Bramy segmentowe",
+     ["Panel o grubości 40 lub 60mm wypełniony pianką poliuretanową",
+      "Sposób otwierania – brama unosi się pionowo i przesuwa pod sufitem",
+      "Otwieranie ręczne lub automatyczne",
+      "Szeroki wybór wykończeń i kolorów"], "brama_antracyt_lampy", "bramy-garazowe--bramy-segmentowe"),
+    ("Bramy rolowane",
+     ["Pancerz aluminiowy z pianką PU nawijany na wał w skrzynce",
+      "Możliwość montażu skrzynki z pancerzem po wewnętrznej lub zewnętrznej stronie garażu",
+      "Napęd rurowy z awaryjnym otwieraniem korbą w standardzie",
+      "Brak prowadnic pod sufitem sprawia, że brama sprawdza się w garażach z ograniczoną przestrzenią."], "bramy/rolowane-aluprof", "bramy-garazowe--bramy-rolowane"),
+]
+BR_ADV = [("Ciepło i komfort", "Panele i pancerze wypełnione pianką poliuretanową", "thermo"),
+          ("Bezpieczeństwo", "Solidna konstrukcja i zabezpieczenia na co dzień", "lock"),
+          ("Wygodna obsługa", "Ręcznie, pilotem lub z aplikacji smart home", "cog")]
+BR_POROWNANIE = [
+    ["Sposób otwierania", "Brama unosi się pionowo i przesuwa pod sufitem", "Pancerz zwija się do skrzynki nad otworem"],
+    ["Konstrukcja", "Panele 40 lub 60 mm wypełnione pianką poliuretanową", "Profile aluminiowe PA 77 wypełnione pianką poliuretanową"],
+    ["Izolacja termiczna", "Bardzo dobra", "Dobra"],
+    ["Miejsce w garażu", "Wymaga wolnej przestrzeni pod sufitem i nad otworem", "Nie zajmuje miejsca pod sufitem — skrzynka 250 lub 300 mm"],
+    ["Montaż", "Wewnątrz garażu, na prowadnicach", "Skrzynka po wewnętrznej lub zewnętrznej stronie garażu"],
+    ["Obsługa", "Ręczna lub automatyczna — napęd paskowy", "Napęd rurowy z awaryjnym otwieraniem korbą"],
+    ["Wygląd", "Panele gładkie, z jednym lub wieloma przetłoczeniami, kolory RAL i okleiny", "Kolory standardowe i drewnopodobne"],
+    ["Najlepiej sprawdzi się", "W garażach ogrzewanych i nowych budynkach", "Przy niskim nadprożu i ograniczonej przestrzeni w garażu"],
+]
+BR_FAQ = [
+    ("Jaką bramę wybrać - segmentową czy rolowaną?",
+     "Bramy segmentowe zapewniają bardzo dobrą izolację termiczną i szerokie możliwości dopasowania do wyglądu budynku, ale wymagają odpowiedniej przestrzeni pod sufitem i nad otworem. Bramy rolowane zajmują mniej miejsca, ponieważ pancerz chowa się w skrzynce nad wjazdem. To praktyczna opcja przy niskim nadprożu lub ograniczonej przestrzeni w garażu."),
+    ("Czy bramę garażową można dopasować kolorystycznie do okien i drzwi?",
+     "Tak, bramę garażową można dopasować kolorystycznie do okien, drzwi i pozostałych elementów stolarki. Dostępna paleta kolorów, różne struktury powierzchni oraz wzory pozwalają stworzyć spójną aranżację elewacji i podkreślić styl budynku."),
+    ("Czy brama garażowa może być wyposażona w przeszklenia?",
+     "Tak, wybrane modele bram garażowych można wyposażyć w przeszklenia, które doświetlają wnętrze garażu naturalnym światłem. Dostępne są różne kształty i układy przeszkleń, dzięki czemu można dopasować ich wygląd do stylu budynku."),
+    ("Jak przygotować garaż do montażu bramy segmentowej?",
+     "Przed montażem bramy garażowej należy odpowiednio przygotować otwór – ściany po bokach i nadproże powinny być równe, stabilne i wykończone zgodnie z wymaganiami montażowymi. Warto również sprawdzić wymiary otworu oraz zapewnić wolną przestrzeń w garażu, niezbędną do prawidłowego montażu bramy."),
+    ("Co zrobić, gdy zabraknie prądu?",
+     "W przypadku braku prądu bramę rolowaną można otworzyć korbą, korzystając z mechanizmu awaryjnego. Natomiast bramę segmentową można otworzyć ręcznie od środka. Jeśli nie ma innego wejścia do garażu, warto przy zakupie bramy dokupić dodatkową opcję: akumulator bądź wysprzęglenie awaryjne pozwalające otworzyć bramę z zewnątrz."),
+    ("Jaka brama garażowa sprawdzi się w garażu ogrzewanym?",
+     "W ogrzewanym garażu najlepiej sprawdzi się brama segmentowa z panelami o dobrych właściwościach termoizolacyjnych."),
+]
+BR_INSPIRACJE = ["brama_antracyt", "real/brama-antracyt", "bramy/insp-avo-garaz", "real/brama-drzwi",
+                 "bramy/insp-aluprof-dom", "realizacje/bramy", "brama_avo_dom", "bramy/segmentowe-wnetrze"]
+
+
+def _bramy_anim():
+    """Przekrój garażu: segmenty bramy jadą prowadnicą w górę i pod sufit (SVG/SMIL)."""
+    L = 320 + 3.14159 * 40 / 2 + 200      # długość prowadnicy (poziom + łuk + pion)
+    segs = ""
+    for i in range(4):
+        closed = (L - 25 - 50 * i) / L
+        opened = (L - 25 - 50 * i - 380) / L
+        kp = f"{closed:.4f};{closed:.4f};{opened:.4f};{opened:.4f};{closed:.4f};{closed:.4f}"
+        segs += (f'<rect class="ga-seg" x="-24" y="-6" width="48" height="12" rx="2">'
+                 f'<animateMotion dur="10s" repeatCount="indefinite" rotate="auto" calcMode="spline" keyPoints="{kp}" '
+                 f'keyTimes="0;0.12;0.45;0.6;0.93;1" keySplines="0 0 1 1;.45 0 .25 1;0 0 1 1;.45 0 .25 1;0 0 1 1">'
+                 f'<mpath href="#ga-track"/></animateMotion></rect>')
+    return f"""<svg class="garage-anim" viewBox="0 0 640 360" role="img" aria-label="Animacja: brama segmentowa unosi się pionowo i przesuwa pod sufitem">
+  <path id="ga-track" d="M500,80 L180,80 A40,40 0 0 0 140,120 L140,320" class="ga-track"/>
+  <line x1="40" y1="320" x2="600" y2="320" class="ga-ground"/>
+  <rect x="104" y="40" width="16" height="70" class="ga-wall"/>
+  <line x1="120" y1="56" x2="600" y2="56" class="ga-ceiling"/>
+  <rect x="104" y="30" width="496" height="10" class="ga-wall"/>
+  <rect x="510" y="60" width="64" height="14" rx="3" class="ga-motor"/>
+  <line x1="180" y1="67" x2="510" y2="67" class="ga-belt"/>
+  {segs}
+  <text x="60" y="345" class="ga-label">na zewnątrz</text>
+  <text x="380" y="345" class="ga-label">wnętrze garażu</text>
+  <text x="330" y="108" class="ga-label ga-label--sm">prowadnica pod sufitem</text>
+  <text x="518" y="96" class="ga-label ga-label--sm">napęd paskowy</text>
+</svg>"""
+
+
+def _br_related(cur):
+    out = ""
+    for slug, title, img in [("bramy-garazowe--bramy-segmentowe", "Bramy segmentowe", "brama_antracyt_lampy"),
+                             ("bramy-garazowe--bramy-rolowane", "Bramy rolowane", "bramy/rolowane-aluprof"),
+                             ("bramy-garazowe", "Wszystkie bramy garażowe", "bramy/hero")]:
+        if slug == cur: continue
+        out += f"""<a href="{slug}.html"><article class="card">
+        <img src="assets/img/{img}.jpg" alt="{title}" style="height:150px;object-fit:cover;border-radius:var(--r-md)" loading="lazy">
+        <div><h3>{title}</h3></div>
+        <span class="card__more">Zobacz {I['arrow']}</span>
+      </article></a>"""
+    return out
+
+
+def build_bramy():
+    # ---- strona główna kategorii
+    rows = ""
+    for k, (title, bullets, img, more) in enumerate(BR_ROWS):
+        li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+        media = f'<div><img src="assets/img/{img}.jpg" alt="{title}" loading="lazy"></div>'
+        text = f"""<div class="subrow__text">
+        <h2>{title}</h2>
+        <ul class="bullets">{li}</ul>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn--primary btn--sm" href="{more}.html">Więcej o tym rozwiązaniu {I['arrow']}</a>
+          <a class="btn btn--outline btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+        </div>
+      </div>"""
+        flip = k % 2
+        rows += f'<div class="subrow{" subrow--flip" if flip else ""}">{media if not flip else text}{text if not flip else media}</div>'
+    adv = "".join(f"""<div class="adv"><span class="adv__icon">{I[ic]}</span>
+      <div><h3>{t}</h3><p>{d}</p></div></div>""" for t, d, ic in BR_ADV)
+    th = "".join(f"<th>{c}</th>" for c in ["", "Brama segmentowa", "Brama rolowana"])
+    tr = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in BR_POROWNANIE)
+    faq = "".join(f"""<div class="faq__row">
+      <button class="faq__q"><span>{q}</span><span>+</span></button>
+      <div class="faq__a"><p>{a}</p></div>
+    </div>""" for q, a in BR_FAQ)
+    insp = '<div class="gallery gallery--okna" data-lightbox>' + "".join(
+        f'<a href="assets/img/{g}.jpg" data-lightbox-item><img src="assets/img/{g}.jpg" alt="Brama garażowa — inspiracja" loading="lazy"></a>'
+        for g in BR_INSPIRACJE) + "</div>"
+    rel = ""
+    for sl in ["drzwi-zewnetrzne", "okna", "rolety-zewnetrzne"]:
+        rel += f"""<a href="{sl}.html"><article class="card">
+        <img src="assets/img/{PROD_IMG[sl]}.jpg" alt="{PROD_LABEL[sl]}" style="height:150px;object-fit:cover;border-radius:var(--r-md)">
+        <div><h3>{PROD_LABEL[sl]}</h3></div>
+        <span class="card__more">Zobacz ofertę {I['arrow']}</span>
+      </article></a>"""
+    body = pagehero("bramy/hero", "Bramy garażowe segmentowe i rolowane",
+                    "Nowoczesne rozwiązania, które łączą wygodę użytkowania, estetykę i bezpieczeństwo Twojego garażu.", None)
+    body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
+<section class="advantages"><div class="container advantages__inner">{adv}</div></section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Brama segmentowa czy rolowana?</h2></div></div>
+    <div class="spec-wrap"><table class="spec-table"><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
+    <div class="faq">{faq}</div>
+  </div>
+</section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Inspiracje</h2></div></div>
+    {insp}
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Planujesz nową bramę garażową?",
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Sprawdź również inne systemy</h2>
+    <div class="grid-3">{rel}</div>
+  </div>
+</section>
+"""
+    write("bramy-garazowe.html", head("Bramy garażowe segmentowe i rolowane — AVO i Aluprof | PROMYK Wieluń",
+                                      "Bramy garażowe segmentowe AVO (panel 40 lub 60 mm) i rolowane Aluprof. Porównanie, kolory, przeszklenia, napędy i smart home — PROMYK Wieluń.")
+          + nav("bramy-garazowe") + body + footer())
+
+    # ---- podstrona: bramy segmentowe
+    panele = '<div class="panel-types" data-lightbox>' + "".join(
+        f'<a href="assets/img/bramy/{f}.jpg" data-lightbox-item><img src="assets/img/bramy/{f}.jpg" alt="Brama segmentowa — {n.lower()}" loading="lazy"><span>{n}</span></a>'
+        for n, f in [("Bez przetłoczeń", "panel-bez"), ("Z jednym przetłoczeniem", "panel-jedno"), ("Z wieloma przetłoczeniami", "panel-wiele")]) + "</div>"
+    tabs = '<div class="chips chips--tabs" role="tablist">' + "".join(
+        f'<button type="button" class="{"is-active" if i == 0 else ""}" data-filter-btn="{g}">{n}</button>'
+        for i, (g, n) in enumerate(BR_AVO_GRUPY)) + "</div>"
+    kolory = '<div class="swatches-grid" data-filter-grid>' + "".join(
+        f'<figure data-filter="{g}"{"" if g == BR_AVO_GRUPY[0][0] else " hidden"}><img src="assets/img/bramy/{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
+        for g, n, f in BR_AVO_KOLORY) + "</div>"
+    body = pagehero("bramy/segmentowe-wnetrze", "Bramy segmentowe",
+                    "Funkcjonalne rozwiązania, dobra izolacja termiczna i szeroki wybór wzorów oraz kolorów dopasowanych do stylu Twojego domu.", None)
+    body += f"""<section class="section">
+  <div class="container">
+    <div class="subrow">
+      <div class="subrow__text prose-text">
+        <p>Bramy segmentowe to jedno z najpopularniejszych rozwiązań stosowanych w garażach, cenione za wygodę użytkowania i funkcjonalną konstrukcję. Podczas otwierania panele przesuwają się po prowadnicach pod sufitem, dzięki czemu brama nie zajmuje miejsca przed garażem.</p>
+        <p>W zależności od modelu segmenty mają grubość 40 lub 60 mm. Do wyboru są panele gładkie, bez przetłoczeń, z jednym przetłoczeniem lub z wieloma przetłoczeniami. Bramę można również wyposażyć w przeszklenia, zapewniające dostęp światła dziennego, oraz drzwi przejściowe, umożliwiające wejście do garażu bez otwierania całej bramy.</p>
+        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+      </div>
+      <div><img src="assets/img/bramy/hero.jpg" alt="Brama segmentowa w okleinie drewnopodobnej" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Wzory paneli</h2></div></div>
+    {panele}
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Kolorystyka bram AVO</h2></div></div>
+    <div>{tabs}{kolory}</div>
+    <p class="colors-note">Oprócz pokazanych kolorów dostępne są ponad 200 kolorów z palety RAL (także w lakierowaniu strukturalnym), okleiny drewnopodobne oraz lakierowanie na kolor z palety NCS.</p>
+  </div>
+</section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="garage-anim-wrap">
+      <div>{_bramy_anim()}</div>
+      <div class="subrow__text prose-text">
+        <h2>Jak otwiera się brama segmentowa?</h2>
+        <p>Panele unoszą się pionowo, a następnie przesuwają po prowadnicach pod sufitem — brama nie zajmuje miejsca przed garażem ani na podjeździe.</p>
+        <p>Bramy segmentowe otwierane automatycznie wyposażone są w napęd paskowy, który zapewnia płynną i cichą pracę. Istnieje również możliwość zastosowania rozwiązań Somfy Smart Home, dzięki którym bramą można sterować zdalnie i zintegrować ją z inteligentnym systemem zarządzania domem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Dobierzemy bramę do Twojego garażu",
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Zobacz również</h2>
+    <div class="grid-3">{_br_related("bramy-garazowe--bramy-segmentowe")}</div>
+  </div>
+</section>
+"""
+    write("bramy-garazowe--bramy-segmentowe.html", head("Bramy segmentowe AVO — panele 40 i 60 mm, wzory i kolory | PROMYK Wieluń",
+                                                         "Bramy segmentowe AVO: panele 40 lub 60 mm z pianką PU, gładkie, z jednym lub wieloma przetłoczeniami, kolory RAL i okleiny, napęd paskowy i Somfy Smart Home.")
+          + nav("bramy-garazowe") + body + footer())
+
+    # ---- podstrona: bramy rolowane
+    rk = '<div class="swatches-grid">' + "".join(
+        f'<figure><img src="assets/img/rol/kolor-{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
+        for f, n in BR_ROL_KOLORY) + "</div>"
+    body = pagehero("bramy/rolowane-aluprof", "Bramy rolowane",
+                    "Oszczędność miejsca, wygodna obsługa i funkcjonalne rozwiązania dopasowane do różnych rodzajów garaży.", None)
+    body += f"""<section class="section">
+  <div class="container">
+    <div class="subrow">
+      <div class="subrow__text prose-text">
+        <p>Bramy rolowane Aluprof to praktyczne rozwiązanie, które sprawdzi się zarówno w nowych, jak i modernizowanych garażach. Pancerz bramy zwija się do skrzynki umieszczonej nad otworem, dzięki czemu nie zajmuje miejsca pod sufitem i pozwala w pełni wykorzystać przestrzeń garażu.</p>
+        <p>Pancerz wykonany jest z aluminiowych profili PA 77 o wysokości 77 mm, wypełnionych pianką poliuretanową. W zależności od wymiarów i konfiguracji bramy można zastosować skrzynkę o wysokości 250 lub 300 mm. Standardowo bramy rolowane Aluprof wyposażone są w napęd rurowy z awaryjnym otwieraniem za pomocą korby. Dzięki temu bramę można obsługiwać elektrycznie na co dzień, a w przypadku braku zasilania otworzyć ją ręcznie. To praktyczne rozwiązanie, które zwiększa wygodę użytkowania i zapewnia możliwość korzystania z bramy również w awaryjnych sytuacjach.</p>
+        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+      </div>
+      <div><img class="img-contain" src="assets/img/bramy/rolowane-konstrukcja.jpg" alt="Brama rolowana Aluprof — pancerz i skrzynka" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Kolory bram rolowanych</h2></div></div>
+    {rk}
+  </div>
+</section>
+
+{cta("Doradztwo i wycena", "Dobierzemy bramę do Twojego garażu",
+     "Skontaktuj się z nami — doradzimy technicznie i przygotujemy kalkulację cenową.")}
+
+<section class="section related">
+  <div class="container">
+    <h2 class="h-sec" style="margin-bottom:32px">Zobacz również</h2>
+    <div class="grid-3">{_br_related("bramy-garazowe--bramy-rolowane")}</div>
+  </div>
+</section>
+"""
+    write("bramy-garazowe--bramy-rolowane.html", head("Bramy rolowane Aluprof — pancerz PA 77, skrzynka 250/300 mm | PROMYK Wieluń",
+                                                       "Bramy rolowane Aluprof: pancerz z profili PA 77 z pianką PU, skrzynka 250 lub 300 mm, napęd rurowy z awaryjną korbą. Kolory standardowe i drewnopodobne.")
+          + nav("bramy-garazowe") + body + footer())
+
+
 if __name__ == "__main__":
     print("Generuję strony PROMYK...")
     build_index()
@@ -3091,6 +3363,8 @@ if __name__ == "__main__":
             build_rolety_zewnetrzne()
         elif slug == "pergole":
             build_pergole()
+        elif slug == "bramy-garazowe":
+            build_bramy()
         else:
             product_page(slug, meta)
     build_parapety()

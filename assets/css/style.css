@@ -1117,3 +1117,24 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 .sill-card > a:hover img { transform: scale(1.04); }
 .pagehero--sill img { object-position: center 72%; }
 .pagehero--sill::after { background: linear-gradient(90deg, rgba(21,23,25,.72) 0%, rgba(21,23,25,.45) 55%, rgba(21,23,25,.15) 100%); }
+
+/* ---------- Bramy garażowe ---------- */
+.prose-text p { margin: 0; font-size: 17px; line-height: 1.75; color: #3a3f45; }
+.subrow img.img-contain { object-fit: contain; background: #fff; }
+.panel-types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.panel-types a { display: block; text-align: center; cursor: zoom-in; }
+.panel-types img { width: 100%; aspect-ratio: 313 / 258; object-fit: cover; border-radius: var(--r-md); display: block; box-shadow: 0 6px 18px rgba(21,23,25,.10); }
+.panel-types span { display: block; margin-top: 12px; font-weight: 700; font-size: 16px; }
+.garage-anim-wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
+.garage-anim { width: 100%; height: auto; display: block; background: #fff; border-radius: var(--r-lg); border: 1px solid var(--line); }
+.garage-anim .ga-track { fill: none; stroke: #c9ced4; stroke-width: 3; stroke-dasharray: 6 5; }
+.garage-anim .ga-ground { stroke: #3a3f45; stroke-width: 3; }
+.garage-anim .ga-wall { fill: #7d848c; }
+.garage-anim .ga-ceiling { stroke: #c9ced4; stroke-width: 2; }
+.garage-anim .ga-motor { fill: #2f3237; }
+.garage-anim .ga-belt { stroke: #2f3237; stroke-width: 2; }
+.garage-anim .ga-seg { fill: #44607b; stroke: #2f3237; stroke-width: 1.5; }
+.garage-anim .ga-label { font: 600 14px "Plus Jakarta Sans", sans-serif; fill: #6b737b; }
+.garage-anim .ga-label--sm { font-size: 12px; }
+@media (max-width: 1024px) { .garage-anim-wrap { grid-template-columns: 1fr; gap: 32px; } }
+@media (max-width: 780px) { .panel-types { grid-template-columns: 1fr; } }
