@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "59"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "62"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -94,28 +94,7 @@ HOME_REALIZACJE = [  # kolejność wg klienta: okna, drzwi, bramy, pergola/refle
     ("realizacje/pergola", "Pergola z lamelami"),
 ]
 
-GALLERY = [  # wyłącznie realizacje PROMYK (zdjęcia ze zgodą klientów)
-    ("real/pergola", "Pergola z lamelami — strefa wypoczynku", "pergole"),
-    ("real/markiza-tarasowa", "Markiza tarasowa nad strefą wypoczynku", "oslony"),
-    ("real/drzwi-zew-drewno", "Drzwi zewnętrzne w okleinie drewnopodobnej", "drzwi"),
-    ("real/refleksole", "Refleksole ZIP na elewacji", "oslony"),
-    ("real/markiza-kasetowa", "Markiza kasetowa nad tarasem", "oslony"),
-    ("real/drzwi-zew-naswietle", "Drzwi wejściowe z naświetlem bocznym", "drzwi"),
-    ("real/brama-drzwi", "Brama segmentowa i drzwi — nowy dom", "bramy"),
-    ("real/rolety-zew", "Rolety zewnętrzne nadstawne", "rolety"),
-    ("real/zaluzje-kuchnia", "Żaluzje w kuchni", "oslony"),
-    ("real/okna-szczyt", "Przeszklenie szczytowe", "okna"),
-    ("real/zaluzje-fasadowe", "Żaluzje fasadowe", "oslony"),
-    ("real/drzwi-wew-czarne", "Drzwi wewnętrzne w czerni", "drzwi"),
-    ("real/brama-antracyt", "Brama garażowa antracyt", "bramy"),
-    ("real/okna-lukowe", "Okna łukowe ze szprosami", "okna"),
-    ("real/rolety-dzien-noc", "Rolety dzień-noc", "oslony"),
-    ("real/rolety-rzymskie", "Rolety rzymskie w kuchni", "oslony"),
-    ("real/moskitiera-plisowana", "Moskitiera plisowana do drzwi tarasowych", "oslony"),
-    ("real/rolety-budowa", "Rolety zewnętrzne — dom w budowie", "rolety"),
-    ("real/drzwi-wew-biale", "Drzwi wewnętrzne białe", "drzwi"),
-    ("real/rolety-taras", "Rolety zewnętrzne przy tarasie", "rolety"),
-]
+GALLERY = [('gal/r01', 'Pergola lamelowa w ogrodzie', 'pergole'), ('gal/r02', 'Markiza tarasowa przy domu', 'oslony'), ('gal/r03', 'Drzwi wewnętrzne białe z czarną klamką', 'drzwi'), ('gal/r04', 'Żaluzje w salonie', 'oslony'), ('gal/r05', 'Okna w domu parterowym', 'okna'), ('gal/r06', 'Refleksol przy tarasie', 'oslony'), ('gal/r07', 'Rolety zewnętrzne przy tarasie', 'rolety'), ('gal/r08', 'Roleta rzymska w kuchni', 'oslony'), ('gal/r09', 'Drzwi wewnętrzne w czerni', 'drzwi'), ('gal/r10', 'Markiza nad tarasem', 'oslony'), ('gal/r11', 'Moskitiera plisowana do drzwi tarasowych', 'oslony'), ('gal/r12', 'Roleta materiałowa', 'oslony'), ('gal/r13', 'Pergola nad strefą wypoczynku', 'pergole'), ('gal/r14', 'Żaluzje drewnopodobne w narożnym oknie', 'oslony'), ('gal/r15', 'Okna i balkon', 'okna'), ('gal/r16', 'Rolety zewnętrzne', 'rolety'), ('gal/r17', 'Drzwi wewnętrzne białe', 'drzwi'), ('gal/r18', 'Markiza i strefa wypoczynku', 'oslony'), ('gal/r19', 'Refleksole na elewacji', 'oslony'), ('gal/r20', 'Rolety dzień-noc', 'oslony'), ('gal/r21', 'Drzwi wewnętrzne w korytarzu', 'drzwi'), ('gal/r22', 'Rolety rzymskie w kuchni', 'oslony'), ('gal/r23', 'Żaluzje w jadalni', 'oslony'), ('gal/r24', 'Przeszklenia od strony ogrodu', 'okna'), ('gal/r25', 'Drzwi wewnętrzne w jasnym wnętrzu', 'drzwi'), ('gal/r26', 'Markiza nad tarasem — widok spod', 'oslony'), ('gal/r27', 'Moskitiera plisowana', 'oslony'), ('gal/r28', 'Rolety dzień-noc w salonie', 'oslony'), ('gal/r29', 'Drzwi wewnętrzne drewnopodobne', 'drzwi'), ('gal/r30', 'Roleta rzymska', 'oslony'), ('gal/r31', 'Żaluzje w kuchni', 'oslony'), ('gal/r32', 'Drzwi zewnętrzne', 'drzwi'), ('gal/r33', 'Rolety rzymskie', 'oslony'), ('gal/r34', 'Żaluzje drewnopodobne', 'oslony'), ('gal/r35', 'Żaluzje przy drzwiach tarasowych', 'oslony'), ('gal/r36', 'Moskitiera drzwiowa', 'oslony')]
 
 # ---------------------------------------------------------------- szkielet ----
 def head(title, desc, extra=""):
@@ -756,7 +735,7 @@ def build_inwestor():
 # ================================================================ GALERIA ----
 def build_galeria():
     cats = [("all", "Wszystkie"), ("okna", "Okna"), ("drzwi", "Drzwi"), ("pergole", "Pergole"),
-            ("rolety", "Rolety"), ("bramy", "Bramy"), ("oslony", "Osłony")]
+            ("rolety", "Rolety"), ("oslony", "Osłony")]
     fl = "".join(f'<button class="filter{" is-active" if c == "all" else ""}" data-filter="{c}">{t}</button>' for c, t in cats)
     items = ""
     for k, (img, cap, cat) in enumerate(GALLERY):
@@ -765,7 +744,7 @@ def build_galeria():
         items += f'<a href="assets/img/{img}.jpg" target="_blank" data-cat="{cat}" class="{hid.strip()}"{style}><img src="assets/img/{img}.jpg" alt="{cap}" loading="lazy"><figcaption>{cap}</figcaption></a>'
 
     body = pagehero("wiked67", "Galeria realizacji",
-                    "Zobacz, jak nasze systemy wyglądają w prawdziwych domach — okna, drzwi, bramy, pergole i osłony.", "Galeria")
+                    "Zobacz, jak nasze systemy wyglądają w prawdziwych domach — okna, drzwi, pergole i osłony.", None)
     body += f"""<section class="section" style="padding-bottom:0">
   <div class="container"><div class="filters">{fl}</div></div>
 </section>
@@ -775,6 +754,7 @@ def build_galeria():
     <div class="gallery">{items}</div>
     <div style="text-align:center;margin-top:48px">
       <button class="btn btn--outline" data-more>Pokaż więcej realizacji {I['chevD']}</button>
+      <a class="btn btn--primary" href="{FB_URL}" target="_blank" rel="noopener" style="margin-left:12px">{I['fb']} Więcej realizacji na Facebooku</a>
     </div>
   </div>
 </section>
@@ -783,7 +763,7 @@ def build_galeria():
      "Zadbamy o każdy detal — od dokładnego pomiaru laserowego na Twojej budowie po czysty i bezbłędny montaż z gwarancją premium.")}
 """
     write("galeria.html",
-          head("Galeria realizacji — okna, drzwi, bramy i pergole | PROMYK Wieluń",
+          head("Galeria realizacji — okna, drzwi, pergole i osłony | PROMYK Wieluń",
                "Galeria realizacji firmy PROMYK: montaż okien, drzwi zewnętrznych i wewnętrznych, bram garażowych, rolet, pergoli i osłon przeciwsłonecznych.")
           + nav("galeria") + body + footer())
 
@@ -797,6 +777,13 @@ def build_kontakt():
     <span class="tag">Biuro Handlowe &amp; Serwis</span>
     <h1 class="h-page" style="font-size:44px">Zapraszamy do kontaktu</h1>
     <p class="lead lead--lg">Odpowiemy na Twoje pytania i doradzimy najlepsze rozwiązania dla Twojej inwestycji.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-bottom:0">
+  <div class="container contact-quick">
+    <a class="contact-quick__item" href="tel:{PHONE_TEL}"><span class="contact-quick__icon">{I['phone']}</span><span><small>Zadzwoń</small><strong>{PHONE}</strong></span></a>
+    <a class="contact-quick__item" href="mailto:{MAIL}"><span class="contact-quick__icon">{I['mail']}</span><span><small>Napisz e-mail</small><strong>{MAIL}</strong></span></a>
   </div>
 </section>
 
@@ -837,6 +824,7 @@ def build_kontakt():
         <p>Sobota: 9:00 – 13:00</p>
         <p>Niedziela: Zamknięte</p>
       </div>
+      <figure class="contact-photo"><img src="assets/img/onas/budynek.jpg" alt="Siedziba PROMYK w Wieluniu" loading="lazy"><figcaption>Nasza siedziba w Wieluniu</figcaption></figure>
     </aside>
   </div>
 </section>
@@ -894,6 +882,17 @@ def build_konfigurator():
     bd = "".join(
         f'<button type="button" class="optcard{" is-active" if n == "Brak" else ""}" data-value="{n}">{svg}{n}</button>'
         for n, svg in bars)
+    opens = [("RU", "Rozwierno-uchylne", '<svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M38 4 6 22l32 18M6 40l16-36 16 36" stroke="currentColor" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/></svg>'),
+             ("R", "Rozwierne", '<svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M38 4 6 22l32 18" stroke="currentColor" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/></svg>'),
+             ("U", "Uchylne", '<svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M6 40l16-36 16 36" stroke="currentColor" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/></svg>'),
+             ("FIX", "Stałe (FIX)", '<svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M16 22h12M22 16v12" stroke="currentColor" stroke-width="2"/></svg>')]
+    op = "".join(
+        f'<button type="button" class="optcard{" is-active" if k == "RU" else ""}" data-value="{k}">{svg}{n}</button>'
+        for k, n, svg in opens)
+    gl = "".join(
+        f'<button type="button" class="optcard{" is-active" if k == "3" else ""}" data-value="{k}"><svg viewBox="0 0 44 44">' +
+        "".join(f'<path d="M{12 + 8 * i} 6v32" stroke="currentColor" stroke-width="2.4"/>' for i in range(int(k))) +
+        f'</svg>{k}-szybowy</button>' for k in ("2", "3"))
 
     scenes = [("plaster", "Tynk biały", "#ece9e2"), ("grey", "Tynk szary", "#b7babd"),
               ("anthracite", "Antracyt", "#43484d"), ("brick", "Cegła", "#a75d45"), ("wood", "Deska", "#a97b4e")]
@@ -906,7 +905,7 @@ def build_konfigurator():
   <div class="container">
     <span class="tag">Narzędzie online</span>
     <h1 class="h-sec" style="margin:16px 0 10px">Konfigurator okien</h1>
-    <p class="lead lead--lg" style="max-width:760px">Złóż swoje okno na żywo — wybierz konstrukcję, kolory, klamkę i szprosy, sprawdź wygląd na różnych elewacjach i wyślij gotową konfigurację do bezpłatnej wyceny.</p>
+    <p class="lead lead--lg" style="max-width:760px">Złóż swoje okno na żywo — wybierz konstrukcję, sposób otwierania, kolory, klamkę i szprosy, sprawdź wygląd na różnych elewacjach, dodaj kolejne pozycje i wyślij zapytanie o wycenę.</p>
   </div>
 </section>
 
@@ -933,11 +932,6 @@ def build_konfigurator():
         <div class="preview__dims" data-dims></div>
         <div class="preview__scenes"><small>Elewacja</small>{sc}</div>
       </div>
-      <div class="cfg-photos">
-        <h4>Okna w kolorze <span data-photocolor>Antracyt</span> — nasze realizacje</h4>
-        <div class="cfg-photos__row" data-photos></div>
-        <div class="cfg-photos__empty">Ten odcień prezentujemy na próbnikach w naszym showroomie w Wieluniu — zapraszamy, doradca pokaże Ci go na gotowych oknach.</div>
-      </div>
       <div class="alert">💡 <strong>Wskazówka:</strong> kolory drewnopodobne (Złoty dąb, Orzech, Winchester) doskonale pasują do nowoczesnego budownictwa i elewacji z elementami naturalnego drewna.</div>
     </div>
 
@@ -949,12 +943,21 @@ def build_konfigurator():
       <div class="optgroup cfg-only-scene">
         <h3><span class="no">2</span> Wymiary okna</h3>
         <div class="dims">
-          <div><label for="cfg-w">Szerokość (50–400)</label><div class="dim-wrap"><input id="cfg-w" data-w type="number" min="50" max="400" step="5" value="180"><span class="unit">cm</span></div></div>
-          <div><label for="cfg-h">Wysokość (50–280)</label><div class="dim-wrap"><input id="cfg-h" data-h type="number" min="50" max="280" step="5" value="150"><span class="unit">cm</span></div></div>
+          <div><label for="cfg-w" data-wlabel>Szerokość</label><div class="dim-wrap"><input id="cfg-w" data-w type="number" min="50" max="200" step="5" value="160"><span class="unit">cm</span></div></div>
+          <div><label for="cfg-h" data-hlabel>Wysokość</label><div class="dim-wrap"><input id="cfg-h" data-h type="number" min="50" max="280" step="5" value="150"><span class="unit">cm</span></div></div>
         </div>
+        <p class="dims-note" data-limit></p>
+      </div>
+      <div class="optgroup cfg-only-scene" data-group="open">
+        <h3><span class="no">3</span> Sposób otwierania <span class="picked"></span></h3>
+        <div class="optcards optcards--4">{op}</div>
+      </div>
+      <div class="optgroup cfg-only-scene" data-group="glass">
+        <h3><span class="no">4</span> Pakiet szybowy <span class="picked"></span></h3>
+        <div class="optcards optcards--2">{gl}</div>
       </div>
       <div class="optgroup" data-group="out">
-        <h3><span class="no">3</span> Kolor od zewnątrz (dekory VEKA) <span class="picked"></span></h3>
+        <h3><span class="no">5</span> Kolor od zewnątrz (dekory VEKA) <span class="picked"></span></h3>
         <div class="veka-cat">Paleta kolorów</div>
         <div class="veka-row" data-vekagroup="uni"></div>
         <div class="veka-cat">Dekory drewnopodobne i metalopodobne</div>
@@ -963,23 +966,28 @@ def build_konfigurator():
         <div class="veka-row" data-vekagroup="spectral"></div>
       </div>
       <div class="optgroup cfg-only-scene" data-group="in">
-        <h3><span class="no">4</span> Kolor od wewnątrz <span class="picked"></span></h3>
+        <h3><span class="no">6</span> Kolor od wewnątrz <span class="picked"></span></h3>
         <div class="swatches">{sw('Biel')}</div>
       </div>
       <div class="optgroup cfg-only-scene" data-group="handle">
-        <h3><span class="no">5</span> Klamka okienna <span class="picked"></span></h3>
+        <h3><span class="no">7</span> Klamka okienna <span class="picked"></span></h3>
         <div class="optcards">{hd}</div>
       </div>
       <div class="optgroup cfg-only-scene" data-group="bars">
-        <h3><span class="no">6</span> Szprosy (szczebliny) <span class="picked"></span></h3>
+        <h3><span class="no">8</span> Szprosy (szczebliny) <span class="picked"></span></h3>
         <div class="optcards">{bd}</div>
       </div>
       <div class="recap">
         <h3>Twoja konfiguracja</h3>
         <dl data-recap></dl>
-        <div class="recap__price">
-          <small>Orientacyjna cena brutto z montażem — dokładną wycenę przygotujemy w 24 h.</small>
-          <strong data-price></strong>
+        <div class="qty-row">
+          <label for="cfg-qty">Ilość sztuk</label>
+          <div class="dim-wrap"><input id="cfg-qty" data-qty type="number" min="1" max="99" step="1" value="1"><span class="unit">szt.</span></div>
+        </div>
+        <button type="button" class="btn btn--outline btn--sm" data-add>+ Dodaj pozycję do zapytania</button>
+        <div class="positions is-empty">
+          <h4>Pozycje w zapytaniu</h4>
+          <ol data-positions></ol>
         </div>
         <a class="btn" data-cta href="kontakt.html">Wyślij zapytanie o wycenę {I['arrow']}</a>
       </div>
@@ -991,7 +999,7 @@ def build_konfigurator():
 """
     write("konfigurator.html",
           head("Konfigurator okien online — kolory, klamki, szprosy | PROMYK Wieluń",
-               "Interaktywny konfigurator okien: typ konstrukcji, wymiary, kolory od zewnątrz i wewnątrz, klamka, szprosy i podgląd na różnych elewacjach. Wyślij konfigurację do bezpłatnej wyceny.")
+               "Interaktywny konfigurator okien: typ konstrukcji, sposób otwierania, pakiet szybowy, kolory, klamka i szprosy. Dodaj kilka pozycji i wyślij zapytanie o wycenę.")
           + nav("konfigurator") + body + footer())
 
 # ================================================================ PRODUKTY ----
@@ -2830,14 +2838,14 @@ def build_rolety_zewnetrzne():
 
 # ================================================================ PARAPETY (Jaro-Max, dopisane 20.10.2026) ----
 PARAPETY_KOLORY = {
-    'w-granit': [('Vanga', 'w-granit-01'), ('Blue Night', 'w-granit-02'), ('Colonial White', 'w-granit-03'), ('Royal Black', 'w-granit-04'), ('Nero Impala', 'w-granit-05'), ('Tan Brown', 'w-granit-06'), ('China Cristal', 'w-granit-07'), ('Steel Grey', 'w-granit-08'), ('Yellow Pink', 'w-granit-09'), ('Rosa Beta', 'w-granit-10'), ('Steel Grey Lapatura', 'w-granit-11'), ('Nero Assoluto (polerowany)', 'w-granit-12'), ('Nero Assoluto (płomień i szczotka)', 'w-granit-13')],
+    'w-granit': [('Vanga', 'w-granit-01'), ('Blue Night', 'w-granit-02'), ('Colonial White', 'w-granit-03'), ('Royal Black', 'w-granit-04'), ('Nero Impala', 'w-granit-05'), ('Tan Brown', 'w-granit-06'), ('China Cristal', 'w-granit-07'), ('Steel Grey', 'w-granit-08'), ('Yellow Pink', 'w-granit-09'), ('Rosa Beta', 'w-granit-10')],
     'w-kwarcyt': [('Bianchissimo', 'w-kwarcyt-01'), ('Vittoria White', 'w-kwarcyt-02'), ('Navona', 'w-kwarcyt-03'), ('Blanco Paloma', 'w-kwarcyt-04'), ('Gris Ceniza', 'w-kwarcyt-06'), ('Black Nimbus', 'w-kwarcyt-07'), ('City Dark', 'w-kwarcyt-08'), ('Gris Antracita', 'w-kwarcyt-09'), ('Black Mamba', 'w-kwarcyt-10')],
     'w-marmur': [('Polare', 'w-marmur-01'), ('Monte Bianco', 'w-marmur-02'), ('Bianco Carrara', 'w-marmur-03'), ('Perla Arte', 'w-marmur-04'), ('Beige Marfil', 'w-marmur-05'), ('Marmo White', 'w-marmur-06'), ('Baltic Grey', 'w-marmur-07'), ('Crystal White', 'w-marmur-08'), ('Botticino', 'w-marmur-09'), ('Breccia Aurora', 'w-marmur-10'), ('Calacatta Gold', 'w-marmur-11'), ('Perlato Appia', 'w-marmur-12'), ('Rosso Asiago', 'w-marmur-13'), ('Beige Luna', 'w-marmur-14'), ('Giorgione', 'w-marmur-15'), ('White Iceberg', 'w-marmur-16'), ('Cotone', 'w-marmur-18')],
     'w-fornir': [('Dąb naturalny', 'w-fornir-01'), ('Winchester', 'w-fornir-02'), ('Złoty dąb', 'w-fornir-03'), ('Dąb orzech', 'w-fornir-04'), ('Stary złoty dąb', 'w-fornir-05'), ('Dąb orzech ciemny', 'w-fornir-06'), ('Dąb mahoń', 'w-fornir-07'), ('Dąb bielony', 'w-fornir-08'), ('Dąb grafit', 'w-fornir-09')],
     'w-laminat': [('Cream Beige', 'w-laminat-01'), ('Subtle Nude', 'w-laminat-02'), ('Subtle Taupe', 'w-laminat-03'), ('Biały mat', 'w-laminat-04'), ('Biały połysk', 'w-laminat-05'), ('Marmur jasny', 'w-laminat-06'), ('Beton ciemny', 'w-laminat-07'), ('Granit szary', 'w-laminat-08'), ('Dąb Ribbeck', 'w-laminat-09'), ('Jasny dąb', 'w-laminat-10'), ('Dąb Sonoma', 'w-laminat-11'), ('Dąb naturalny', 'w-laminat-12'), ('Orzech Lanzado', 'w-laminat-13'), ('Winchester', 'w-laminat-14'), ('Beton', 'w-laminat-15'), ('Dąb vintage', 'w-laminat-16'), ('Białe drewno', 'w-laminat-17'), ('Dąb Watan', 'w-laminat-18'), ('Dąb London', 'w-laminat-19'), ('Dąb Argos', 'w-laminat-20'), ('Jabłoń', 'w-laminat-21'), ('Złoty dąb', 'w-laminat-22'), ('Antracyt', 'w-laminat-23')],
     'w-lakier': [('Perła łuska', 'w-lakier-01'), ('Biały mat', 'w-lakier-02'), ('Biały połysk', 'w-lakier-03'), ('Biały wysoki połysk', 'w-lakier-04'), ('Czarny mat', 'w-lakier-05'), ('Marmurek czarny', 'w-lakier-06'), ('Marmurek biały', 'w-lakier-07'), ('Antracyt RAL 7016 półmat', 'w-lakier-08')],
-    'w-pcv': [('Biały', 'w-pcv-01'), ('Marmur', 'w-pcv-02'), ('Orzech', 'w-pcv-03'), ('Złoty dąb', 'w-pcv-04'), ('Dąb skandynawski', 'w-pcv-05'), ('Winchester', 'w-pcv-06'), ('Grafit', 'w-pcv-07')],
-    'z-granit': [('Vanga', 'z-granit-01'), ('Blue Night', 'z-granit-02'), ('Colonial White', 'z-granit-03'), ('Royal Black', 'z-granit-04'), ('Nero Impala', 'z-granit-05'), ('Tan Brown', 'z-granit-06'), ('China Cristal', 'z-granit-07'), ('Steel Grey', 'z-granit-08'), ('Yellow Pink', 'z-granit-09'), ('Rosa Beta', 'z-granit-10'), ('Imperial White', 'z-granit-11'), ('Steel Grey Lapatura', 'z-granit-12'), ('Nero Assoluto (polerowany)', 'z-granit-13'), ('Nero Assoluto (płomień i szczotka)', 'z-granit-14')],
+    'w-pcv': [('Biały', 'w-pcv-01'), ('Marmur', 'w-pcv-02'), ('Orzech', 'w-pcv-03'), ('Złoty dąb', 'w-pcv-04'), ('Dąb skandynawski', 'w-pcv-05'), ('Grafit', 'w-pcv-07')],
+    'z-granit': [('Vanga', 'z-granit-01'), ('Blue Night', 'z-granit-02'), ('Colonial White', 'z-granit-03'), ('Royal Black', 'z-granit-04'), ('Nero Impala', 'z-granit-05'), ('Tan Brown', 'z-granit-06'), ('China Cristal', 'z-granit-07'), ('Steel Grey', 'z-granit-08'), ('Yellow Pink', 'z-granit-09'), ('Rosa Beta', 'z-granit-10'), ('Imperial White', 'z-granit-11')],
     'z-contour': [('RAL 1011', 'z-contour-01'), ('RAL 7016', 'z-contour-02'), ('RAL 7024', 'z-contour-03'), ('RAL 8003', 'z-contour-04'), ('RAL 8017', 'z-contour-05'), ('RAL 8019', 'z-contour-06'), ('RAL 8028', 'z-contour-07'), ('RAL 9016', 'z-contour-08'), ('RAL 9005', 'z-contour-09')],
     'z-alu': [('Ciemny brąz RAL 8019', 'z-alu-01'), ('Gładki antracyt RAL 7016', 'z-alu-02'), ('Biały RAL 9016', 'z-alu-03')],
     'z-aluplytka': [('Biały RAL 9016', 'z-aluplytka-01'), ('Gładki antracyt RAL 7016', 'z-aluplytka-02'), ('Miedź antyczna', 'z-aluplytka-03'), ('Antracyt antyczny', 'z-aluplytka-04'), ('Złoto antyczne', 'z-aluplytka-05'), ('Dąb antyczny', 'z-aluplytka-06'), ('Jasny brąz RAL 8017', 'z-aluplytka-07'), ('JM 8230 drobna struktura', 'z-aluplytka-08'), ('RAL 7016 drobna struktura', 'z-aluplytka-09'), ('RAL 9006 drobna struktura', 'z-aluplytka-10'), ('RAL 9005 drobna struktura', 'z-aluplytka-11'), ('Ciemny brąz RAL 8019', 'z-aluplytka-12')],
@@ -3731,8 +3739,8 @@ ZF_ROWS = [
       "Bogata kolorystyka – dopasowanie żaluzji do okien i elewacji.",
       "Sterowanie elektryczne – wygodna obsługa osłon"], "fasad/podtynkowe"),
 ]
-ZF_ADV = [("Kontrola światła", "Płynna regulacja kąta lameli", "sun"),
-          ("Komfort termiczny", "Mniej nagrzewania latem i mniejsze straty ciepła zimą", "thermo"),
+ZF_ADV = [("Kontrola światła", "Płynna regulacja kąta nachylenia lameli", "sun"),
+          ("Komfort termiczny", "Ograniczają nagrzewanie pomieszczeń latem i pomagają zmniejszyć straty ciepła zimą", "thermo"),
           ("Automatyka", "Sterowanie z telefonu, automatyczne zwijanie przy wietrze", "cog")]
 ZF_FAQ = [
     ("Lamela C80 czy Z90 — czym się różnią?",
@@ -3979,7 +3987,7 @@ def build_zaluzje_fasadowe():
       <div class="subrow__text prose-text">
         <h2>Lamele C80 i Z90</h2>
         <p>Lamele żaluzji wykonane są z blachy aluminiowej. Lamele typu C są obustronnie wywinięte, sztywne i odporne na wiatr — obracają się w zakresie 0–180°. Lamele typu Z lepiej zaciemniają, mają uszczelkę wygłuszającą i obracają się w zakresie 0–90°.</p>
-        <p>Prowadnice z uszczelkami tłumiącymi ograniczają hałas pracy. Żaluzjami można sterować przewodowo — pięciopozycyjnym włącznikiem Somfy Smoove Uno — albo radiowo pilotem Somfy Situo Variation io z pokrętłem, którym płynnie obracasz lamele. Z automatyką sterujesz nimi także z telefonu, a przy silnym wietrze zwijają się same.</p>
+        <p>Prowadnice z uszczelkami tłumiącymi ograniczają hałas pracy. Żaluzjami można sterować przewodowo za pomocą pięciopozycyjnego włącznika Somfy Smoove Uno lub radiowo – pilotem Somfy Situo Variation io z pokrętłem umożliwiającym płynną regulację kąta nachylenia lameli. Możliwe jest również sterowanie z poziomu smartfona.</p>
       </div>
       <div class="ctrl-pair">
         <figure><img src="assets/img/fasad/smoove.jpg" alt="Włącznik Somfy Smoove Uno WT 5P" loading="lazy"><figcaption>Włącznik 5-pozycyjny Somfy Smoove Uno</figcaption></figure>
@@ -4002,7 +4010,7 @@ def build_zaluzje_fasadowe():
 <section class="section section--soft">
   <div class="container">
     <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Kolory żaluzji</h2></div></div>
-    {_swatch_grid([(f"ozew/kolor-{i:02d}", n) for i, n in enumerate(OZ_KOLORY, 1)])}
+    {_swatch_grid([(f"ozew/kolor-{i:02d}", n) for i, n in enumerate(OZ_KOLORY, 1) if n != "RAL 9010 struktura"])}
   </div>
 </section>
 """ + _std_sections(ZF_ADV, ZF_FAQ, ZF_INSPIRACJE, "Planujesz żaluzje fasadowe?", ["oslony-zewnetrzne", "rolety-zewnetrzne", "okna"])
@@ -4081,9 +4089,9 @@ def build_moskitiery():
     spec = PRODUCT_EXTRAS["moskitiery"]["specs"]
     th = "".join(f"<th>{c}</th>" for c in spec["cols"])
     tr = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in spec["rows"])
-    kolory = _swatch_grid([(f"mosk/kolor-{i:02d}", n) for i, n in enumerate(MS_KOLORY, 1)])
+    kolory = _swatch_grid([(f"mosk/kolor-{i:02d}", n) for i, n in enumerate(MS_KOLORY, 1)]).replace('class="swatches-grid"', 'class="swatches-grid swatches-grid--9"', 1)
     body = pagehero(meta["hero"], meta["h1"],
-                    "Moskitiery z naszej własnej produkcji — na wymiar do każdego typu okna i drzwi. Ciesz się świeżym powietrzem bez nieproszonych gości.", None)
+                    "Moskitiery naszej produkcji — na wymiar do każdego typu okna i drzwi. Ciesz się świeżym powietrzem bez nieproszonych gości.", None)
     body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
 <section class="section">
   <div class="container">

@@ -21,12 +21,15 @@
   var HANDLES = {
     'Biała': '#f2f2ef', 'Srebrna': '#b9bec4', 'Czarna': '#232426', 'Złota': '#c79a4b'
   };
+  /* limity wymiarów wg PROMYK: jednoskrzydłowe max 150×150 cm powierzchni (ale np. 100×170 też),
+     dwuskrzydłowe max 200×280 cm */
   var TYPES = {
-    jedno:  { label: 'Jednoskrzydłowe', w: 120, h: 140, rate: 1400 },
-    dwa:    { label: 'Dwuskrzydłowe',   w: 180, h: 150, rate: 1600 },
-    balkon: { label: 'Drzwi balkonowe', w: 100, h: 220, rate: 1700 },
-    hst:    { label: 'Przesuwne HST',   w: 300, h: 230, rate: 3200 }
+    jedno:  { label: 'Jednoskrzydłowe', w: 100, h: 140, maxW: 150, maxH: 170, maxArea: 22500 },
+    dwa:    { label: 'Dwuskrzydłowe',   w: 160, h: 150, maxW: 200, maxH: 280 },
+    balkon: { label: 'Drzwi balkonowe', w: 90,  h: 220, maxW: 120, maxH: 250 },
+    hst:    { label: 'Przesuwne HST',   w: 300, h: 230, maxW: 400, maxH: 280 }
   };
+  var OPEN = { RU: 'Rozwierno-uchylne (RU)', R: 'Rozwierne (R)', U: 'Uchylne (U)', FIX: 'Stałe (FIX)' };
   var SCENES = {
     plaster:    { label: 'Tynk biały',  wall: '#e9e5dc', joint: null },
     grey:       { label: 'Tynk szary',  wall: '#b6b9bc', joint: null },
@@ -60,9 +63,12 @@
   }
 
   var state = {
-    type: 'dwa', out: '02_anthrazitgrau', inn: 'Biel', handle: 'Czarna',
-    bars: 'Brak', scene: 'plaster', view: 'out', time: 'day', mode: 'scene', w: 180, h: 150
+    type: 'dwa', out: '02_anthrazitgrau', inn: 'Biel', handle: 'Czarna', open: 'RU', glass: '3',
+    bars: 'Brak', scene: 'plaster', view: 'out', time: 'day', mode: 'scene', w: 160, h: 150, qty: 1
   };
+  var positions = [];
+  try { positions = JSON.parse(localStorage.getItem('promykCfg') || '[]') || []; } catch (e) { positions = []; }
+  function savePositions() { try { localStorage.setItem('promykCfg', JSON.stringify(positions)); } catch (e) {} }
 
   var preview = root.querySelector('.preview');
   var stageBox = root.querySelector('[data-svg]');
@@ -207,9 +213,13 @@
     s += glass(gx, gy, gw, gh, interior);
     s += '<rect x="' + gx + '" y="' + gy + '" width="' + gw + '" height="' + gh + '" fill="none" stroke="rgba(0,0,0,.38)" stroke-width="1.1"/>';
     if (barsKind && barsKind !== 'Brak') s += barsRects(gx, gy, gw, gh, barsKind, 5, ff.fill);
-    if (withHandle) {
-      var hx = handleSide === 'left' ? x + sashW / 2 : x + w - sashW / 2;
-      s += handleSvg(hx, y + h / 2, HANDLES[state.handle]);
+    if (withHandle && interior && state.open !== 'FIX') {
+      if (state.open === 'U' && state.type !== 'hst') {
+        s += '<g transform="rotate(90 ' + (x + w / 2) + ' ' + (y + sashW / 2) + ')">' + handleSvg(x + w / 2, y + sashW / 2, HANDLES[state.handle]) + '</g>';
+      } else {
+        var hx = handleSide === 'left' ? x + sashW / 2 : x + w - sashW / 2;
+        s += handleSvg(hx, y + h / 2, HANDLES[state.handle]);
+      }
     }
     return s;
   }
@@ -235,7 +245,7 @@
       svg += sash(ix + half + 1, iy, half - 1, ih, ff, SW, interior, true, 'left', state.bars);
       svg += '<rect x="' + (ix + half - 2.5) + '" y="' + iy + '" width="5" height="' + ih + '" fill="' + ff.edge + '" opacity=".55"/>';
     } else if (state.type === 'hst') {
-      var fixed = iw * 0.55, slide = iw * 0.45;
+      var fixed = iw * 0.5, slide = iw * 0.5;
       svg += sash(ix, iy, fixed, ih, ff, SW * 0.66, interior, false, null, state.bars);
       svg += '<g transform="translate(0,-3)">' +
         '<rect x="' + (ix + fixed - 8) + '" y="' + (iy + 2) + '" width="' + (slide + 8) + '" height="' + (ih + 4) + '" fill="rgba(0,0,0,.24)" rx="2"/>' +
@@ -252,15 +262,16 @@
     var sc = SCENES[state.scene];
     var T = TIMES[state.time];
 
+    var doorLike = (state.type === 'balkon' || state.type === 'hst' || state.h > 200);
     var maxW = VB_W * (state.type === 'hst' ? 0.62 : 0.5);
-    var maxH = VB_H * 0.58;
+    var maxH = VB_H * ((interior && !doorLike) ? 0.44 : 0.58);
     var pxPerCm = Math.min(maxW / state.w, maxH / state.h);
     var W = state.w * pxPerCm, H = state.h * pxPerCm;
     var groundY = VB_H * 0.80;
     var x = (VB_W - W) / 2;
-    var isDoor = (state.type === 'balkon' || state.type === 'hst');
+    var isDoor = (state.type === 'balkon' || state.type === 'hst' || state.h > 200);
     var y = interior
-      ? (isDoor ? VB_H * 0.74 - H : VB_H * 0.70 - H)
+      ? (isDoor ? VB_H * 0.74 - H : Math.max(14, VB_H * 0.57 - H))
       : (isDoor ? groundY - H + 6 : groundY - H - 56);
 
     var defs = '<defs>' +
@@ -321,6 +332,22 @@
       if (!isDoor) {
         s += '<rect x="' + (x - 20) + '" y="' + (y + H + 7) + '" width="' + (W + 40) + '" height="13" rx="2" fill="#f3efe8" stroke="#cfc8bb" stroke-width="1"/>';
         s += '<rect x="' + (x - 20) + '" y="' + (y + H + 20) + '" width="' + (W + 40) + '" height="16" fill="url(#sillShade)" opacity=".5"/>';
+        /* kaloryfer pod oknem */
+        var ry = y + H + 44, rh = Math.max(20, Math.min(70, floorY - ry - 24)), rw = Math.min(W * 0.8, 360), rx = x + (W - rw) / 2;
+        if (rh > 20) {
+          s += '<rect x="' + rx + '" y="' + ry + '" width="' + rw + '" height="' + rh + '" rx="4" fill="#f7f7f5" stroke="#d3d0ca" stroke-width="1.2"/>';
+          for (var f = rx + 10; f < rx + rw - 6; f += 12) s += '<rect x="' + f + '" y="' + (ry + 4) + '" width="2" height="' + (rh - 8) + '" fill="#000" opacity=".07"/>';
+          s += '<rect x="' + (rx + rw - 14) + '" y="' + (ry + rh + 2) + '" width="6" height="' + Math.max(0, floorY - ry - rh - 2) + '" fill="#e2dfd9"/>';
+        }
+      }
+      /* roślina w donicy obok okna */
+      var px = x + W + 60, pyb = floorY + 6;
+      if (px + 60 < VB_W) {
+        s += '<path d="M' + (px - 22) + ',' + (pyb - 62) + ' L' + (px + 22) + ',' + (pyb - 62) + ' L' + (px + 16) + ',' + pyb + ' L' + (px - 16) + ',' + pyb + ' Z" fill="#c9b8a2"/>';
+        var lv = [[-30, -150, -20], [6, -175, 8], [30, -140, 24], [-12, -120, -35], [20, -110, 40], [-34, -95, -50], [0, -135, 0]];
+        lv.forEach(function (l) {
+          s += '<ellipse cx="' + (px + l[0]) + '" cy="' + (pyb + l[1] / 1.6) + '" rx="12" ry="34" fill="#4f7a4a" opacity=".92" transform="rotate(' + l[2] + ' ' + (px + l[0]) + ' ' + (pyb + l[1] / 1.6) + ')"/>';
+        });
       }
       s += '</g>';
       if (state.time === 'night') s += '<rect x="-40" y="-40" width="' + (VB_W + 80) + '" height="' + (VB_H + 80) + '" fill="#1a1206" opacity=".18"/>';
@@ -363,10 +390,12 @@
       s += '<rect x="' + (x - 8) + '" y="' + (y - 8) + '" width="' + (W + 16) + '" height="' + (H + 16) + '" fill="' + shade(sc.wall, 0.72) + '"/>';
       s += '<rect x="' + (x - 8) + '" y="' + (y - 8) + '" width="' + (W + 16) + '" height="4" fill="#000" opacity=".22"/>';
       s += '<g filter="url(#winShadow)" transform="translate(' + x + ',' + y + ')">' + windowSvg(W, H, false) + '</g>';
-      var sy = y + H + 8;
-      s += '<rect x="' + (x - 14) + '" y="' + (sy - 3) + '" width="' + (W + 28) + '" height="4" fill="#d8dadc"/>';
-      s += '<rect x="' + (x - 14) + '" y="' + (sy + 1) + '" width="' + (W + 28) + '" height="9" rx="1.5" fill="#b9bdc1" stroke="#96999d" stroke-width=".8"/>';
-      s += '<rect x="' + (x - 14) + '" y="' + (sy + 10) + '" width="' + (W + 28) + '" height="22" fill="url(#sillShade)"/>';
+      if (!isDoor) {
+        var sy = y + H + 8;
+        s += '<rect x="' + (x - 14) + '" y="' + (sy - 3) + '" width="' + (W + 28) + '" height="4" fill="#d8dadc"/>';
+        s += '<rect x="' + (x - 14) + '" y="' + (sy + 1) + '" width="' + (W + 28) + '" height="9" rx="1.5" fill="#b9bdc1" stroke="#96999d" stroke-width=".8"/>';
+        s += '<rect x="' + (x - 14) + '" y="' + (sy + 10) + '" width="' + (W + 28) + '" height="22" fill="url(#sillShade)"/>';
+      }
       if (state.time === 'night') {
         s += '<ellipse cx="' + (x + W / 2) + '" cy="' + (groundY + 8) + '" rx="' + (W * 0.75) + '" ry="16" fill="#ffcf7e" opacity=".18" filter="url(#blurGlow)"/>';
       }
@@ -380,22 +409,47 @@
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + VB_W + ' ' + VB_H + '" preserveAspectRatio="xMidYMid slice">' + defs + s + '</svg>';
   }
 
-  /* ------------------------------------------------------ wycena ---- */
-  function estimate() {
-    var area = Math.max(0.5, (state.w * state.h) / 10000);
-    var mult = 1;
-    if (!WHITE_IDS[state.out]) mult += 0.12;
-    if (state.inn !== 'Biel') mult += 0.08;
-    var price = TYPES[state.type].rate * area * mult;
-    if (state.bars !== 'Brak') price += 160;
-    if (state.handle === 'Złota') price += 60;
-    return { area: area, price: Math.round(price / 10) * 10 };
+  /* ------------------------------------------------------ wymiary ---- */
+  function estimate() { return { area: (state.w * state.h) / 10000 }; }
+  function limitText() {
+    var t = TYPES[state.type];
+    if (state.type === 'jedno') return 'Okno jednoskrzydłowe: maks. ok. 150 × 150 cm (np. 100 × 170 cm też wykonamy).';
+    return t.label + ': maks. ' + t.maxW + ' × ' + t.maxH + ' cm.' + (state.type === 'dwa' ? ' Powyżej 200 cm wysokości okno sięga do podłogi.' : '');
+  }
+  function fitDims(changed) {
+    var t = TYPES[state.type];
+    state.w = Math.max(50, Math.min(t.maxW, state.w));
+    state.h = Math.max(50, Math.min(t.maxH, state.h));
+    if (t.maxArea && state.w * state.h > t.maxArea) {
+      if (changed === 'w') state.h = Math.max(50, Math.floor(t.maxArea / state.w / 5) * 5);
+      else state.w = Math.max(50, Math.floor(t.maxArea / state.h / 5) * 5);
+    }
   }
 
   /* ------------------------------------------------------ render ---- */
   function summaryText() {
-    return TYPES[state.type].label + ' ' + state.w + '×' + state.h + ' cm | Zewn.: ' + (DECOR[state.out] ? DECOR[state.out].name : state.out) +
-      ' | Wewn.: ' + state.inn + ' | Klamka: ' + state.handle + ' | Szprosy: ' + state.bars;
+    return TYPES[state.type].label + ' ' + state.w + '×' + state.h + ' cm, ' + OPEN[state.open] + ', ' + state.glass + '-szybowe | Zewn.: ' +
+      (DECOR[state.out] ? DECOR[state.out].name : state.out) + ' | Wewn.: ' + state.inn + ' | Klamka: ' + state.handle + ' | Szprosy: ' + state.bars;
+  }
+  function requestText() {
+    var list = positions.length ? positions : [{ text: summaryText(), qty: state.qty }];
+    return list.map(function (p, i) { return (i + 1) + '. ' + p.text + ' — ' + p.qty + ' szt.'; }).join('\n');
+  }
+  function renderPositions() {
+    var box = root.querySelector('[data-positions]');
+    if (!box) return;
+    box.innerHTML = positions.length ? positions.map(function (p, i) {
+      return '<li><span>' + (i + 1) + '. ' + p.text + ' — <strong>' + p.qty + ' szt.</strong></span><button type="button" data-remove="' + i + '" aria-label="Usuń pozycję">×</button></li>';
+    }).join('') : '';
+    box.closest('.positions').classList.toggle('is-empty', !positions.length);
+    box.querySelectorAll('[data-remove]').forEach(function (b) {
+      b.addEventListener('click', function () { positions.splice(+b.getAttribute('data-remove'), 1); savePositions(); renderPositions(); updateCta(); });
+    });
+  }
+  function updateCta() {
+    root.querySelectorAll('[data-cta]').forEach(function (cta) {
+      cta.href = 'kontakt.html?konfiguracja=' + encodeURIComponent(requestText());
+    });
   }
 
   function render() {
@@ -413,15 +467,22 @@
       if (dims) dims.innerHTML = '<span>' + state.w + ' × ' + state.h + ' cm</span> &nbsp;•&nbsp; ' + e.area.toFixed(2).replace('.', ',') + ' m²';
     }
 
-    root.querySelectorAll('[data-price]').forEach(function (est) {
-      est.textContent = 'od ' + e.price.toLocaleString('pl-PL') + ' zł';
-    });
+    var lim = root.querySelector('[data-limit]');
+    if (lim) lim.textContent = limitText();
+    var wl = root.querySelector('[data-wlabel]'), hl = root.querySelector('[data-hlabel]');
+    if (wl) wl.textContent = 'Szerokość (50–' + TYPES[state.type].maxW + ')';
+    if (hl) hl.textContent = 'Wysokość (50–' + TYPES[state.type].maxH + ')';
+    var wi2 = root.querySelector('[data-w]'), hi2 = root.querySelector('[data-h]');
+    if (wi2) { wi2.max = TYPES[state.type].maxW; if (document.activeElement !== wi2) wi2.value = state.w; }
+    if (hi2) { hi2.max = TYPES[state.type].maxH; if (document.activeElement !== hi2) hi2.value = state.h; }
 
     var rc = root.querySelector('[data-recap]');
     if (rc) {
       rc.innerHTML =
         '<dt>Typ konstrukcji</dt><dd>' + TYPES[state.type].label + '</dd>' +
         '<dt>Wymiary</dt><dd>' + state.w + ' × ' + state.h + ' cm (' + e.area.toFixed(2).replace('.', ',') + ' m²)</dd>' +
+        '<dt>Otwieranie</dt><dd>' + OPEN[state.open] + '</dd>' +
+        '<dt>Pakiet szybowy</dt><dd>' + state.glass + '-szybowy</dd>' +
         '<dt>Kolor zewnętrzny</dt><dd>' + (DECOR[state.out] ? DECOR[state.out].name : state.out) + '</dd>' +
         '<dt>Kolor wewnętrzny</dt><dd>' + state.inn + '</dd>' +
         '<dt>Klamka</dt><dd>' + state.handle + '</dd>' +
@@ -432,26 +493,11 @@
       var key = g.getAttribute('data-group');
       var lbl = g.querySelector('.picked');
       if (!lbl) return;
-      var map = { type: TYPES[state.type].label, out: (DECOR[state.out] ? DECOR[state.out].name : state.out), in: state.inn, handle: state.handle, bars: state.bars };
+      var map = { type: TYPES[state.type].label, out: (DECOR[state.out] ? DECOR[state.out].name : state.out), in: state.inn, handle: state.handle, bars: state.bars, open: OPEN[state.open], glass: state.glass + '-szybowy' };
       if (map[key]) lbl.textContent = map[key];
     });
 
-    var ph = root.querySelector('[data-photos]');
-    if (ph) {
-      var imgs = photosFor(state.out);
-      var wrap = ph.closest('.cfg-photos');
-      if (wrap) wrap.classList.toggle('is-empty', imgs.length === 0);
-      ph.innerHTML = imgs.map(function (n) {
-        return '<a href="assets/img/' + n + '.jpg" target="_blank" rel="noopener">' +
-          '<img src="assets/img/' + n + '.jpg" alt="Okno w kolorze ' + state.out + '" loading="lazy"></a>';
-      }).join('');
-      var pc = root.querySelector('[data-photocolor]');
-      if (pc) pc.textContent = (DECOR[state.out] ? DECOR[state.out].name : state.out);
-    }
-
-    root.querySelectorAll('[data-cta]').forEach(function (cta) {
-      cta.href = 'kontakt.html?konfiguracja=' + encodeURIComponent(summaryText());
-    });
+    updateCta();
   }
 
   /* ------------------------------------------------------ zdarzenia ---- */
@@ -469,6 +515,8 @@
           if (wi) wi.value = state.w;
           if (hi) hi.value = state.h;
         }
+        else if (key === 'open') state.open = v;
+        else if (key === 'glass') state.glass = v;
         else if (key === 'out') state.out = v;
         else if (key === 'in') state.inn = v;
         else if (key === 'handle') state.handle = v;
@@ -523,8 +571,24 @@
 
   var wIn = root.querySelector('[data-w]'), hIn = root.querySelector('[data-h]');
   function clamp(v, lo, hi) { v = parseInt(v, 10); if (isNaN(v)) return lo; return Math.max(lo, Math.min(hi, v)); }
-  if (wIn) wIn.addEventListener('input', function () { state.w = clamp(wIn.value, 50, 400); render(); });
-  if (hIn) hIn.addEventListener('input', function () { state.h = clamp(hIn.value, 50, 280); render(); });
+  if (wIn) {
+    wIn.addEventListener('input', function () { state.w = clamp(wIn.value, 50, 400); fitDims('w'); render(); });
+    wIn.addEventListener('change', function () { wIn.value = state.w; hIn.value = state.h; });
+  }
+  if (hIn) {
+    hIn.addEventListener('input', function () { state.h = clamp(hIn.value, 50, 280); fitDims('h'); render(); });
+    hIn.addEventListener('change', function () { wIn.value = state.w; hIn.value = state.h; });
+  }
+  var qIn = root.querySelector('[data-qty]');
+  if (qIn) qIn.addEventListener('input', function () { state.qty = clamp(qIn.value, 1, 99); updateCta(); });
+  var addBtn = root.querySelector('[data-add]');
+  if (addBtn) addBtn.addEventListener('click', function () {
+    positions.push({ text: summaryText(), qty: state.qty });
+    savePositions(); renderPositions(); updateCta();
+    addBtn.textContent = 'Dodano ✓ — skonfiguruj kolejne okno';
+    setTimeout(function () { addBtn.textContent = '+ Dodaj pozycję do zapytania'; }, 2200);
+  });
+  renderPositions();
 
   /* parallax podążający za kursorem — obraz delikatnie „żyje” */
   preview.addEventListener('mousemove', function (ev) {

@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Konfigurator okien online — kolory, klamki, szprosy | PROMYK Wieluń</title>
-<meta name="description" content="Interaktywny konfigurator okien: typ konstrukcji, wymiary, kolory od zewnątrz i wewnątrz, klamka, szprosy i podgląd na różnych elewacjach. Wyślij konfigurację do bezpłatnej wyceny.">
+<meta name="description" content="Interaktywny konfigurator okien: typ konstrukcji, sposób otwierania, pakiet szybowy, kolory, klamka i szprosy. Dodaj kilka pozycji i wyślij zapytanie o wycenę.">
 <link rel="icon" href="assets/img/logo-promyk.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=59">
+<link rel="stylesheet" href="assets/css/style.css?v=62">
 </head>
 <body>
 <div class="topbar">
@@ -53,7 +53,7 @@
   <div class="container">
     <span class="tag">Narzędzie online</span>
     <h1 class="h-sec" style="margin:16px 0 10px">Konfigurator okien</h1>
-    <p class="lead lead--lg" style="max-width:760px">Złóż swoje okno na żywo — wybierz konstrukcję, kolory, klamkę i szprosy, sprawdź wygląd na różnych elewacjach i wyślij gotową konfigurację do bezpłatnej wyceny.</p>
+    <p class="lead lead--lg" style="max-width:760px">Złóż swoje okno na żywo — wybierz konstrukcję, sposób otwierania, kolory, klamkę i szprosy, sprawdź wygląd na różnych elewacjach, dodaj kolejne pozycje i wyślij zapytanie o wycenę.</p>
   </div>
 </section>
 
@@ -80,11 +80,6 @@
         <div class="preview__dims" data-dims></div>
         <div class="preview__scenes"><small>Elewacja</small><button type="button" data-scene="plaster" title="Elewacja: Tynk biały" aria-label="Elewacja: Tynk biały" class=is-active style="background:#ece9e2"></button><button type="button" data-scene="grey" title="Elewacja: Tynk szary" aria-label="Elewacja: Tynk szary" style="background:#b7babd"></button><button type="button" data-scene="anthracite" title="Elewacja: Antracyt" aria-label="Elewacja: Antracyt" style="background:#43484d"></button><button type="button" data-scene="brick" title="Elewacja: Cegła" aria-label="Elewacja: Cegła" style="background:#a75d45"></button><button type="button" data-scene="wood" title="Elewacja: Deska" aria-label="Elewacja: Deska" style="background:#a97b4e"></button></div>
       </div>
-      <div class="cfg-photos">
-        <h4>Okna w kolorze <span data-photocolor>Antracyt</span> — nasze realizacje</h4>
-        <div class="cfg-photos__row" data-photos></div>
-        <div class="cfg-photos__empty">Ten odcień prezentujemy na próbnikach w naszym showroomie w Wieluniu — zapraszamy, doradca pokaże Ci go na gotowych oknach.</div>
-      </div>
       <div class="alert">💡 <strong>Wskazówka:</strong> kolory drewnopodobne (Złoty dąb, Orzech, Winchester) doskonale pasują do nowoczesnego budownictwa i elewacji z elementami naturalnego drewna.</div>
     </div>
 
@@ -96,12 +91,21 @@
       <div class="optgroup cfg-only-scene">
         <h3><span class="no">2</span> Wymiary okna</h3>
         <div class="dims">
-          <div><label for="cfg-w">Szerokość (50–400)</label><div class="dim-wrap"><input id="cfg-w" data-w type="number" min="50" max="400" step="5" value="180"><span class="unit">cm</span></div></div>
-          <div><label for="cfg-h">Wysokość (50–280)</label><div class="dim-wrap"><input id="cfg-h" data-h type="number" min="50" max="280" step="5" value="150"><span class="unit">cm</span></div></div>
+          <div><label for="cfg-w" data-wlabel>Szerokość</label><div class="dim-wrap"><input id="cfg-w" data-w type="number" min="50" max="200" step="5" value="160"><span class="unit">cm</span></div></div>
+          <div><label for="cfg-h" data-hlabel>Wysokość</label><div class="dim-wrap"><input id="cfg-h" data-h type="number" min="50" max="280" step="5" value="150"><span class="unit">cm</span></div></div>
         </div>
+        <p class="dims-note" data-limit></p>
+      </div>
+      <div class="optgroup cfg-only-scene" data-group="open">
+        <h3><span class="no">3</span> Sposób otwierania <span class="picked"></span></h3>
+        <div class="optcards optcards--4"><button type="button" class="optcard is-active" data-value="RU"><svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M38 4 6 22l32 18M6 40l16-36 16 36" stroke="currentColor" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/></svg>Rozwierno-uchylne</button><button type="button" class="optcard" data-value="R"><svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M38 4 6 22l32 18" stroke="currentColor" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/></svg>Rozwierne</button><button type="button" class="optcard" data-value="U"><svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M6 40l16-36 16 36" stroke="currentColor" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/></svg>Uchylne</button><button type="button" class="optcard" data-value="FIX"><svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M16 22h12M22 16v12" stroke="currentColor" stroke-width="2"/></svg>Stałe (FIX)</button></div>
+      </div>
+      <div class="optgroup cfg-only-scene" data-group="glass">
+        <h3><span class="no">4</span> Pakiet szybowy <span class="picked"></span></h3>
+        <div class="optcards optcards--2"><button type="button" class="optcard" data-value="2"><svg viewBox="0 0 44 44"><path d="M12 6v32" stroke="currentColor" stroke-width="2.4"/><path d="M20 6v32" stroke="currentColor" stroke-width="2.4"/></svg>2-szybowy</button><button type="button" class="optcard is-active" data-value="3"><svg viewBox="0 0 44 44"><path d="M12 6v32" stroke="currentColor" stroke-width="2.4"/><path d="M20 6v32" stroke="currentColor" stroke-width="2.4"/><path d="M28 6v32" stroke="currentColor" stroke-width="2.4"/></svg>3-szybowy</button></div>
       </div>
       <div class="optgroup" data-group="out">
-        <h3><span class="no">3</span> Kolor od zewnątrz (dekory VEKA) <span class="picked"></span></h3>
+        <h3><span class="no">5</span> Kolor od zewnątrz (dekory VEKA) <span class="picked"></span></h3>
         <div class="veka-cat">Paleta kolorów</div>
         <div class="veka-row" data-vekagroup="uni"></div>
         <div class="veka-cat">Dekory drewnopodobne i metalopodobne</div>
@@ -110,31 +114,36 @@
         <div class="veka-row" data-vekagroup="spectral"></div>
       </div>
       <div class="optgroup cfg-only-scene" data-group="in">
-        <h3><span class="no">4</span> Kolor od wewnątrz <span class="picked"></span></h3>
+        <h3><span class="no">6</span> Kolor od wewnątrz <span class="picked"></span></h3>
         <div class="swatches"><button type="button" class="swatch is-active" data-value="Biel"><i style="background:#f5f5f2"></i>Biel</button><button type="button" class="swatch" data-value="Antracyt"><i style="background:#3c3f43"></i>Antracyt</button><button type="button" class="swatch" data-value="Czerń"><i style="background:#17181a"></i>Czerń</button><button type="button" class="swatch" data-value="Brąz"><i style="background:#5b3a24"></i>Brąz</button><button type="button" class="swatch" data-value="Złoty dąb"><i style="background:linear-gradient(160deg,#b97c36,#8a5420)"></i>Złoty dąb</button><button type="button" class="swatch" data-value="Orzech"><i style="background:linear-gradient(160deg,#5f3c22,#3c2413)"></i>Orzech</button><button type="button" class="swatch" data-value="Winchester"><i style="background:linear-gradient(160deg,#8a6240,#5e3f27)"></i>Winchester</button></div>
       </div>
       <div class="optgroup cfg-only-scene" data-group="handle">
-        <h3><span class="no">5</span> Klamka okienna <span class="picked"></span></h3>
+        <h3><span class="no">7</span> Klamka okienna <span class="picked"></span></h3>
         <div class="optcards"><button type="button" class="optcard" data-value="Biała"><span class="dot" style="background:#f2f2f0"></span>Biała</button><button type="button" class="optcard" data-value="Srebrna"><span class="dot" style="background:#b9bec4"></span>Srebrna</button><button type="button" class="optcard is-active" data-value="Czarna"><span class="dot" style="background:#1c1d1f"></span>Czarna</button><button type="button" class="optcard" data-value="Złota"><span class="dot" style="background:#c79a4b"></span>Złota</button></div>
       </div>
       <div class="optgroup cfg-only-scene" data-group="bars">
-        <h3><span class="no">6</span> Szprosy (szczebliny) <span class="picked"></span></h3>
+        <h3><span class="no">8</span> Szprosy (szczebliny) <span class="picked"></span></h3>
         <div class="optcards"><button type="button" class="optcard is-active" data-value="Brak"><svg viewBox="0 0 44 44"><rect x="4" y="4" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>Brak</button><button type="button" class="optcard" data-value="Krzyż"><svg viewBox="0 0 44 44"><rect x="4" y="4" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M22 4v36M4 22h36" stroke="currentColor" stroke-width="2"/></svg>Krzyż</button><button type="button" class="optcard" data-value="Poziome"><svg viewBox="0 0 44 44"><rect x="4" y="4" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M4 22h36" stroke="currentColor" stroke-width="2"/></svg>Poziome</button><button type="button" class="optcard" data-value="Wielopolowe"><svg viewBox="0 0 44 44"><rect x="4" y="4" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M16 4v36M28 4v36M4 16h36M4 28h36" stroke="currentColor" stroke-width="1.6"/></svg>Wielopolowe</button></div>
       </div>
       <div class="recap">
         <h3>Twoja konfiguracja</h3>
         <dl data-recap></dl>
-        <div class="recap__price">
-          <small>Orientacyjna cena brutto z montażem — dokładną wycenę przygotujemy w 24 h.</small>
-          <strong data-price></strong>
+        <div class="qty-row">
+          <label for="cfg-qty">Ilość sztuk</label>
+          <div class="dim-wrap"><input id="cfg-qty" data-qty type="number" min="1" max="99" step="1" value="1"><span class="unit">szt.</span></div>
+        </div>
+        <button type="button" class="btn btn--outline btn--sm" data-add>+ Dodaj pozycję do zapytania</button>
+        <div class="positions is-empty">
+          <h4>Pozycje w zapytaniu</h4>
+          <ol data-positions></ol>
         </div>
         <a class="btn" data-cta href="kontakt.html">Wyślij zapytanie o wycenę <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
   </div>
 </section>
-<script src="assets/js/veka-data.js?v=59"></script>
-<script src="assets/js/configurator.js?v=59" defer></script>
+<script src="assets/js/veka-data.js?v=62"></script>
+<script src="assets/js/configurator.js?v=62" defer></script>
 <footer class="footer">
   <div class="container">
     <div class="footer__cols">
@@ -172,6 +181,6 @@
 
 <a class="floating" href="tel:+48607941499"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span><small>Zadzwoń teraz</small><strong>607 941 499</strong></span></a>
 
-<script src="assets/js/main.js?v=59"></script>
+<script src="assets/js/main.js?v=62"></script>
 </body>
 </html>
