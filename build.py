@@ -3532,7 +3532,7 @@ OW_ROWS = [
       "Precyzyjna regulacja ilości światła",
       "Szeroka gama kolorów lameli",
       "Nowoczesny i ponadczasowy wygląd",
-      "Rozwiązanie m.in. do domu, mieszkania i biura"], "osl/aluminiowe-okno"),
+      "Rozwiązanie m.in. do domu, mieszkania i biura"], "osl/aluminiowe-katalog"),
     ("Żaluzje drewniane i bambusowe",
      ["Lamele 25 mm i 50 mm",
       "Naturalny wygląd i ponadczasowy styl",
