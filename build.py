@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "58"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "59"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -540,9 +540,7 @@ def build_oferta():
         ("DRE — katalog 2026", "Kolekcje Estra, Nestor, Vetro, Ilis; ościeżnica WaterProof", "katalog-dre.pdf"),
         ("Porta — katalog 2026", "10 linii wzorniczych, drzwi akustyczne i wilgocioodporne", "katalog-porta.pdf"),
         ("AVO — bramy garażowe 2026", "Bramy segmentowe Base Line – Elegant ISO 60, automatyka ADO", "katalog-avo-bramy.pdf"),
-        ("Nice — napędy Spider i Spido", "Siłowniki do bram segmentowych i uchylnych, Wi-Fi, Yubii", "katalog-nice-napedy.pdf"),
         ("Aluprof Sun Shading Solutions — pergole 2026", "Pergole lamelowe SB400, SB350, SB400R i doposażenia", "katalog-aluprof-pergole.pdf"),
-        ("Cennik orientacyjny PROMYK", "Ceny typowych rozwiązań", "cennik-promyk.pdf"),
     ]
     cat = ""
     for t, sub, fname in catalogs:
@@ -570,7 +568,7 @@ def build_oferta():
         for logo, title, href, bullets in MODELS_2026)
 
     body = pagehero("al31_rol", "Kompleksowa stolarka otworowa",
-                    "Okna, drzwi, bramy i osłony przeciwsłoneczne — wszystko w jednym miejscu, z jednym montażem i jedną gwarancją.", "Oferta")
+                    "Wszystko, czego potrzebujesz do swojego domu, w jednym miejscu – od okien i drzwi po bramy garażowe i nowoczesne osłony okienne.", None)
     body += f"""<section class="section section--soft">
   <div class="container">
     <div class="section-header">
@@ -584,18 +582,7 @@ def build_oferta():
   </div>
 </section>
 
-<section class="section">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-header__left">
-        <span class="tag">Prosto z katalogów 2026</span>
-        <h2 class="h-sec">Modele i parametry naszych producentów</h2>
-        <p class="lead">Wyciąg techniczny z aktualnych katalogów — pełne wersje PDF do pobrania poniżej.</p>
-      </div>
-    </div>
-    <div class="grid-2">{models}</div>
-  </div>
-</section>
+{partners()}
 
 <section class="section section--soft">
   <div class="container">
@@ -603,7 +590,7 @@ def build_oferta():
       <div class="section-header__left">
         <span class="tag">Materiały informacyjne</span>
         <h2 class="h-sec">Katalogi do pobrania</h2>
-        <p class="lead">Pobierz oficjalne katalogi naszych partnerów oraz orientacyjne cenniki, aby zapoznać się ze szczegółowymi specyfikacjami technicznymi.</p>
+        <p class="lead">Pobierz oficjalne katalogi naszych partnerów, aby zapoznać się ze szczegółowymi specyfikacjami technicznymi.</p>
       </div>
     </div>
     <div class="stack">{cat}</div>
@@ -1871,7 +1858,7 @@ for _p, _meta in PRODUCT_DATA.items():
 def build_subpages():
     """Strony 3. poziomu — jedna na każde rozwiązanie z podstron produktowych."""
     for parent, meta in PRODUCT_DATA.items():
-        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole", "bramy-garazowe", "markizy", "oslony-wewnetrzne", "oslony-zewnetrzne"):   # bez podstron 3. poziomu (uwagi klienta)
+        if parent in ("okna", "drzwi-zewnetrzne", "drzwi-wewnetrzne", "rolety-zewnetrzne", "pergole", "bramy-garazowe", "markizy", "oslony-wewnetrzne", "oslony-zewnetrzne", "moskitiery"):   # bez podstron 3. poziomu (uwagi klienta)
             continue
         details = SUB_DETAILS.get(parent, [])
         for k, row in enumerate(meta["rows"]):
@@ -3729,21 +3716,20 @@ OZ_FAQ = [
 OZ_INSPIRACJE = [f"ozew/insp-{i:02d}" for i in range(1, 9)]
 
 ZF_ROWS = [
-    ("Żaluzje fasadowe samonośne",
-     ["Do fasad słupowo-ryglowych i montażu bezpośrednio do muru",
-      "Widoczna kaseta CUBE lub OVAL jako detal architektoniczny elewacji",
-      "Modułowa konstrukcja — osłony o dużych szerokościach",
-      "Maksymalne wymiary: 5 × 4 m"], "fasad/samonosne"),
     ("Żaluzje fasadowe adaptacyjne",
      ["Do budynków istniejących — bez ingerencji w warstwę docieplenia",
       "Skrzynka z blachy osłonowej w kilku wariantach",
-      "Montaż we wnęce okiennej lub natynkowy",
-      "Maksymalne wymiary: 5 × 5 m"], "fasad/adaptacyjne"),
+      "Ochrona przed nagrzewaniem – ograniczenie dopływu promieni słonecznych",
+      "Szeroka gama kolorów – dopasowanie do okien i elewacji",
+      "Nowoczesny wygląd – podkreślenie charakteru fasady",
+      "Sterowanie elektryczne – wygodna obsługa osłon"], "fasad/adaptacyjne"),
     ("Żaluzje fasadowe podtynkowe",
      ["Montaż na etapie budowy lub generalnego remontu",
       "Kaseta BOX całkowicie ukryta pod ociepleniem i tynkiem",
       "Minimalistyczne wykończenie elewacji",
-      "Maksymalne wymiary: 5 × 5 m"], "fasad/podtynkowe"),
+      "Komfort we wnętrzu – możliwość dopasowania zacienienia do pory dnia.",
+      "Bogata kolorystyka – dopasowanie żaluzji do okien i elewacji.",
+      "Sterowanie elektryczne – wygodna obsługa osłon"], "fasad/podtynkowe"),
 ]
 ZF_ADV = [("Kontrola światła", "Płynna regulacja kąta lameli", "sun"),
           ("Komfort termiczny", "Mniej nagrzewania latem i mniejsze straty ciepła zimą", "thermo"),
@@ -3752,11 +3738,19 @@ ZF_FAQ = [
     ("Lamela C80 czy Z90 — czym się różnią?",
      "Lamele C80 są obustronnie wywinięte, sztywne i odporne na wiatr — obracają się w zakresie 0–180°. Lamele Z90 lepiej zaciemniają, mają uszczelkę wygłuszającą i obracają się w zakresie 0–90°."),
     ("Który system żaluzji fasadowych wybrać?",
-     "W nowym budynku lub przy generalnym remoncie najlepiej sprawdzą się żaluzje podtynkowe, ukryte pod ociepleniem. W budynku istniejącym wybiera się zwykle żaluzje adaptacyjne, które nie wymagają ingerencji w docieplenie, a przy fasadach słupowo-ryglowych — samonośne."),
+     "W nowym budynku lub przy generalnym remoncie najlepiej sprawdzą się żaluzje podtynkowe, ukryte pod ociepleniem. W budynku istniejącym wybiera się zwykle żaluzje adaptacyjne, które nie wymagają ingerencji w docieplenie."),
     ("Czy żaluzje fasadowe mogą działać automatycznie?",
      "Tak. Żaluzje fasadowe wyposaża się w napęd elektryczny, a z czujnikami pogodowymi mogą same opuszczać się w słońcu i zwijać przy silnym wietrze. Można nimi sterować także z telefonu lub tabletu."),
+    ("Czym różnią się żaluzje fasadowe od rolet zewnętrznych?",
+     "Żaluzje fasadowe pozwalają regulować kąt nachylenia lameli, dzięki czemu można precyzyjnie kontrolować ilość światła wpadającego do pomieszczeń, jednocześnie ograniczając ich nagrzewanie. Rolety zewnętrzne mają pełny pancerz, który po opuszczeniu skuteczniej zaciemnia wnętrze i zapewnia większą osłonę przed hałasem oraz warunkami atmosferycznymi."),
+    ("Czy żaluzje fasadowe można zamontować razem z oknami?",
+     "Tak, żaluzje fasadowe można zaplanować już na etapie zamawiania okien. W nowym budynku warto uwzględnić je w projekcie, aby odpowiednio przygotować miejsce na montaż i estetycznie zintegrować system z elewacją."),
+    ("Jak dobrać kolor żaluzji do okien i elewacji?",
+     "Kolor żaluzji fasadowych warto dopasować do stolarki okiennej i elewacji, aby całość tworzyła spójną kompozycję. Można wybrać odcień zbliżony do koloru okien, który podkreśli ich wygląd, lub postawić na kontrast, który nada budynkowi nowoczesny charakter. Warto również zwrócić uwagę na kolor pozostałych elementów, takich jak brama garażowa czy drzwi wejściowe."),
+    ("Czy można zintegrować je z systemem Smart Home?",
+     "Tak, żaluzje fasadowe można zintegrować z systemem Smart Home, jeśli zastosowane sterowanie jest z nim kompatybilne. Dzięki temu można nimi zarządzać za pomocą aplikacji."),
 ]
-ZF_INSPIRACJE = [f"fasad/insp-{i:02d}" for i in range(1, 10)]
+ZF_INSPIRACJE = [f"fasad/insp-{i:02d}" for i in (1, 2, 3, 4, 5, 6, 8, 9)]
 
 
 def _sunbreaker_anim():
@@ -3950,9 +3944,34 @@ def build_oslony_zewnetrzne():
           + nav("oslony-zewnetrzne") + body + footer())
 
 
+def _fasad_anim():
+    """Przekrój żaluzji fasadowej: lamele obracają się, potem podnoszą do pakietu i opadają (SVG/SMIL)."""
+    out = ""
+    kt = "0;0.12;0.27;0.4;0.52;0.72;0.82;1"
+    for i in range(7):
+        y0 = 78 + 36 * i
+        dy = (54 + 7 * i) - y0
+        out += (f'<g transform="translate(330 {y0})"><g>'
+                f'<animateTransform attributeName="transform" type="translate" values="0 0;0 0;0 0;0 0;0 0;0 {dy};0 {dy};0 0" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/>'
+                f'<path class="sb-blade" d="M-44,-2 Q0,-12 44,-2 L44,3 Q0,-7 -44,3 Z">'
+                f'<animateTransform attributeName="transform" type="rotate" values="0;0;72;72;0;0;0;0" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/>'
+                f'</path></g></g>')
+    return f"""<svg class="garage-anim" viewBox="0 0 640 360" role="img" aria-label="Animacja: obracanie i podnoszenie lameli żaluzji fasadowej">
+  <rect x="270" y="22" width="120" height="24" rx="3" class="ga-motor"/>
+  <line x1="276" y1="46" x2="276" y2="330" class="sb-guide"/>
+  <line x1="384" y1="46" x2="384" y2="330" class="sb-guide"/>
+  <circle cx="90" cy="70" r="26" class="sb-sun"/>
+  {out}
+  <text x="60" y="345" class="ga-label">na zewnątrz</text>
+  <text x="430" y="345" class="ga-label">wnętrze</text>
+  <text x="410" y="120" class="ga-label ga-label--sm">obrót lameli</text>
+  <text x="410" y="140" class="ga-label ga-label--sm">i podnoszenie pakietu</text>
+</svg>"""
+
+
 def build_zaluzje_fasadowe():
     body = pagehero("fasad/hero", "Żaluzje fasadowe Aluprof",
-                    "Precyzyjna kontrola światła i cienia oraz nowoczesny, spójny charakter elewacji.", None)
+                    "Nowoczesna ochrona przed słońcem. Reguluj ilość światła wpadającego do pomieszczeń i zadbaj o komfort przez cały rok.", None)
     body += f"""<section class="section section--tight-bottom"><div class="container">{_rows_html(ZF_ROWS)}</div></section>
 <section class="section section--soft">
   <div class="container">
@@ -3960,16 +3979,126 @@ def build_zaluzje_fasadowe():
       <div class="subrow__text prose-text">
         <h2>Lamele C80 i Z90</h2>
         <p>Lamele żaluzji wykonane są z blachy aluminiowej. Lamele typu C są obustronnie wywinięte, sztywne i odporne na wiatr — obracają się w zakresie 0–180°. Lamele typu Z lepiej zaciemniają, mają uszczelkę wygłuszającą i obracają się w zakresie 0–90°.</p>
-        <p>Prowadnice z uszczelkami tłumiącymi ograniczają hałas pracy, a napęd elektryczny z automatyką pozwala sterować żaluzjami z telefonu i automatycznie zwijać je przy silnym wietrze.</p>
+        <p>Prowadnice z uszczelkami tłumiącymi ograniczają hałas pracy. Żaluzjami można sterować przewodowo — pięciopozycyjnym włącznikiem Somfy Smoove Uno — albo radiowo pilotem Somfy Situo Variation io z pokrętłem, którym płynnie obracasz lamele. Z automatyką sterujesz nimi także z telefonu, a przy silnym wietrze zwijają się same.</p>
       </div>
-      <div><img src="assets/img/fasad/insp-02.jpg" alt="Żaluzje fasadowe Aluprof na elewacji domu" loading="lazy"></div>
+      <div class="ctrl-pair">
+        <figure><img src="assets/img/fasad/smoove.jpg" alt="Włącznik Somfy Smoove Uno WT 5P" loading="lazy"><figcaption>Włącznik 5-pozycyjny Somfy Smoove Uno</figcaption></figure>
+        <figure><img src="assets/img/fasad/situo.jpg" alt="Pilot Somfy Situo Variation io II" loading="lazy"><figcaption>Pilot z pokrętłem Somfy Situo Variation io</figcaption></figure>
+      </div>
     </div>
   </div>
 </section>
+<section class="section">
+  <div class="container">
+    <div class="garage-anim-wrap">
+      <div>{_fasad_anim()}</div>
+      <div class="subrow__text prose-text">
+        <h2>Jak działają żaluzje fasadowe?</h2>
+        <p>Lamele obracają się, regulując ilość światła i widok na zewnątrz, a gdy osłona nie jest potrzebna — podnoszą się i składają w pakiet pod nadprożem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Kolory żaluzji</h2></div></div>
+    {_swatch_grid([(f"ozew/kolor-{i:02d}", n) for i, n in enumerate(OZ_KOLORY, 1)])}
+  </div>
+</section>
 """ + _std_sections(ZF_ADV, ZF_FAQ, ZF_INSPIRACJE, "Planujesz żaluzje fasadowe?", ["oslony-zewnetrzne", "rolety-zewnetrzne", "okna"])
-    write("zaluzje-fasadowe.html", head("Żaluzje fasadowe Aluprof — samonośne, adaptacyjne, podtynkowe | PROMYK Wieluń",
-                                        "Żaluzje fasadowe Aluprof z lamelami C80 i Z90: samonośne, adaptacyjne i podtynkowe, z napędem elektrycznym i automatyką. PROMYK Wieluń.")
+    write("zaluzje-fasadowe.html", head("Żaluzje fasadowe Aluprof — adaptacyjne i podtynkowe | PROMYK Wieluń",
+                                        "Żaluzje fasadowe Aluprof z lamelami C80 i Z90: adaptacyjne i podtynkowe, sterowanie włącznikiem, pilotem Somfy lub z telefonu. PROMYK Wieluń.")
           + nav("zaluzje-fasadowe") + body + footer())
+
+
+# ================================================================ MOSKITIERY (uwagi klienta 22.10.2026) ----
+MS_ROWS = [
+    ("Moskitiery ramkowe",
+     ["Aluminiowy profil ramki – wysoka trwałość i odporność na uszkodzenia",
+      "Prosty montaż i demontaż – łatwe zakładanie i zdejmowanie np. na zimę.",
+      "Różne kolory profilu - możliwość dopasowania do stolarki okiennej",
+      "Łatwe czyszczenie – prosta pielęgnacja siatki i ramki",
+      "Bez ingerencji w okno – montaż za pomocą odpowiednich zaczepów, bez konieczności wiercenia w ramie okiennej"], "al41", False),
+    ("Moskitiery drzwiowe",
+     ["Solidna aluminiowa konstrukcja – trwałość i odporność na codzienne użytkowanie",
+      "Ochrona przed owadami – swobodne korzystanie z otwartych drzwi bez komarów i much",
+      "Estetyczny wygląd – konstrukcja dopasowana do stolarki okiennej i drzwiowej.",
+      "Otwieranie na zawiasach – wygodne przechodzenie na taras lub balkon",
+      "Zamykanie magnetyczne – komfortowe domykanie moskitiery",
+      "Indywidualne dopasowanie – wykonanie na wymiar"], "mosk/drzwiowa", True),
+    ("Moskitiery plisowane",
+     ["Harmonijkowa konstrukcja zajmuje niewiele miejsca po złożeniu",
+      "Wygodna obsługa – płynne otwieranie i zamykanie moskitiery",
+      "Aluminiowy profil – trwałość i odporność na codzienne użytkowanie",
+      "Dopasowanie na wymiar – możliwość dostosowania do konkretnego otworu",
+      "Możliwość zatrzymania siatki w wybranym położeniu",
+      "Niski próg – wygodne przechodzenie na taras lub balkon"], "al25", False),
+    ("Moskitiery rolowane",
+     ["Wygodna obsługa – szybkie rozwijanie i zwijanie moskitiery",
+      "Dopasowanie na wymiar – możliwość dostosowania do okien i wybranych drzwi",
+      "Trwała konstrukcja – solidne profile przeznaczone do wieloletniego użytkowania",
+      "Możliwość całkowitego zwinięcia – odsłonięcie okna, gdy moskitiera nie jest potrzebna",
+      "Kaseta ochronna – zabezpiecza zwiniętą siatkę poza sezonem użytkowania",
+      "Dopasowanie kolorystyczne – możliwość dobrania profili do ram okiennych"], "al28", False),
+]
+MS_ADV = [("Ochrona", "Siatka o drobnym oczku — bariera także dla małych owadów", "bug"),
+          ("Wentylacja", "Swobodny przepływ powietrza i światła", "wind"),
+          ("Własna produkcja", "Moskitiery produkujemy na wymiar w naszej pracowni", "ruler")]
+MS_KOLORY = ["Biały", "Srebrny", "Szary antracyt", "Ciemnobrązowy", "Czarny", "Złoty dąb", "Orzech", "Winchester", "Dąb słodowy"]
+MS_FAQ = [
+    ("Czy moskitierę można zamontować na każdym oknie?",
+     "Moskitiery można zamontować na większości okien, jednak wybór odpowiedniego rozwiązania zależy od konstrukcji okna, dostępnego miejsca oraz rodzaju zastosowanych osłon zewnętrznych. Przed montażem warto sprawdzić, jaki typ moskitiery będzie najlepiej dopasowany do danej stolarki."),
+    ("Jak czyścić i pielęgnować moskitiery?",
+     "Moskitiery najlepiej czyścić regularnie miękką szczotką lub odkurzaczem z delikatną końcówką, aby usunąć kurz i zabrudzenia. W razie potrzeby siatkę i profile można przetrzeć miękką ściereczką zwilżoną wodą z łagodnym detergentem. Należy unikać silnych środków chemicznych i szorstkich gąbek, które mogłyby uszkodzić siatkę lub powierzchnię profili. Regularna pielęgnacja pozwala zachować estetyczny wygląd i funkcjonalność moskitiery przez długi czas."),
+    ("Czy moskitiery trzeba demontować na zimę?",
+     "Nie wszystkie moskitiery wymagają demontażu na zimę. Moskitiery ramkowe warto zdjąć na okres jesienno-zimowy, aby ograniczyć ich narażenie na trudne warunki atmosferyczne. Moskitiery rolowane i plisowane zazwyczaj mogą pozostać zamontowane przez cały rok, zgodnie z zaleceniami producenta."),
+    ("Jak działa moskitiera rolowana?",
+     "Moskitiera rolowana działa podobnie do rolety – siatkę rozwija się z kasety i przesuwa w prowadnicach, aby zabezpieczyć okno lub drzwi przed owadami. Gdy nie jest potrzebna, można ją zwinąć z powrotem do kasety, dzięki czemu pozostaje schowana i jest chroniona przed zabrudzeniami. To wygodne rozwiązanie, które pozwala korzystać z moskitiery tylko wtedy, gdy jest potrzebna."),
+    ("Czy można zamontować moskitierę w oknie z roletą zewnętrzną?",
+     "Tak, moskitierę można zamontować w oknie wyposażonym w roletę zewnętrzną. Ważne jest jednak dobranie odpowiedniego rodzaju moskitiery oraz sprawdzenie dostępnego miejsca montażowego. W zależności od konstrukcji okna i rolety możliwe jest zastosowanie m.in. moskitiery ramkowej lub rolowanej. Najlepiej dobrać rozwiązanie już na etapie pomiaru, aby oba systemy mogły działać niezależnie i bez przeszkód."),
+    ("Czy moskitiery są odporne na uszkodzenia przez zwierzęta?",
+     "Standardowa siatka może ulec uszkodzeniu w kontakcie z pazurami zwierząt. Dlatego oferujemy również mocniejszą siatkę aluminiową, która charakteryzuje się większą odpornością na uszkodzenia mechaniczne."),
+    ("Czy moskitiery najlepiej zamontować od razu z oknami, czy dopiero po zakończeniu budowy?",
+     "Montaż najlepiej wykonać po zakończeniu prac budowlanych i wykończeniowych, co pozwoli ograniczyć ryzyko zabrudzenia lub uszkodzenia siatki. Dzięki temu moskitiery będą gotowe do użytkowania, gdy tylko zamieszkasz w nowym domu."),
+]
+MS_INSPIRACJE = ["al27", "al38", "al29", "moskitiera_mrs"]
+
+
+def build_moskitiery():
+    meta = PRODUCT_DATA["moskitiery"]
+    rows = ""
+    for k, (title, bullets, img, contain) in enumerate(MS_ROWS):
+        li = "".join(f'<li><span class="check">{I["check"]}</span> {b}</li>' for b in bullets)
+        cls = ' class="img-contain"' if contain else ""
+        media = f'<div><img{cls} src="assets/img/{img}.jpg" alt="{title}" loading="lazy"></div>'
+        text = f"""<div class="subrow__text">
+        <h2>{title}</h2>
+        <ul class="bullets">{li}</ul>
+        <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
+      </div>"""
+        flip = k % 2
+        rows += f'<div class="subrow{" subrow--flip" if flip else ""}">{media if not flip else text}{text if not flip else media}</div>'
+    spec = PRODUCT_EXTRAS["moskitiery"]["specs"]
+    th = "".join(f"<th>{c}</th>" for c in spec["cols"])
+    tr = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in spec["rows"])
+    kolory = _swatch_grid([(f"mosk/kolor-{i:02d}", n) for i, n in enumerate(MS_KOLORY, 1)])
+    body = pagehero(meta["hero"], meta["h1"],
+                    "Moskitiery z naszej własnej produkcji — na wymiar do każdego typu okna i drzwi. Ciesz się świeżym powietrzem bez nieproszonych gości.", None)
+    body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
+<section class="section">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Kolory profili</h2></div></div>
+    {kolory}
+  </div>
+</section>
+<section class="section section--soft">
+  <div class="container">
+    <div class="section-header"><div class="section-header__left"><h2 class="h-sec">{spec["title"]}</h2></div></div>
+    <div class="spec-wrap"><table class="spec-table"><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table></div>
+  </div>
+</section>
+""" + _std_sections(MS_ADV, MS_FAQ, MS_INSPIRACJE, "Dobierzemy moskitiery do Twoich okien i drzwi", ["okna", "rolety-zewnetrzne", "oslony-wewnetrzne"])
+    write("moskitiery.html", head(meta["title"], meta["desc"]) + nav("moskitiery") + body + footer())
 
 
 if __name__ == "__main__":
@@ -4000,6 +4129,8 @@ if __name__ == "__main__":
             build_oslony_wewnetrzne()
         elif slug == "oslony-zewnetrzne":
             build_oslony_zewnetrzne()
+        elif slug == "moskitiery":
+            build_moskitiery()
         else:
             product_page(slug, meta)
     build_parapety()
