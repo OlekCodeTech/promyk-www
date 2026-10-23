@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "65"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "67"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -96,7 +96,7 @@ HOME_REALIZACJE = [  # kolejność wg klienta: okna, drzwi, bramy, pergola/refle
     ("realizacje/pergola", "Pergola z lamelami"),
 ]
 
-GALLERY = [('gal/r01', 'Pergola lamelowa w ogrodzie', 'pergole'), ('gal/r02', 'Markiza tarasowa przy domu', 'markizy'), ('gal/r03', 'Drzwi wewnętrzne białe z czarną klamką', 'drzwi-wewnetrzne'), ('gal/r04', 'Żaluzje drewniane w salonie', 'oslony-wewnetrzne'), ('gal/r05', 'Okna w domu parterowym', 'okna'), ('gal/r06', 'Rolety zewnętrzne przy tarasie', 'rolety-zewnetrzne'), ('gal/r07', 'Drzwi zewnętrzne', 'drzwi-zewnetrzne'), ('gal/r08', 'Refleksol przy tarasie', 'oslony-zewnetrzne'), ('gal/r09', 'Żaluzje fasadowe na elewacji', 'zaluzje-fasadowe'), ('gal/r10', 'Moskitiera plisowana do drzwi tarasowych', 'moskitiery'), ('gal/r11', 'Brama garażowa antracytowa', 'bramy-garazowe'), ('gal/r12', 'Pergola nad strefą wypoczynku', 'pergole'), ('gal/r13', 'Markiza nad tarasem', 'markizy'), ('gal/r14', 'Drzwi wewnętrzne w czerni', 'drzwi-wewnetrzne'), ('gal/r15', 'Roleta rzymska w kuchni', 'oslony-wewnetrzne'), ('gal/r16', 'Okna i balkon', 'okna'), ('gal/r17', 'Rolety zewnętrzne', 'rolety-zewnetrzne'), ('gal/r18', 'Drzwi zewnętrzne drewnopodobne', 'drzwi-zewnetrzne'), ('gal/r19', 'Refleksole na elewacji', 'oslony-zewnetrzne'), ('gal/r20', 'Żaluzja fasadowa w oknie tarasowym', 'zaluzje-fasadowe'), ('gal/r21', 'Moskitiera plisowana', 'moskitiery'), ('gal/r22', 'Brama garażowa biała', 'bramy-garazowe'), ('gal/r23', 'Pergola — widok na lamele', 'pergole'), ('gal/r24', 'Markiza i strefa wypoczynku', 'markizy'), ('gal/r25', 'Drzwi wewnętrzne białe', 'drzwi-wewnetrzne'), ('gal/r26', 'Roleta materiałowa', 'oslony-wewnetrzne'), ('gal/r27', 'Przeszklenia od strony ogrodu', 'okna'), ('gal/r28', 'Rolety zewnętrzne na elewacji', 'rolety-zewnetrzne'), ('gal/r29', 'Drzwi zewnętrzne z przeszkleniem', 'drzwi-zewnetrzne'), ('gal/r30', 'Żaluzje fasadowe — widok od wewnątrz', 'zaluzje-fasadowe'), ('gal/r31', 'Moskitiera drzwiowa', 'moskitiery'), ('gal/r32', 'Brama garażowa segmentowa', 'bramy-garazowe'), ('gal/r33', 'Dach lamelowy pergoli', 'pergole'), ('gal/r34', 'Markiza nad tarasem — widok spod', 'markizy'), ('gal/r35', 'Drzwi wewnętrzne w korytarzu', 'drzwi-wewnetrzne'), ('gal/r36', 'Żaluzje drewnopodobne w narożnym oknie', 'oslony-wewnetrzne'), ('gal/r37', 'Przeszklenie w szczycie domu', 'okna'), ('gal/r38', 'Rolety zewnętrzne w domu jednorodzinnym', 'rolety-zewnetrzne'), ('gal/r39', 'Drzwi zewnętrzne antracyt + drewno', 'drzwi-zewnetrzne'), ('gal/r40', 'Brama garażowa w kolorze czerwonym', 'bramy-garazowe'), ('gal/r41', 'Markiza nad tarasem z zielenią', 'markizy'), ('gal/r42', 'Drzwi wewnętrzne w jasnym wnętrzu', 'drzwi-wewnetrzne'), ('gal/r43', 'Rolety dzień-noc', 'oslony-wewnetrzne'), ('gal/r44', 'Okna łukowe w nowym domu', 'okna'), ('gal/r45', 'Rolety zewnętrzne przy balkonie', 'rolety-zewnetrzne'), ('gal/r46', 'Drzwi zewnętrzne antracytowe', 'drzwi-zewnetrzne'), ('gal/r47', 'Brama garażowa w nowym domu', 'bramy-garazowe'), ('gal/r48', 'Markiza kasetowa na elewacji', 'markizy'), ('gal/r49', 'Drzwi wewnętrzne drewnopodobne', 'drzwi-wewnetrzne'), ('gal/r50', 'Rolety rzymskie w kuchni', 'oslony-wewnetrzne'), ('gal/r51', 'Okna łukowe — montaż', 'okna'), ('gal/r52', 'Roleta zewnętrzna w oknie', 'rolety-zewnetrzne'), ('gal/r53', 'Drzwi zewnętrzne zielone', 'drzwi-zewnetrzne'), ('gal/r54', 'Markiza tarasowa — widok z boku', 'markizy'), ('gal/r55', 'Drzwi wewnętrzne do łazienki', 'drzwi-wewnetrzne'), ('gal/r56', 'Żaluzje w jadalni', 'oslony-wewnetrzne'), ('gal/r57', 'Duże przeszklenie w szczycie', 'okna'), ('gal/r58', 'Drzwi zewnętrzne białe', 'drzwi-zewnetrzne'), ('gal/r59', 'Drzwi wewnętrzne frezowane', 'drzwi-wewnetrzne'), ('gal/r60', 'Rolety dzień-noc w salonie', 'oslony-wewnetrzne'), ('gal/r61', 'Okna w domu parterowym — montaż', 'okna'), ('gal/r62', 'Drzwi zewnętrzne z doświetlem', 'drzwi-zewnetrzne'), ('gal/r63', 'Roleta rzymska', 'oslony-wewnetrzne'), ('gal/r64', 'Drzwi zewnętrzne złoty dąb', 'drzwi-zewnetrzne'), ('gal/r65', 'Żaluzje w kuchni', 'oslony-wewnetrzne'), ('gal/r66', 'Drzwi zewnętrzne z przeszkleniami', 'drzwi-zewnetrzne'), ('gal/r67', 'Rolety rzymskie', 'oslony-wewnetrzne'), ('gal/r68', 'Żaluzje drewnopodobne', 'oslony-wewnetrzne'), ('gal/r69', 'Żaluzje przy drzwiach tarasowych', 'oslony-wewnetrzne'), ('gal/r70', 'Roleta rzymska w oknie', 'oslony-wewnetrzne'), ('gal/r71', 'Roleta rzymska — tkanina', 'oslony-wewnetrzne'), ('gal/r72', 'Żaluzje przy drzwiach balkonowych', 'oslony-wewnetrzne'), ('gal/r73', 'Żaluzje drewniane w kuchni', 'oslony-wewnetrzne'), ('gal/r74', 'Żaluzje aluminiowe w dużym oknie', 'oslony-wewnetrzne'), ('gal/r75', 'Żaluzje drewniane nad zlewem', 'oslony-wewnetrzne'), ('gal/r76', 'Żaluzje w ciemnym kolorze', 'oslony-wewnetrzne')]
+GALLERY = [('gal/r01', 'Pergola lamelowa w ogrodzie', 'pergole'), ('gal/r02', 'Markiza tarasowa przy domu', 'markizy'), ('gal/r03', 'Drzwi wewnętrzne białe z czarną klamką', 'drzwi-wewnetrzne'), ('gal/r04', 'Żaluzje drewniane w salonie', 'oslony-wewnetrzne'), ('gal/r05', 'Okna w domu parterowym', 'okna'), ('gal/r06', 'Rolety zewnętrzne przy tarasie', 'rolety-zewnetrzne'), ('gal/r07', 'Drzwi zewnętrzne', 'drzwi-zewnetrzne'), ('gal/r08', 'Refleksol przy tarasie', 'oslony-zewnetrzne'), ('gal/r09', 'Żaluzje fasadowe na elewacji', 'zaluzje-fasadowe'), ('gal/r10', 'Moskitiera plisowana do drzwi tarasowych', 'moskitiery'), ('gal/r11', 'Brama garażowa antracytowa', 'bramy-garazowe'), ('gal/r12', 'Pergola nad strefą wypoczynku', 'pergole'), ('gal/r13', 'Markiza nad tarasem', 'markizy'), ('gal/r14', 'Drzwi wewnętrzne w czerni', 'drzwi-wewnetrzne'), ('gal/r15', 'Roleta rzymska w kuchni', 'oslony-wewnetrzne'), ('gal/r16', 'Okna i balkon', 'okna'), ('gal/r17', 'Rolety zewnętrzne', 'rolety-zewnetrzne'), ('gal/r18', 'Drzwi zewnętrzne drewnopodobne', 'drzwi-zewnetrzne'), ('gal/r19', 'Refleksole na elewacji', 'oslony-zewnetrzne'), ('gal/r20', 'Żaluzja fasadowa w oknie tarasowym', 'zaluzje-fasadowe'), ('gal/r21', 'Moskitiera plisowana', 'moskitiery'), ('gal/r22', 'Brama garażowa biała', 'bramy-garazowe'), ('gal/r23', 'Pergola — widok na lamele', 'pergole'), ('gal/r24', 'Markiza i strefa wypoczynku', 'markizy'), ('gal/r25', 'Drzwi wewnętrzne białe', 'drzwi-wewnetrzne'), ('gal/r26', 'Roleta materiałowa', 'oslony-wewnetrzne'), ('gal/r27', 'Przeszklenia od strony ogrodu', 'okna'), ('gal/r28', 'Rolety zewnętrzne na elewacji', 'rolety-zewnetrzne'), ('gal/r29', 'Drzwi zewnętrzne z przeszkleniem', 'drzwi-zewnetrzne'), ('gal/r30', 'Żaluzje fasadowe — widok od wewnątrz', 'zaluzje-fasadowe'), ('gal/r31', 'Moskitiera drzwiowa', 'moskitiery'), ('gal/r32', 'Brama garażowa segmentowa', 'bramy-garazowe'), ('gal/r33', 'Dach lamelowy pergoli', 'pergole'), ('gal/r34', 'Markiza nad tarasem — widok spod', 'markizy'), ('gal/r35', 'Drzwi wewnętrzne w korytarzu', 'drzwi-wewnetrzne'), ('gal/r36', 'Żaluzje drewnopodobne w narożnym oknie', 'oslony-wewnetrzne'), ('gal/r37', 'Przeszklenie w szczycie domu', 'okna'), ('gal/r38', 'Rolety zewnętrzne w domu jednorodzinnym', 'rolety-zewnetrzne'), ('gal/r39', 'Drzwi zewnętrzne antracyt + drewno', 'drzwi-zewnetrzne'), ('gal/r40', 'Brama garażowa w kolorze czerwonym', 'bramy-garazowe'), ('gal/r41', 'Markiza nad tarasem z zielenią', 'markizy'), ('gal/r42', 'Drzwi wewnętrzne w jasnym wnętrzu', 'drzwi-wewnetrzne'), ('gal/r43', 'Rolety dzień-noc', 'oslony-wewnetrzne'), ('gal/r44', 'Okna łukowe w nowym domu', 'okna'), ('gal/r45', 'Rolety zewnętrzne przy balkonie', 'rolety-zewnetrzne'), ('gal/r46', 'Drzwi zewnętrzne antracytowe', 'drzwi-zewnetrzne'), ('gal/r47', 'Brama garażowa w nowym domu', 'bramy-garazowe'), ('gal/r48', 'Markiza kasetowa na elewacji', 'markizy'), ('gal/r49', 'Drzwi wewnętrzne drewnopodobne', 'drzwi-wewnetrzne'), ('gal/r50', 'Rolety rzymskie w kuchni', 'oslony-wewnetrzne'), ('gal/r51', 'Okna łukowe — montaż', 'okna'), ('gal/r52', 'Roleta zewnętrzna w oknie', 'rolety-zewnetrzne'), ('gal/r53', 'Drzwi zewnętrzne zielone', 'drzwi-zewnetrzne'), ('gal/r54', 'Markiza tarasowa — widok z boku', 'markizy'), ('gal/r55', 'Drzwi wewnętrzne do łazienki', 'drzwi-wewnetrzne'), ('gal/r56', 'Żaluzje w jadalni', 'oslony-wewnetrzne'), ('gal/r57', 'Duże przeszklenie w szczycie', 'okna'), ('gal/r58', 'Drzwi zewnętrzne białe', 'drzwi-zewnetrzne'), ('gal/r59', 'Drzwi wewnętrzne frezowane', 'drzwi-wewnetrzne'), ('gal/r60', 'Rolety dzień-noc w salonie', 'oslony-wewnetrzne'), ('gal/r61', 'Okna w domu parterowym — montaż', 'okna'), ('gal/r62', 'Drzwi zewnętrzne z doświetlem', 'drzwi-zewnetrzne'), ('gal/r63', 'Roleta rzymska', 'oslony-wewnetrzne'), ('gal/r64', 'Drzwi zewnętrzne złoty dąb', 'drzwi-zewnetrzne'), ('gal/r65', 'Żaluzje w kuchni', 'oslony-wewnetrzne'), ('gal/r66', 'Drzwi zewnętrzne z przeszkleniami', 'drzwi-zewnetrzne'), ('gal/r67', 'Rolety rzymskie', 'oslony-wewnetrzne'), ('gal/r68', 'Żaluzje drewnopodobne', 'oslony-wewnetrzne'), ('gal/r69', 'Żaluzje przy drzwiach tarasowych', 'oslony-wewnetrzne'), ('gal/r70', 'Roleta rzymska w oknie', 'oslony-wewnetrzne'), ('gal/r71', 'Roleta rzymska — tkanina', 'oslony-wewnetrzne'), ('gal/r72', 'Żaluzje przy drzwiach balkonowych', 'oslony-wewnetrzne'), ('gal/r73', 'Żaluzje drewniane w kuchni', 'oslony-wewnetrzne'), ('gal/r74', 'Żaluzje aluminiowe w dużym oknie', 'oslony-wewnetrzne'), ('gal/r75', 'Żaluzje drewniane nad zlewem', 'oslony-wewnetrzne'), ('gal/r76', 'Żaluzje w ciemnym kolorze', 'oslony-wewnetrzne'), ('gal/r77', 'Żaluzje drewniane w oknie tarasowym', 'oslony-wewnetrzne'), ('gal/r78', 'Żaluzje aluminiowe w jadalni', 'oslony-wewnetrzne'), ('gal/r79', 'Żaluzje aluminiowe w oknie', 'oslony-wewnetrzne'), ('gal/r80', 'Żaluzje drewniane w narożnej kuchni', 'oslony-wewnetrzne')]
 
 # ---------------------------------------------------------------- szkielet ----
 def head(title, desc, extra=""):
@@ -147,7 +147,7 @@ def nav(active=""):
         <a href="oferta.html" class="{offer_active.strip()}">Oferta</a>
         <span class="drop">{drop}</span>
       </span>
-      <a href="konfigurator.html"{cls('konfigurator')}>Konfigurator</a>
+      <a href="konfigurator.html"{cls('konfigurator')}>Konfigurator okien</a>
       <a href="dla-inwestora.html"{cls('dla-inwestora')}>Dla Inwestora</a>
       <a href="galeria.html"{cls('galeria')}>Galeria</a>
       <a href="kontakt.html"{cls('kontakt')}>Kontakt</a>
@@ -621,7 +621,7 @@ def _inv_house():
     </g>
     <!-- parapety -->
     <g class="ih-el" data-k="parapety" style="--i:6">
-      <rect x="82" y="302" width="108" height="7" rx="1.5" fill="#a9adb3"/><rect x="226" y="302" width="90" height="7" rx="1.5" fill="#a9adb3"/><rect x="195" y="186" width="70" height="6" rx="1.5" fill="#a9adb3"/>
+      <rect x="80" y="301" width="112" height="9" rx="2" fill="#8d9299"/><rect x="224" y="301" width="94" height="9" rx="2" fill="#8d9299"/><rect x="193" y="185" width="74" height="8" rx="2" fill="#8d9299"/><rect x="322" y="383" width="68" height="8" rx="2" fill="#8d9299"/>
     </g>
     <!-- rolety zewnętrzne (pancerz zjeżdża w pętli) -->
     <g class="ih-el" data-k="rolety" style="--i:3">
@@ -721,24 +721,33 @@ def build_inwestor():
       <div class="faq__a">{a}</div>
     </div>"""
 
-    body = pagehero("wiked07", "Kompleksowe rozwiązania dla Twojej inwestycji — od etapu projektu po realizację",
+    body = pagehero("inw/projekt", "Kompleksowe rozwiązania dla Twojej inwestycji — od etapu projektu po realizację",
                     "Budowa domu to wiele ważnych decyzji. Wybór okien, drzwi, bramy czy rolet wpływa nie tylko na wygląd budynku, ale również na komfort, bezpieczeństwo i koszty jego użytkowania przez wiele lat.", None)
 
     flow_items = [
-        ("veka_profil", "Bezpłatna konsultacja", "Podczas spotkania w naszej siedzibie wspólnie przeanalizujemy projekt domu, doradzimy najlepsze rozwiązania techniczne i estetyczne oraz przygotujemy wstępną, niezobowiązującą wycenę — dopasowaną do budżetu i charakteru inwestycji."),
-        ("gal/" + GAL_BY_CAP["Okna łukowe — montaż"], "Pomiar i montaż", "Po podjęciu decyzji wykonujemy dokładny pomiar na budowie, dbając o to, aby wszystkie elementy były idealnie dopasowane. Montaż wykonują doświadczeni specjaliści."),
-        ("onas/budynek", "Showroom w Wieluniu", "Zapraszamy do showroomu — obejrzysz oferowane produkty, porównasz różne rozwiązania i skorzystasz z konsultacji z naszymi doradcami."),
-        ("perg/sb400", "Ogród i taras", "Gdy dom jest gotowy, nadal jesteśmy do dyspozycji: pergole tarasowe, refleksole i sunbreakery zwiększą komfort wypoczynku na świeżym powietrzu."),
+        (["inw/konsultacja"], "Bezpłatna konsultacja",
+         "Spotykamy się w naszym salonie w Wieluniu. Analizujemy projekt architektoniczny, pytamy o Twoje oczekiwania, styl domu i budżet. Podpowiadamy, o czym warto pomyśleć już na etapie projektu — np. o wielkości przeszkleń czy miejscu na rolety i żaluzje fasadowe."),
+        (["veka_profil"], "Dobór i wycena",
+         "Dobieramy systemy profili, pakiety szybowe, okucia i kolory — przekroje profili i próbki kolorów pokazujemy na żywo. Na tej podstawie przygotowujemy przejrzystą, niezobowiązującą wycenę całego zamówienia: okien, drzwi, bramy, rolet i osłon."),
+        (["inw/pomiar"], "Pomiar na budowie",
+         "Gdy otwory są gotowe, nasz specjalista przyjeżdża na budowę i wykonuje dokładny pomiar dalmierzem laserowym. Sprawdzamy też warunki montażu, aby każdy element pasował idealnie i nie wymagał przeróbek."),
+        (["inw/produkcja"], "Produkcja",
+         "Stolarkę zamawiamy u sprawdzonych producentów (VEKA, Wikęd, DRE, Aluprof), a rolety, moskitiery i osłony wykonujemy w naszej pracowni. Termin dostawy dopasowujemy do harmonogramu Twojej budowy."),
+        (["inw/montaz"], "Montaż",
+         "Montaż wykonują nasze doświadczone ekipy — starannie, czysto i zgodnie ze sztuką. Po zakończeniu prac sprawdzamy działanie każdego elementu, regulujemy okucia i pokazujemy, jak dbać o nowe okna i drzwi."),
+        (["gal/" + GAL_BY_CAP["Pergola lamelowa w ogrodzie"], "gal/" + GAL_BY_CAP["Żaluzje drewniane w salonie"]], "Zapraszamy ponownie",
+         "Gdy dom jest już gotowy, nadal jesteśmy do Twojej dyspozycji: urządzimy wnętrza osłonami — roletami, żaluzjami i plisami — a ogród i taras pergolą, markizą, refleksolami lub sunbreakerem."),
     ]
+    def _imgs(ims, t):
+        return "".join(f'<img src="assets/img/{im}.jpg" alt="{t}" loading="lazy">' for im in ims)
     flow = "".join(f"""<article class="inv-card" style="--i:{k}">
-      <div class="inv-card__img"><img src="assets/img/{im}.jpg" alt="{t}" loading="lazy"><span class="inv-card__no">0{k + 1}</span></div>
+      <div class="inv-card__img{' inv-card__img--duo' if len(ims) > 1 else ''}">{_imgs(ims, t)}<span class="inv-card__no">0{k + 1}</span></div>
       <div class="inv-card__body"><h3>{t}</h3><p>{d}</p></div>
-    </article>""" for k, (im, t, d) in enumerate(flow_items))
+    </article>""" for k, (ims, t, d) in enumerate(flow_items))
 
     body += f"""<section class="section">
   <div class="container split split--inv">
     <div class="split__text">
-      <span class="tag">Kompleksowa obsługa inwestora</span>
       <h2 class="h-sec">Wszystko zamówisz w jednym miejscu</h2>
       <div class="prose">
         <p>Warto zgłosić się do nas już na etapie projektu domu. Im wcześniej rozpoczniemy współpracę, tym większe możliwości doboru optymalnych rozwiązań oraz lepszego zaplanowania całej inwestycji.</p>
@@ -764,19 +773,17 @@ def build_inwestor():
   <div class="container">
     <div class="section-header">
       <div class="section-header__left">
-        <span class="tag">Jak pracujemy</span>
-        <h2 class="h-sec">Od projektu po montaż — z pełnym wsparciem</h2>
+        <h2 class="h-sec">Od projektu po montaż — krok po kroku</h2>
       </div>
     </div>
-    <div class="inv-flow">{flow}</div>
+    <div class="inv-flow inv-flow--steps">{flow}</div>
   </div>
 </section>
 
-<section class="section section--soft">
+<section class="section">
   <div class="container">
     <div class="section-header">
       <div class="section-header__left">
-        <span class="tag">Strategiczne podejście</span>
         <h2 class="h-sec">Dlaczego warto planować wcześniej?</h2>
       </div>
     </div>
@@ -788,31 +795,6 @@ def build_inwestor():
   <div class="container">
     <div class="section-header">
       <div class="section-header__left">
-        <span class="tag">Ścieżka współpracy</span>
-        <h2 class="h-sec">5 kroków do idealnej stolarki</h2>
-      </div>
-    </div>
-    <div class="steps">{st}</div>
-  </div>
-</section>
-
-<section class="section section--soft">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-header__left">
-        <span class="tag">Partnerzy w budowie</span>
-        <h2 class="h-sec">Dedykowane wsparcie i korzyści</h2>
-      </div>
-    </div>
-    <div class="grid-3">{gr}</div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-header__left">
-        <span class="tag">Najczęstsze pytania</span>
         <h2 class="h-sec">Baza wiedzy inwestora (FAQ)</h2>
       </div>
     </div>
@@ -820,7 +802,7 @@ def build_inwestor():
   </div>
 </section>
 
-{cta("Umów się na konsultację", "Rozpocznij planowanie już teraz",
+{cta(None, "Rozpocznij planowanie już teraz",
      "Nie zwlekaj do ostatniej chwili. Skonsultuj z nami swój projekt, aby uniknąć błędów projektowych i zaoszczędzić na budowie.")}
 """
     write("dla-inwestora.html",
@@ -834,9 +816,9 @@ def build_galeria():
     fl = "".join(f'<button class="filter{" is-active" if c == "all" else ""}" data-filter="{c}">{t}</button>' for c, t in cats)
     items = ""
     for k, (img, cap, cat) in enumerate(GALLERY):
-        hid = " is-hidden" if k >= 16 else ""
-        style = ' style="display:none"' if k >= 16 else ""
-        items += f'<a href="assets/img/{img}.jpg" target="_blank" data-cat="{cat}" class="{hid.strip()}"{style}><img src="assets/img/{img}.jpg" alt="{cap}" loading="lazy"><figcaption>{cap}</figcaption></a>'
+        hid = " is-hidden" if k >= 24 else ""
+        style = ' style="display:none"' if k >= 24 else ""
+        items += f'<a href="assets/img/{img}.jpg" target="_blank" data-cat="{cat}" class="{hid.strip()}"{style}><img src="assets/img/{img}.jpg" alt="{cap}" loading="lazy"></a>'
 
     body = pagehero("wiked67", "Galeria realizacji",
                     "Zobacz, jak nasze produkty wyglądają w prawdziwych domach naszych klientów — od okien i drzwi po bramy, pergole i osłony.", None)
@@ -871,14 +853,17 @@ def build_kontakt():
                    ["Wycena stolarki okiennej", "Drzwi zewnętrzne", "Drzwi wewnętrzne", "Bramy garażowe",
                     "Rolety i osłony", "Pergole i markizy", "Moskitiery", "Serwis i reklamacja", "Inne pytanie"])
     body = f"""<section class="section" style="padding-bottom:0">
+  <div class="container contact-head">
+    <h1>Jesteśmy tutaj dla Ciebie</h1>
+    <p>Masz pytania dotyczące naszych produktów, montażu lub możliwości współpracy? Zadzwoń, napisz lub odwiedź nasz salon.</p>
+  </div>
   <div class="container contact-quick contact-quick--3">
     <a class="contact-quick__item" href="tel:{PHONE_TEL}"><span class="contact-quick__icon">{I['phone']}</span><span><small>Zadzwoń — komórka</small><strong>{PHONE}</strong></span></a>
     <a class="contact-quick__item" href="tel:{PHONE2_TEL}"><span class="contact-quick__icon">{I['phone']}</span><span><small>Zadzwoń — biuro</small><strong>{PHONE2}</strong></span></a>
     <a class="contact-quick__item" href="mailto:{MAIL}"><span class="contact-quick__icon">{I['mail']}</span><span><small>Napisz e-mail</small><strong>{MAIL}</strong></span></a>
   </div>
   <div class="container contact-intro">
-    <h1>Zapraszamy do kontaktu</h1>
-    <p>Odpowiemy na Twoje pytania i doradzimy najlepsze rozwiązania dla Twojej inwestycji.</p>
+    <h2>Zapraszamy do kontaktu</h2>
   </div>
 </section>
 
@@ -907,19 +892,13 @@ def build_kontakt():
         <p>ul. Michała Wołodyjowskiego 15</p>
         <p>{ADDR2}</p>
       </div>
-      <div class="info-block">
-        <h3>Szybki kontakt</h3>
-        <a class="info-line" href="tel:{PHONE_TEL}">{I['phone']} {PHONE}</a>
-        <a class="info-line" href="tel:{PHONE2_TEL}">{I['phone']} {PHONE2}</a>
-        <a class="info-line" href="mailto:{MAIL}">{I['mail']} {MAIL}</a>
-      </div>
+      <figure class="contact-photo"><img src="assets/img/onas/budynek-prosto.jpg" alt="Siedziba PROMYK w Wieluniu" loading="lazy"><figcaption>Nasza siedziba w Wieluniu</figcaption></figure>
       <div class="info-block">
         <h3>Godziny pracy salonu</h3>
         <p>Poniedziałek – Piątek: 8:00 – 17:00</p>
         <p>Sobota: 9:00 – 13:00</p>
         <p>Niedziela: Zamknięte</p>
       </div>
-      <figure class="contact-photo"><img src="assets/img/onas/budynek.jpg" alt="Siedziba PROMYK w Wieluniu" loading="lazy"><figcaption>Nasza siedziba w Wieluniu</figcaption></figure>
     </aside>
   </div>
 </section>
@@ -996,8 +975,7 @@ def build_konfigurator():
 
     body = f"""<section class="section" style="padding-block:56px 0">
   <div class="container">
-    <span class="tag">Narzędzie online</span>
-    <h1 class="h-sec" style="margin:16px 0 10px">Konfigurator okien</h1>
+    <h1 class="h-sec" style="margin:0 0 10px">Konfigurator okien</h1>
     <p class="lead lead--lg" style="max-width:760px">Złóż swoje okno na żywo — wybierz konstrukcję, sposób otwierania, kolory, klamkę i szprosy, sprawdź wygląd na różnych elewacjach, dodaj kolejne pozycje i wyślij zapytanie o wycenę.</p>
   </div>
 </section>
@@ -1043,7 +1021,6 @@ def build_konfigurator():
           <div><label for="cfg-w" data-wlabel>Szerokość</label><div class="dim-wrap"><input id="cfg-w" data-w type="number" min="50" max="200" step="5" value="160"><span class="unit">cm</span></div></div>
           <div><label for="cfg-h" data-hlabel>Wysokość</label><div class="dim-wrap"><input id="cfg-h" data-h type="number" min="50" max="280" step="5" value="150"><span class="unit">cm</span></div></div>
         </div>
-        <p class="dims-note" data-limit></p>
       </div>
       <div class="optgroup cfg-only-scene" data-group="glass">
         <h3><span class="no">4</span> Pakiet szybowy <span class="picked"></span></h3>
@@ -2173,7 +2150,7 @@ def build_okna():
   </div>
 </section>
 <section class="advantages"><div class="container advantages__inner">{adv_html(OKNA_ADV_ALUPROF)}</div></section>
-
+{_anim_section(_okno_anim(), "Jak działa okno rozwierno-uchylne?", "Jedno skrzydło, dwie funkcje: klamka ustawiona poziomo pozwala otworzyć okno na całą szerokość, a skierowana do góry — uchylić je do wietrzenia. Okucia obwiedniowe dociskają skrzydło do ramy w wielu punktach, dzięki czemu okno pozostaje szczelne i bezpieczne.")}
 <section class="section section--soft">
   <div class="container">
     <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Porównanie systemów okiennych</h2></div></div>
@@ -2883,7 +2860,7 @@ def build_rolety_zewnetrzne():
                     "Aluminiowe profile wypełnione pianką pomagają ograniczyć straty ciepła, chronią przed nadmiernym nasłonecznieniem i zapewniają mieszkańcom większy komfort na co dzień.", None)
     body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
 <section class="advantages"><div class="container advantages__inner">{adv}</div></section>
-
+{_anim_section(_roleta_anim(), "Jak działa roleta zewnętrzna?", "Pancerz z profili aluminiowych zwija się w skrzynce nad oknem i zjeżdża w prowadnicach. Opuszczona roleta zaciemnia wnętrze, chroni przed nagrzewaniem latem, ogranicza straty ciepła zimą i utrudnia włamanie. Sterujesz nią ręcznie, przyciskiem, pilotem albo z telefonu.")}
 <section class="section section--soft">
   <div class="container">
     <div class="tahoma">
@@ -3205,6 +3182,124 @@ BR_FAQ = [
 ]
 BR_INSPIRACJE = ["brama_antracyt", "bramy/insp-nice-1", "bramy/insp-avo-garaz", "bramy/insp-nice-2",
                  "bramy/insp-aluprof-dom", "realizacje/bramy", "brama_avo_dom", "bramy/segmentowe-wnetrze"]
+
+
+
+def _anim_section(svg, h2, txt, soft=False):
+    return f"""<section class="section{' section--soft' if soft else ''}">
+  <div class="container">
+    <div class="garage-anim-wrap">
+      <div>{svg}</div>
+      <div class="subrow__text prose-text">
+        <h2>{h2}</h2>
+        <p>{txt}</p>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
+def _okno_anim():
+    """Okno RU: klamka w poziomie — rozwarcie, klamka w górę — uchył (SVG/SMIL)."""
+    kt = "0;0.08;0.14;0.3;0.4;0.52;0.58;0.64;0.76;0.86;0.94;1"
+    closed = "200,60 440,60 440,300 200,300"
+    turn = "200,60 330,84 330,276 200,300"
+    tilt = "214,96 426,96 440,300 200,300"
+    pts = ";".join([closed, closed, closed, turn, turn, closed, closed, closed, tilt, tilt, closed, closed])
+    hx = ";".join(["0 0"] * 3 + ["-104 0"] * 2 + ["0 0"] * 7)
+    rot = ";".join(f"{a} 425 182" for a in [0, 0, 90, 90, 90, 90, 90, 180, 180, 180, 180, 0])
+    vis = lambda on: ";".join("1" if x else "0" for x in on)
+    return f"""<svg class="garage-anim" viewBox="0 0 640 360" role="img" aria-label="Animacja: okno rozwierno-uchylne — rozwarcie i uchył">
+  <rect x="186" y="46" width="268" height="268" rx="3" class="ow-frame"/>
+  <rect x="200" y="60" width="240" height="240" class="ow-hole"/>
+  <polygon class="ow-sash" points="{closed}"><animate attributeName="points" values="{pts}" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/></polygon>
+  <g><animateTransform attributeName="transform" type="translate" values="{hx}" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/>
+    <g><animateTransform attributeName="transform" type="rotate" values="{rot}" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/>
+      <rect x="421" y="176" width="8" height="12" rx="2" class="ow-handle"/><rect x="422" y="182" width="6" height="34" rx="3" class="ow-handle"/>
+    </g>
+  </g>
+  <rect x="176" y="314" width="288" height="10" rx="2" class="ga-wall"/>
+  <text x="480" y="120" class="ga-label">rozwarcie<animate attributeName="opacity" values="{vis([0,0,1,1,1,1,0,0,0,0,0,0])}" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/></text>
+  <text x="480" y="120" class="ga-label" opacity="0">uchył<animate attributeName="opacity" values="{vis([0,0,0,0,0,0,0,1,1,1,1,0])}" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/></text>
+  <text x="480" y="150" class="ga-label ga-label--sm">klamka poziomo:</text>
+  <text x="480" y="166" class="ga-label ga-label--sm">rozwarcie</text>
+  <text x="480" y="190" class="ga-label ga-label--sm">klamka w górę:</text>
+  <text x="480" y="206" class="ga-label ga-label--sm">uchył</text>
+  <text x="40" y="345" class="ga-label">widok od wewnątrz</text>
+</svg>"""
+
+
+def _roleta_anim():
+    """Roleta zewnętrzna: pancerz zjeżdża w prowadnicach, w pokoju robi się wieczór (SVG/SMIL)."""
+    kt = "0;0.15;0.45;0.65;0.95;1"
+    ys = "-236;-236;0;0;-236;-236"
+    return f"""<svg class="garage-anim" viewBox="0 0 640 360" role="img" aria-label="Animacja: roleta zewnętrzna opuszcza się i podnosi">
+  <defs>
+    <pattern id="rlSlat" width="20" height="13" patternUnits="userSpaceOnUse"><rect width="20" height="13" fill="#8d949b"/><rect y="10.5" width="20" height="2.5" fill="#5e656c"/></pattern>
+    <clipPath id="rlClip"><rect x="206" y="66" width="228" height="236"/></clipPath>
+  </defs>
+  <rect x="150" y="20" width="340" height="310" class="rl-wall"/>
+  <rect x="206" y="66" width="228" height="236" class="rl-glass"><animate attributeName="fill" values="#cfe3f0;#cfe3f0;#f3c56b;#f3c56b;#cfe3f0;#cfe3f0" keyTimes="{kt}" dur="10s" repeatCount="indefinite"/></rect>
+  <path d="M320 66v236M206 184h228" stroke="#3a3f45" stroke-width="6"/>
+  <g clip-path="url(#rlClip)"><rect x="206" y="66" width="228" height="236" fill="url(#rlSlat)"><animateTransform attributeName="transform" type="translate" values="0 -236;0 -236;0 0;0 0;0 -236;0 -236" keyTimes="{kt}" dur="10s" repeatCount="indefinite"/></rect>
+    <rect x="206" y="296" width="228" height="6" fill="#3a3f45"><animateTransform attributeName="transform" type="translate" values="0 -236;0 -236;0 0;0 0;0 -236;0 -236" keyTimes="{kt}" dur="10s" repeatCount="indefinite"/></rect></g>
+  <rect x="196" y="40" width="248" height="28" rx="3" class="ga-motor"/>
+  <rect x="196" y="66" width="10" height="240" class="rl-guide"/><rect x="434" y="66" width="10" height="240" class="rl-guide"/>
+  <rect x="190" y="304" width="260" height="8" rx="2" class="ga-wall"/>
+  <circle cx="560" cy="60" r="24" class="sb-sun"><animate attributeName="opacity" values="1;1;.15;.15;1;1" keyTimes="{kt}" dur="10s" repeatCount="indefinite"/></circle>
+  <text x="456" y="58" class="ga-label ga-label--sm">skrzynka z napędem</text>
+  <text x="456" y="200" class="ga-label ga-label--sm">prowadnice</text>
+  <text x="456" y="220" class="ga-label ga-label--sm">pancerz aluminiowy</text>
+  <text x="40" y="345" class="ga-label">dzień → wieczór: pełne zaciemnienie i prywatność</text>
+</svg>"""
+
+
+def _markiza_anim():
+    """Markiza tarasowa w przekroju: ramiona łamane wysuwają tkaninę, na tarasie rośnie cień (SVG/SMIL)."""
+    kt = "0;0.12;0.42;0.66;0.94;1"
+    arm = ";".join(["124,108 140,104 156,100"] * 2 + ["124,108 330,150 520,150"] * 2 + ["124,108 140,104 156,100"] * 2)
+    fab = ";".join(["124,92 156,100"] * 2 + ["124,92 520,150"] * 2 + ["124,92 156,100"] * 2)
+    return f"""<svg class="garage-anim" viewBox="0 0 640 360" role="img" aria-label="Animacja: markiza tarasowa rozwija się nad tarasem">
+  <rect x="96" y="30" width="28" height="290" class="ga-wall"/>
+  <line x1="40" y1="320" x2="620" y2="320" class="ga-ground"/>
+  <rect x="150" y="314" width="0" height="10" rx="4" class="mk-shadow"><animate attributeName="width" values="0;0;380;380;0;0" keyTimes="{kt}" dur="11s" repeatCount="indefinite"/></rect>
+  <polyline class="mk-fabric" points="124,92 156,100"><animate attributeName="points" values="{fab}" keyTimes="{kt}" dur="11s" repeatCount="indefinite"/></polyline>
+  <polyline class="mk-arm" points="124,108 140,104 156,100"><animate attributeName="points" values="{arm}" keyTimes="{kt}" dur="11s" repeatCount="indefinite"/></polyline>
+  <rect x="120" y="82" width="34" height="22" rx="5" class="ga-motor"/>
+  <g class="mk-chair"><path d="M392 320v-46h44v46M380 280h68" fill="none" stroke="#6b737b" stroke-width="5" stroke-linecap="round"/><path d="M470 320v-30h28v30M460 290h50" fill="none" stroke="#6b737b" stroke-width="5" stroke-linecap="round"/></g>
+  <circle cx="575" cy="58" r="24" class="sb-sun"/>
+  <path class="sb-ray" d="M556 76 476 156M548 66 420 196"><animate attributeName="opacity" values=".8;.8;.15;.15;.8;.8" keyTimes="{kt}" dur="11s" repeatCount="indefinite"/></path>
+  <text x="160" y="76" class="ga-label ga-label--sm">kaseta</text>
+  <text x="300" y="196" class="ga-label ga-label--sm">ramiona łamane</text>
+  <text x="40" y="345" class="ga-label">cień na tarasie — dokładnie tam, gdzie go potrzebujesz</text>
+</svg>"""
+
+
+def _plisa_anim():
+    """Moskitiera plisowana: siatka rozkłada się w otworze HST, owady zostają na zewnątrz, powietrze przepływa (SVG/SMIL)."""
+    kt = "0;0.12;0.42;0.66;0.94;1"
+    flies = ""
+    for i, (x, y, d) in enumerate([(70, 120, 0), (110, 200, 1.3), (60, 260, 2.1), (130, 90, .7)]):
+        flies += (f'<circle r="3.5" class="ms-fly"><animateMotion dur="{3.2 + i * .6:.1f}s" begin="{d}s" repeatCount="indefinite" '
+                  f'path="M{x},{y} q50,-30 80,10 q-30,40 -80,-10"/></circle>')
+    return f"""<svg class="garage-anim" viewBox="0 0 640 360" role="img" aria-label="Animacja: moskitiera plisowana zamyka otwór drzwi tarasowych">
+  <defs>
+    <pattern id="msMesh" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0h6M0 0v6" stroke="#5d646b" stroke-width=".7"/></pattern>
+    <pattern id="msPleat" width="14" height="10" patternUnits="userSpaceOnUse"><path d="M0 0h7M7 0v10" stroke="#5d646b" stroke-width="1"/></pattern>
+  </defs>
+  <rect x="190" y="40" width="300" height="280" class="rl-glass"/>
+  <rect x="180" y="30" width="320" height="10" class="ga-motor"/><rect x="180" y="320" width="320" height="6" class="ga-motor"/>
+  <rect x="180" y="30" width="10" height="296" class="ga-motor"/><rect x="490" y="30" width="10" height="296" class="ga-motor"/>
+  <rect x="190" y="40" width="8" height="280" fill="url(#msMesh)" opacity=".9"><animate attributeName="width" values="8;8;292;292;8;8" keyTimes="{kt}" dur="10s" repeatCount="indefinite"/></rect>
+  <rect x="190" y="40" width="8" height="280" fill="url(#msPleat)" opacity=".35"><animate attributeName="width" values="8;8;292;292;8;8" keyTimes="{kt}" dur="10s" repeatCount="indefinite"/></rect>
+  <rect x="194" y="40" width="8" height="280" rx="2" class="ow-handle"><animate attributeName="x" values="194;194;478;478;194;194" keyTimes="{kt}" dur="10s" repeatCount="indefinite"/></rect>
+  <path class="ms-air" d="M60 170H600M60 230H600"/>
+  {flies}
+  <text x="40" y="30" class="ga-label ga-label--sm">na zewnątrz</text>
+  <text x="520" y="30" class="ga-label ga-label--sm">wnętrze</text>
+  <text x="40" y="345" class="ga-label">siatka zatrzymuje owady, a powietrze swobodnie przepływa</text>
+</svg>"""
 
 
 def _bramy_anim():
@@ -3537,7 +3632,7 @@ def build_markizy():
                     "Komfortowy cień i skuteczna ochrona przed słońcem, dzięki którym możesz cieszyć się wypoczynkiem na tarasie lub balkonie nawet w upalne dni.", None)
     body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
 <section class="advantages"><div class="container advantages__inner">{adv}</div></section>
-
+{_anim_section(_markiza_anim(), "Jak działa markiza tarasowa?", "Tkanina nawinięta jest na rurę w kasecie przy ścianie. Ramiona łamane wysuwają ją nad taras i utrzymują w napięciu, a Ty decydujesz, jak duży ma być cień. Z czujnikiem wiatru markiza zwija się sama, gdy pogoda się zmienia.")}
 <section class="section section--soft">
   <div class="container">
     <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Warto wiedzieć przed zakupem</h2></div></div>
@@ -4188,7 +4283,7 @@ def build_moskitiery():
     body = pagehero(meta["hero"], meta["h1"],
                     "Moskitiery naszej produkcji — na wymiar do każdego typu okna i drzwi. Ciesz się świeżym powietrzem bez nieproszonych gości.", None)
     body += f"""<section class="section section--tight-bottom"><div class="container">{rows}</div></section>
-<section class="section">
+{_anim_section(_plisa_anim(), "Jak działa moskitiera plisowana?", "Siatka złożona w harmonijkę rozkłada się płynnie w otworze — wystarczy przesunąć listwę z uchwytem. Moskitierę można zatrzymać w dowolnym miejscu, a po złożeniu zajmuje tylko kilka centymetrów. Niski próg nie przeszkadza w przechodzeniu na taras.", True)}<section class="section">
   <div class="container">
     <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Kolory profili</h2></div></div>
     {kolory}

@@ -24,10 +24,10 @@
   /* limity wymiarów wg PROMYK: jednoskrzydłowe max 150×150 cm powierzchni (ale np. 100×170 też),
      dwuskrzydłowe max 200×280 cm */
   var TYPES = {
-    jedno:  { label: 'Jednoskrzydłowe', w: 100, h: 140, maxW: 150, maxH: 170, maxArea: 22500 },
-    dwa:    { label: 'Dwuskrzydłowe',   w: 160, h: 150, maxW: 200, maxH: 280 },
+    jedno:  { label: 'Jednoskrzydłowe', w: 100, h: 140, maxW: 150, maxH: 250 },
+    dwa:    { label: 'Dwuskrzydłowe',   w: 160, h: 150, maxW: 300, maxH: 250 },
     balkon: { label: 'Drzwi balkonowe', w: 90,  h: 220, maxW: 120, maxH: 250 },
-    hst:    { label: 'Przesuwne HST',   w: 300, h: 230, maxW: 400, maxH: 280 }
+    hst:    { label: 'Przesuwne HST',   w: 300, h: 230, maxW: 500, maxH: 250 }
   };
   /* sposoby otwierania zależne od typu konstrukcji (kolejność = kolejność kafelków) */
   var OPEN = {
@@ -300,7 +300,7 @@
     var T = TIMES[state.time];
 
     var doorLike = (state.type === 'balkon' || state.type === 'hst' || state.h > 200);
-    var maxW = VB_W * (state.type === 'hst' ? 0.62 : 0.5);
+    var maxW = VB_W * (state.w >= 250 ? 0.86 : state.w > 160 ? 0.66 : 0.5); // szerokie okna/HST nie robią się niskie
     var maxH = VB_H * (doorLike ? (interior ? 0.65 : 0.68) : (interior ? 0.44 : 0.58));
     var pxPerCm = Math.min(maxW / state.w, maxH / state.h);
     var W = state.w * pxPerCm, H = state.h * pxPerCm;
