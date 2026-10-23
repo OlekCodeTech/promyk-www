@@ -1353,3 +1353,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 .garage-anim .ms-fly { fill: #2f3237; }
 .garage-anim .ms-air { fill: none; stroke: #8fb3cc; stroke-width: 2.5; stroke-dasharray: 10 14; animation: msAir 1.6s linear infinite; }
 @keyframes msAir { to { stroke-dashoffset: -48; } }
+/* e-mail w jednej linii, wizualizacja budynku na białym tle */
+.contact-quick--3 .contact-quick__item { padding: 22px 22px; gap: 14px; }
+.contact-quick--3 .contact-quick__item strong { font-size: clamp(16px, 1.45vw, 21px); white-space: nowrap; word-break: normal; }
+img[src$="onas/promyk-firma.jpg"] { border-radius: 0 !important; box-shadow: none !important; object-fit: contain !important; }

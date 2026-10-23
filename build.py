@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "67"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "68"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -414,7 +414,7 @@ def build_onas():
         <p>Kolejne lata przyniosły dynamiczny rozwój. Firma przeniosła się do siedziby przy domu, gdzie rozszerzyliśmy działalność o produkcję rolet zewnętrznych. Rosnące grono zadowolonych klientów oraz coraz szersza oferta sprawiły, że powstał samodzielny budynek, w którym oprócz osłon okiennych zaczęliśmy oferować również okna, drzwi, bramy garażowe oraz nowoczesne zewnętrzne systemy przeciwsłoneczne.</p>
       </div>
     </div>
-    <figure class="split__media about__fig"><img class="about__img about__img--full" src="assets/img/onas/budynek-pion.jpg" alt="Siedziba PROMYK w Wieluniu"><figcaption>Nasza obecna siedziba w Wieluniu</figcaption></figure>
+    <figure class="split__media about__fig"><img class="about__img about__img--full" src="assets/img/onas/promyk-firma.jpg" alt="Siedziba PROMYK w Wieluniu"><figcaption>Nasza obecna siedziba w Wieluniu</figcaption></figure>
   </div>
 </section>
 
@@ -892,7 +892,7 @@ def build_kontakt():
         <p>ul. Michała Wołodyjowskiego 15</p>
         <p>{ADDR2}</p>
       </div>
-      <figure class="contact-photo"><img src="assets/img/onas/budynek-prosto.jpg" alt="Siedziba PROMYK w Wieluniu" loading="lazy"><figcaption>Nasza siedziba w Wieluniu</figcaption></figure>
+      <figure class="contact-photo"><img src="assets/img/onas/promyk-firma.jpg" alt="Siedziba PROMYK w Wieluniu" loading="lazy"><figcaption>Nasza siedziba w Wieluniu</figcaption></figure>
       <div class="info-block">
         <h3>Godziny pracy salonu</h3>
         <p>Poniedziałek – Piątek: 8:00 – 17:00</p>
