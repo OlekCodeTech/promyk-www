@@ -29,7 +29,35 @@
     balkon: { label: 'Drzwi balkonowe', w: 90,  h: 220, maxW: 120, maxH: 250 },
     hst:    { label: 'Przesuwne HST',   w: 300, h: 230, maxW: 400, maxH: 280 }
   };
-  var OPEN = { RU: 'Rozwierno-uchylne (RU)', R: 'Rozwierne (R)', U: 'Uchylne (U)', FIX: 'Stałe (FIX)' };
+  /* sposoby otwierania zależne od typu konstrukcji (kolejność = kolejność kafelków) */
+  var OPEN = {
+    'RU': 'Rozwierno-uchylne (RU)', 'R': 'Rozwierne (R)', 'U': 'Uchylne (U)', 'FIX': 'Stałe (FIX)',
+    'RU/RU': 'RU + RU', 'RU+FIX': 'RU + FIX', 'FIX/FIX': 'FIX + FIX', 'HS': 'Skrzydło przesuwne + FIX'
+  };
+  var OPEN_BY_TYPE = { jedno: ['RU', 'R', 'U', 'FIX'], dwa: ['RU/RU', 'RU+FIX', 'FIX/FIX'], hst: ['HS'] };
+  function pane(x, y, w, h, kind) {
+    var r = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="none" stroke="currentColor" stroke-width="2.2"/>';
+    var d = 'stroke="currentColor" stroke-width="1.3" fill="none" stroke-dasharray="3 2"';
+    if (kind === 'RU' || kind === 'R') r += '<path d="M' + (x + w) + ' ' + y + ' L' + x + ' ' + (y + h / 2) + ' L' + (x + w) + ' ' + (y + h) + '" ' + d + '/>';
+    if (kind === 'RU' || kind === 'U') r += '<path d="M' + x + ' ' + (y + h) + ' L' + (x + w / 2) + ' ' + y + ' L' + (x + w) + ' ' + (y + h) + '" ' + d + '/>';
+    if (kind === 'FIX') r += '<path d="M' + (x + w / 2 - 5) + ' ' + (y + h / 2) + 'h10M' + (x + w / 2) + ' ' + (y + h / 2 - 5) + 'v10" stroke="currentColor" stroke-width="2"/>';
+    return r;
+  }
+  function openIcon(k) {
+    var svg = '<svg viewBox="0 0 64 44">';
+    if (k === 'RU/RU') svg += pane(6, 4, 26, 36, 'RU') + pane(32, 4, 26, 36, 'RU');
+    else if (k === 'RU+FIX') svg += pane(6, 4, 26, 36, 'RU') + pane(32, 4, 26, 36, 'FIX');
+    else if (k === 'FIX/FIX') svg += pane(6, 4, 26, 36, 'FIX') + pane(32, 4, 26, 36, 'FIX');
+    else if (k === 'HS') svg += pane(4, 8, 28, 28, 'NONE') + pane(32, 8, 28, 28, 'NONE') + '<path d="M10 22h14m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>';
+    else svg += pane(14, 4, 36, 36, k);
+    return svg + '</svg>';
+  }
+  /* kolory standardowe PROMYK (zaznaczone w palecie i dostępne od wewnątrz) */
+  var STD = ['62_weiss', '34_winchester', '31_golden_oak', '29_nussbaum', '25_mooreiche', '43_coriander_oak_supermatt',
+             '04_vekaspectral_graphitschwarz_ultramatt', '02_anthrazitgrau', '03_anthrazitgrau_seidenglatt'];
+  var STD_NAME = { '62_weiss': 'biały', '34_winchester': 'winchester', '31_golden_oak': 'złoty dąb', '29_nussbaum': 'orzech',
+    '25_mooreiche': 'dąb bagienny', '43_coriander_oak_supermatt': 'dąb coriander', '04_vekaspectral_graphitschwarz_ultramatt': 'czarny',
+    '02_anthrazitgrau': 'ciemnoszary', '03_anthrazitgrau_seidenglatt': 'ciemnoszary jedwab' };
   var SCENES = {
     plaster:    { label: 'Tynk biały',  wall: '#e9e5dc', joint: null },
     grey:       { label: 'Tynk szary',  wall: '#b6b9bc', joint: null },
@@ -63,7 +91,7 @@
   }
 
   var state = {
-    type: 'dwa', out: '02_anthrazitgrau', inn: 'Biel', handle: 'Czarna', open: 'RU', glass: '3',
+    type: 'dwa', out: '02_anthrazitgrau', inn: '62_weiss', handle: 'Czarna', open: 'RU/RU', glass: '3',
     bars: 'Brak', scene: 'plaster', view: 'out', time: 'day', mode: 'scene', w: 160, h: 150, qty: 1
   };
   var positions = [];
@@ -83,14 +111,21 @@
     '08_vekaspectral_weiss_ultramatt':1, '09_vekaspectral_reinweiss_ultramatt':1 };
   var GROUP_LABEL = { uni: 'Paleta kolorów', dekor: 'Dekory drewnopodobne i metalopodobne', spectral: 'VEKA Spectral (ultramat)' };
 
-  /* zbuduj karuzele próbek (jak w narzędziu VEKA) */
+  function decorName(id) { return STD_NAME[id] || (DECOR[id] ? DECOR[id].name : id); }
+  function chip(d, active) {
+    return '<button type="button" class="veka-chip' + (active ? ' is-active' : '') + '" data-value="' + d.id + '" title="' + decorName(d.id) + '">' +
+      '<img src="assets/img/veka/sw/' + d.id + '.jpg" alt="' + decorName(d.id) + '" loading="lazy"><span>' + decorName(d.id) + '</span></button>';
+  }
+  /* zbuduj karuzele próbek (jak w narzędziu VEKA); standardowe osobno, na górze */
   root.querySelectorAll('[data-vekagroup]').forEach(function (row) {
     var grp = row.getAttribute('data-vekagroup');
-    row.innerHTML = DECORS.filter(function (d) { return d.group === grp; }).map(function (d) {
-      return '<button type="button" class="veka-chip" data-value="' + d.id + '" title="' + d.name + '">' +
-        '<img src="assets/img/veka/sw/' + d.id + '.jpg" alt="' + d.name + '" loading="lazy"><span>' + d.name + '</span></button>';
-    }).join('');
+    var list = grp === 'std' ? STD.map(function (id) { return DECOR[id]; }).filter(Boolean)
+      : DECORS.filter(function (d) { return d.group === grp && STD.indexOf(d.id) < 0; });
+    row.innerHTML = list.map(function (d) { return chip(d, d.id === state.out); }).join('');
   });
+  var inRow = root.querySelector('[data-instd]');
+  if (inRow) inRow.innerHTML = STD.map(function (id) { return DECOR[id]; }).filter(Boolean)
+    .map(function (d) { return chip(d, d.id === state.inn); }).join('');
 
   function renderPhoto() {
     var d = DECOR[state.out];
@@ -201,8 +236,9 @@
   }
 
   /* ------------------------------------------------------- skrzydło ---- */
-  function sash(x, y, w, h, ff, sashW, interior, withHandle, handleSide, barsKind) {
+  function sash(x, y, w, h, ff, sashW, interior, mode, handleSide, barsKind) {
     var s = '';
+    if (mode === 'FIX') sashW = sashW * 0.35;
     s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + ff.fill + '" stroke="' + ff.edge + '" stroke-width="1.2"/>';
     s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="2.4" fill="#fff" opacity=".20"/>';
     s += '<rect x="' + x + '" y="' + y + '" width="2.4" height="' + h + '" fill="#fff" opacity=".14"/>';
@@ -213,8 +249,8 @@
     s += glass(gx, gy, gw, gh, interior);
     s += '<rect x="' + gx + '" y="' + gy + '" width="' + gw + '" height="' + gh + '" fill="none" stroke="rgba(0,0,0,.38)" stroke-width="1.1"/>';
     if (barsKind && barsKind !== 'Brak') s += barsRects(gx, gy, gw, gh, barsKind, 5, ff.fill);
-    if (withHandle && interior && state.open !== 'FIX') {
-      if (state.open === 'U' && state.type !== 'hst') {
+    if (interior && mode !== 'FIX' && mode !== 'NONE') {
+      if (mode === 'U') {
         s += '<g transform="rotate(90 ' + (x + w / 2) + ' ' + (y + sashW / 2) + ')">' + handleSvg(x + w / 2, y + sashW / 2, HANDLES[state.handle]) + '</g>';
       } else {
         var hx = handleSide === 'left' ? x + sashW / 2 : x + w - sashW / 2;
@@ -226,7 +262,7 @@
 
   /* ------------------------------------------------------- samo okno ---- */
   function windowSvg(W, H, interior) {
-    var spec = interior ? COLORS[state.inn] : (DECOR[state.out] || COLORS['Antracyt']);
+    var spec = interior ? (DECOR[state.inn] || COLORS['Biel']) : (DECOR[state.out] || COLORS['Antracyt']);
     var ff = frameFill(spec, 'wf');
     var FR = Math.max(12, Math.min(20, W * 0.045));
     var SW = FR * 0.9;
@@ -238,18 +274,19 @@
     winGlass = { x: ix, y: iy, w: iw, h: ih };
 
     if (state.type === 'jedno' || state.type === 'balkon') {
-      svg += sash(ix, iy, iw, ih, ff, SW, interior, true, 'right', state.bars);
+      svg += sash(ix, iy, iw, ih, ff, SW, interior, state.open, 'right', state.bars);
     } else if (state.type === 'dwa') {
       var half = iw / 2;
-      svg += sash(ix, iy, half - 1, ih, ff, SW, interior, true, 'right', state.bars);
-      svg += sash(ix + half + 1, iy, half - 1, ih, ff, SW, interior, true, 'left', state.bars);
+      var mL = state.open === 'FIX/FIX' ? 'FIX' : 'RU', mR = state.open === 'RU/RU' ? 'RU' : 'FIX';
+      svg += sash(ix, iy, half - 1, ih, ff, SW, interior, mL, 'right', state.bars);
+      svg += sash(ix + half + 1, iy, half - 1, ih, ff, SW, interior, mR, 'left', state.bars);
       svg += '<rect x="' + (ix + half - 2.5) + '" y="' + iy + '" width="5" height="' + ih + '" fill="' + ff.edge + '" opacity=".55"/>';
     } else if (state.type === 'hst') {
       var fixed = iw * 0.5, slide = iw * 0.5;
-      svg += sash(ix, iy, fixed, ih, ff, SW * 0.66, interior, false, null, state.bars);
+      svg += sash(ix, iy, fixed, ih, ff, SW * 0.66, interior, 'NONE', null, state.bars);
       svg += '<g transform="translate(0,-3)">' +
         '<rect x="' + (ix + fixed - 8) + '" y="' + (iy + 2) + '" width="' + (slide + 8) + '" height="' + (ih + 4) + '" fill="rgba(0,0,0,.24)" rx="2"/>' +
-        sash(ix + fixed - 4, iy - 2, slide + 4, ih + 6, ff, SW * 0.85, interior, true, 'left', state.bars) +
+        sash(ix + fixed - 4, iy - 2, slide + 4, ih + 6, ff, SW * 0.85, interior, 'HS', 'left', state.bars) +
         '</g>';
     }
     return svg;
@@ -264,7 +301,7 @@
 
     var doorLike = (state.type === 'balkon' || state.type === 'hst' || state.h > 200);
     var maxW = VB_W * (state.type === 'hst' ? 0.62 : 0.5);
-    var maxH = VB_H * ((interior && !doorLike) ? 0.44 : 0.58);
+    var maxH = VB_H * (doorLike ? (interior ? 0.65 : 0.68) : (interior ? 0.44 : 0.58));
     var pxPerCm = Math.min(maxW / state.w, maxH / state.h);
     var W = state.w * pxPerCm, H = state.h * pxPerCm;
     var groundY = VB_H * 0.80;
@@ -429,7 +466,7 @@
   /* ------------------------------------------------------ render ---- */
   function summaryText() {
     return TYPES[state.type].label + ' ' + state.w + '×' + state.h + ' cm, ' + OPEN[state.open] + ', ' + state.glass + '-szybowe | Zewn.: ' +
-      (DECOR[state.out] ? DECOR[state.out].name : state.out) + ' | Wewn.: ' + state.inn + ' | Klamka: ' + state.handle + ' | Szprosy: ' + state.bars;
+      decorName(state.out) + ' | Wewn.: ' + decorName(state.inn) + ' | Klamka: ' + state.handle + ' | Szprosy: ' + state.bars;
   }
   function requestText() {
     var list = positions.length ? positions : [{ text: summaryText(), qty: state.qty }];
@@ -483,8 +520,8 @@
         '<dt>Wymiary</dt><dd>' + state.w + ' × ' + state.h + ' cm (' + e.area.toFixed(2).replace('.', ',') + ' m²)</dd>' +
         '<dt>Otwieranie</dt><dd>' + OPEN[state.open] + '</dd>' +
         '<dt>Pakiet szybowy</dt><dd>' + state.glass + '-szybowy</dd>' +
-        '<dt>Kolor zewnętrzny</dt><dd>' + (DECOR[state.out] ? DECOR[state.out].name : state.out) + '</dd>' +
-        '<dt>Kolor wewnętrzny</dt><dd>' + state.inn + '</dd>' +
+        '<dt>Kolor zewnętrzny</dt><dd>' + decorName(state.out) + '</dd>' +
+        '<dt>Kolor wewnętrzny</dt><dd>' + decorName(state.inn) + '</dd>' +
         '<dt>Klamka</dt><dd>' + state.handle + '</dd>' +
         '<dt>Szprosy</dt><dd>' + state.bars + '</dd>';
     }
@@ -493,7 +530,7 @@
       var key = g.getAttribute('data-group');
       var lbl = g.querySelector('.picked');
       if (!lbl) return;
-      var map = { type: TYPES[state.type].label, out: (DECOR[state.out] ? DECOR[state.out].name : state.out), in: state.inn, handle: state.handle, bars: state.bars, open: OPEN[state.open], glass: state.glass + '-szybowy' };
+      var map = { type: TYPES[state.type].label, out: decorName(state.out) + (STD.indexOf(state.out) >= 0 ? ' · standard' : ''), in: decorName(state.inn), handle: state.handle, bars: state.bars, open: OPEN[state.open], glass: state.glass + '-szybowy' };
       if (map[key]) lbl.textContent = map[key];
     });
 
@@ -501,6 +538,23 @@
   }
 
   /* ------------------------------------------------------ zdarzenia ---- */
+  function buildOpen() {
+    var box = root.querySelector('[data-open-options]');
+    if (!box) return;
+    box.className = 'optcards optcards--' + OPEN_BY_TYPE[state.type].length;
+    box.innerHTML = OPEN_BY_TYPE[state.type].map(function (k) {
+      return '<button type="button" class="optcard' + (k === state.open ? ' is-active' : '') + '" data-open="' + k + '">' + openIcon(k) + OPEN[k] + '</button>';
+    }).join('');
+    box.querySelectorAll('[data-open]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        box.querySelectorAll('[data-open]').forEach(function (o) { o.classList.remove('is-active'); });
+        b.classList.add('is-active');
+        state.open = b.getAttribute('data-open');
+        render();
+      });
+    });
+  }
+  buildOpen();
   root.querySelectorAll('[data-group]').forEach(function (group) {
     var key = group.getAttribute('data-group');
     group.querySelectorAll('[data-value]').forEach(function (opt) {
@@ -511,11 +565,13 @@
         if (key === 'type') {
           state.type = v;
           state.w = TYPES[v].w; state.h = TYPES[v].h;
+          state.open = OPEN_BY_TYPE[v][0];
+          buildOpen();
           var wi = root.querySelector('[data-w]'), hi = root.querySelector('[data-h]');
           if (wi) wi.value = state.w;
           if (hi) hi.value = state.h;
         }
-        else if (key === 'open') state.open = v;
+        else if (key === 'open') return;
         else if (key === 'glass') state.glass = v;
         else if (key === 'out') state.out = v;
         else if (key === 'in') state.inn = v;

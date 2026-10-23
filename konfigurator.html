@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=62">
+<link rel="stylesheet" href="assets/css/style.css?v=65">
 </head>
 <body>
 <div class="topbar">
@@ -86,19 +86,19 @@
     <div class="cfg-panel">
       <div class="optgroup cfg-only-scene" data-group="type">
         <h3><span class="no">1</span> Typ konstrukcji <span class="picked"></span></h3>
-        <div class="optcards"><button type="button" class="optcard" data-value="jedno"><svg viewBox="0 0 44 44"><rect x="4" y="4" width="36" height="36" fill="none" stroke="currentColor" stroke-width="3"/><rect x="10" y="10" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"/></svg>Jednoskrzydłowe</button><button type="button" class="optcard is-active" data-value="dwa"><svg viewBox="0 0 44 44"><rect x="2" y="6" width="40" height="32" fill="none" stroke="currentColor" stroke-width="3"/><path d="M22 6v32" stroke="currentColor" stroke-width="2"/><rect x="6" y="10" width="12" height="24" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="26" y="10" width="12" height="24" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Dwuskrzydłowe</button><button type="button" class="optcard" data-value="balkon"><svg viewBox="0 0 44 44"><rect x="12" y="2" width="20" height="40" fill="none" stroke="currentColor" stroke-width="3"/><rect x="17" y="7" width="10" height="30" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Drzwi balkonowe</button><button type="button" class="optcard" data-value="hst"><svg viewBox="0 0 44 44"><rect x="2" y="8" width="40" height="28" fill="none" stroke="currentColor" stroke-width="3"/><rect x="20" y="11" width="19" height="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 22h7m0 0-3-3m3 3-3 3" stroke="currentColor" stroke-width="2" fill="none"/></svg>Przesuwne HST</button></div>
+        <div class="optcards optcards--3"><button type="button" class="optcard" data-value="jedno"><svg viewBox="0 0 44 44"><rect x="4" y="4" width="36" height="36" fill="none" stroke="currentColor" stroke-width="3"/><rect x="10" y="10" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"/></svg>Jednoskrzydłowe</button><button type="button" class="optcard is-active" data-value="dwa"><svg viewBox="0 0 44 44"><rect x="2" y="6" width="40" height="32" fill="none" stroke="currentColor" stroke-width="3"/><path d="M22 6v32" stroke="currentColor" stroke-width="2"/><rect x="6" y="10" width="12" height="24" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="26" y="10" width="12" height="24" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Dwuskrzydłowe</button><button type="button" class="optcard" data-value="hst"><svg viewBox="0 0 44 44"><rect x="2" y="8" width="40" height="28" fill="none" stroke="currentColor" stroke-width="3"/><rect x="20" y="11" width="19" height="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 22h7m0 0-3-3m3 3-3 3" stroke="currentColor" stroke-width="2" fill="none"/></svg>Przesuwne HST</button></div>
+      </div>
+      <div class="optgroup cfg-only-scene" data-group="open">
+        <h3><span class="no">2</span> Sposób otwierania <span class="picked"></span></h3>
+        <div class="optcards" data-open-options></div>
       </div>
       <div class="optgroup cfg-only-scene">
-        <h3><span class="no">2</span> Wymiary okna</h3>
+        <h3><span class="no">3</span> Wymiary okna</h3>
         <div class="dims">
           <div><label for="cfg-w" data-wlabel>Szerokość</label><div class="dim-wrap"><input id="cfg-w" data-w type="number" min="50" max="200" step="5" value="160"><span class="unit">cm</span></div></div>
           <div><label for="cfg-h" data-hlabel>Wysokość</label><div class="dim-wrap"><input id="cfg-h" data-h type="number" min="50" max="280" step="5" value="150"><span class="unit">cm</span></div></div>
         </div>
         <p class="dims-note" data-limit></p>
-      </div>
-      <div class="optgroup cfg-only-scene" data-group="open">
-        <h3><span class="no">3</span> Sposób otwierania <span class="picked"></span></h3>
-        <div class="optcards optcards--4"><button type="button" class="optcard is-active" data-value="RU"><svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M38 4 6 22l32 18M6 40l16-36 16 36" stroke="currentColor" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/></svg>Rozwierno-uchylne</button><button type="button" class="optcard" data-value="R"><svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M38 4 6 22l32 18" stroke="currentColor" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/></svg>Rozwierne</button><button type="button" class="optcard" data-value="U"><svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M6 40l16-36 16 36" stroke="currentColor" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/></svg>Uchylne</button><button type="button" class="optcard" data-value="FIX"><svg viewBox="0 0 44 44"><rect x="6" y="4" width="32" height="36" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M16 22h12M22 16v12" stroke="currentColor" stroke-width="2"/></svg>Stałe (FIX)</button></div>
       </div>
       <div class="optgroup cfg-only-scene" data-group="glass">
         <h3><span class="no">4</span> Pakiet szybowy <span class="picked"></span></h3>
@@ -106,7 +106,9 @@
       </div>
       <div class="optgroup" data-group="out">
         <h3><span class="no">5</span> Kolor od zewnątrz (dekory VEKA) <span class="picked"></span></h3>
-        <div class="veka-cat">Paleta kolorów</div>
+        <div class="veka-cat veka-cat--std">★ Kolory standardowe</div>
+        <div class="veka-row veka-row--std" data-vekagroup="std"></div>
+        <div class="veka-cat">Paleta kolorów (na zamówienie)</div>
         <div class="veka-row" data-vekagroup="uni"></div>
         <div class="veka-cat">Dekory drewnopodobne i metalopodobne</div>
         <div class="veka-row" data-vekagroup="dekor"></div>
@@ -115,7 +117,7 @@
       </div>
       <div class="optgroup cfg-only-scene" data-group="in">
         <h3><span class="no">6</span> Kolor od wewnątrz <span class="picked"></span></h3>
-        <div class="swatches"><button type="button" class="swatch is-active" data-value="Biel"><i style="background:#f5f5f2"></i>Biel</button><button type="button" class="swatch" data-value="Antracyt"><i style="background:#3c3f43"></i>Antracyt</button><button type="button" class="swatch" data-value="Czerń"><i style="background:#17181a"></i>Czerń</button><button type="button" class="swatch" data-value="Brąz"><i style="background:#5b3a24"></i>Brąz</button><button type="button" class="swatch" data-value="Złoty dąb"><i style="background:linear-gradient(160deg,#b97c36,#8a5420)"></i>Złoty dąb</button><button type="button" class="swatch" data-value="Orzech"><i style="background:linear-gradient(160deg,#5f3c22,#3c2413)"></i>Orzech</button><button type="button" class="swatch" data-value="Winchester"><i style="background:linear-gradient(160deg,#8a6240,#5e3f27)"></i>Winchester</button></div>
+        <div class="veka-row veka-row--std" data-instd></div>
       </div>
       <div class="optgroup cfg-only-scene" data-group="handle">
         <h3><span class="no">7</span> Klamka okienna <span class="picked"></span></h3>
@@ -142,8 +144,8 @@
     </div>
   </div>
 </section>
-<script src="assets/js/veka-data.js?v=62"></script>
-<script src="assets/js/configurator.js?v=62" defer></script>
+<script src="assets/js/veka-data.js?v=65"></script>
+<script src="assets/js/configurator.js?v=65" defer></script>
 <footer class="footer">
   <div class="container">
     <div class="footer__cols">
@@ -181,6 +183,6 @@
 
 <a class="floating" href="tel:+48607941499"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span><small>Zadzwoń teraz</small><strong>607 941 499</strong></span></a>
 
-<script src="assets/js/main.js?v=62"></script>
+<script src="assets/js/main.js?v=65"></script>
 </body>
 </html>

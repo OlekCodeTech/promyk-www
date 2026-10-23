@@ -158,3 +158,85 @@ document.querySelectorAll('[data-filter-grid]').forEach(function (grid) {
     });
   });
 });
+
+// menu: „pigułka” podążająca za kursorem + cień po przewinięciu
+(function () {
+  var links = document.querySelector('.nav__links');
+  var navEl = document.querySelector('.nav');
+  if (navEl) {
+    var onScroll = function () { navEl.classList.toggle('is-scrolled', window.scrollY > 10); };
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  }
+  if (!links) return;
+  var glider = document.createElement('span');
+  glider.className = 'nav__glider';
+  links.insertBefore(glider, links.firstChild);
+  var top = Array.prototype.slice.call(links.querySelectorAll(':scope > a, :scope > .has-drop > a'));
+  function moveTo(a) {
+    if (!a || !a.offsetWidth) { glider.style.opacity = 0; return; }
+    var r = a.getBoundingClientRect(), base = links.getBoundingClientRect();
+    glider.style.width = r.width + 'px';
+    glider.style.transform = 'translateX(' + (r.left - base.left - links.clientLeft) + 'px)';
+    glider.style.opacity = 1;
+  }
+  var active = links.querySelector('a.is-active');
+  function rest() { links.classList.remove('has-hover'); top.forEach(function (x) { x.classList.remove('is-hovered'); }); moveTo(active); }
+  top.forEach(function (a) {
+    var host = a.parentElement.classList.contains('has-drop') ? a.parentElement : a;
+    host.addEventListener('mouseenter', function () {
+      links.classList.add('has-hover');
+      top.forEach(function (x) { x.classList.toggle('is-hovered', x === a); });
+      moveTo(a);
+    });
+  });
+  links.addEventListener('mouseleave', rest);
+  window.addEventListener('resize', rest);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(rest);
+  rest(); setTimeout(rest, 400);
+})();
+
+// pojawianie się elementów przy przewijaniu („jesteśmy sroki”)
+(function () {
+  if (!('IntersectionObserver' in window)) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var sel = ['.section-header', '.card', '.tile', '.subrow__text', '.adv', '.faq__row', '.step',
+    '.gallery > a', '.sill-card', '.tech-card', '.catalog', '.split__text', '.split__media', '.swatches-grid', '.cta__inner',
+    '.inv-card', '.contact-quick__item', '.info-block', '.panel', '.step-block', '.stat'];
+  var obs = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); obs.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  document.querySelectorAll(sel.join(',')).forEach(function (el) {
+    if (el.closest('.config, .nav, .footer, .lightbox, [data-configurator]')) return;
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.9) return; // to, co widać od razu, nie miga
+    var sib = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
+    el.style.setProperty('--d', Math.min(sib % 6, 5) * 0.08 + 's');
+    if (el.matches('.subrow__text, .split__text')) el.classList.add(el.closest('.subrow--flip') ? 'reveal--right' : 'reveal--left');
+    if (el.matches('.split__media')) el.classList.add('reveal--right');
+    if (el.matches('.gallery > a, .tile, .swatches-grid')) el.classList.add('reveal--zoom');
+    el.classList.add('reveal');
+    obs.observe(el);
+  });
+})();
+
+// Dla Inwestora: dom składa się element po elemencie, lista podświetla element na wizualizacji
+(function () {
+  var house = document.querySelector('.inv-house');
+  if (!house) return;
+  var split = house.closest('.split');
+  var go = function () { house.classList.add('is-in'); if (split) split.classList.add('is-play'); };
+  if ('IntersectionObserver' in window) {
+    var o = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { go(); o.disconnect(); } }, { threshold: 0.3 });
+    o.observe(house);
+  } else go();
+  document.querySelectorAll('.inv-list li[data-k]').forEach(function (li) {
+    var k = li.getAttribute('data-k');
+    li.addEventListener('mouseenter', function () {
+      house.classList.add('has-hl');
+      house.querySelectorAll('.ih-el').forEach(function (g) { g.classList.toggle('is-hl', g.getAttribute('data-k') === k); });
+    });
+    li.addEventListener('mouseleave', function () {
+      house.classList.remove('has-hl');
+      house.querySelectorAll('.ih-el').forEach(function (g) { g.classList.remove('is-hl'); });
+    });
+  });
+})();

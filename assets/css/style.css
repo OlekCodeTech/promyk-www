@@ -1184,3 +1184,125 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 .contact-photo img { width: 100%; border-radius: var(--r-lg); display: block; }
 .contact-photo figcaption { margin-top: 8px; font-size: 13px; color: #5c636b; }
 @media (max-width: 780px) { .contact-quick { grid-template-columns: 1fr; } .contact-quick__item strong { font-size: 20px; } }
+
+.optcards--3 { grid-template-columns: repeat(3, 1fr); }
+.optcards--1 { grid-template-columns: minmax(0, 220px); }
+.optcard svg[viewBox="0 0 64 44"] { width: 64px; height: 44px; }
+.veka-cat--std { color: var(--accent-text); }
+.veka-row--std .veka-chip { border-color: var(--ink); }
+
+/* ==========================================================================
+   Runda 2 (skan) — menu „bajeranckie”, animacje, Dla Inwestora, kontakt
+   ========================================================================== */
+:root { --nav-h: 88px; }
+.nav { transition: box-shadow .25s ease, background .25s ease; }
+.nav.is-scrolled { box-shadow: 0 10px 30px rgba(9,4,2,.08); background: rgba(255,255,255,.96); backdrop-filter: blur(10px); }
+.logo img { height: 34px; }
+.nav__links { gap: 4px; position: relative; padding: 5px; border-radius: 999px; background: var(--soft); border: 1px solid var(--line); }
+.nav__links > a, .nav__links .has-drop > a {
+  font-size: 15.5px; font-weight: 700; padding: 10px 16px; border-radius: 999px; position: relative; z-index: 1;
+  color: var(--ink); transition: color .25s ease;
+}
+.nav__links > a::after, .nav__links .has-drop > a::after { display: none; }
+.nav__links a.is-active { color: #fff; font-weight: 800; }
+.nav__links.has-hover a.is-active { color: var(--ink); }
+.nav__links.has-hover a.is-hovered { color: #fff; }
+.nav__glider {
+  position: absolute; top: 5px; left: 0; height: calc(100% - 10px); width: 0; border-radius: 999px; z-index: 0;
+  background: linear-gradient(135deg, #2f3237, #44607b); box-shadow: 0 6px 18px rgba(47,50,55,.28);
+  transition: transform .35s cubic-bezier(.3,1.4,.5,1), width .35s cubic-bezier(.3,1.4,.5,1), opacity .2s ease; opacity: 0;
+}
+.nav__links .has-drop > a { display: inline-flex; align-items: center; gap: 8px; }
+.nav__links .has-drop > a::before { content: ""; order: 2; width: 6px; height: 6px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform .25s ease; }
+.has-drop:hover > a::before { transform: rotate(225deg) translateY(-1px); }
+.drop a { opacity: 0; transform: translateY(8px); transition: opacity .25s ease, transform .25s ease, background .15s ease; }
+.has-drop:hover .drop a, .has-drop:focus-within .drop a { opacity: 1; transform: none; }
+.drop a img { transition: transform .3s ease; }
+.drop a:hover img { transform: scale(1.12); }
+@media (max-width: 1440px) { .nav__phone { display: none; } }
+@media (max-width: 1240px) {
+  .nav__links { display: none; }
+  .nav__burger { display: block; }
+  .nav.is-open .nav__links {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 4px; border-radius: 0;
+    position: absolute; top: var(--nav-h); left: 0; right: 0; background: #fff; border: 0; border-bottom: 1px solid var(--line);
+    padding: 16px var(--gutter) 24px; max-height: calc(100vh - var(--nav-h) - 38px); overflow: auto; box-shadow: 0 24px 40px rgba(9,4,2,.12);
+  }
+  .nav.is-open .nav__links a { padding: 10px 0; font-size: 16px; width: 100%; }
+  .nav.is-open .nav__links a.is-active { color: var(--accent-text); }
+  .nav.is-open .has-drop { width: 100%; }
+  .nav.is-open .drop { position: static; transform: none; opacity: 1; visibility: visible; box-shadow: none; border: 0; padding: 0 0 0 14px; width: 100%; grid-template-columns: 1fr; gap: 0; }
+  .nav.is-open .drop a { font-size: 14px; padding: 7px 0; opacity: 1; transform: none; }
+  .nav.is-open .drop a img { width: 34px; height: 34px; }
+  .nav__glider { display: none; }
+}
+
+/* ---------- animacje pojawiania się przy przewijaniu ---------- */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+.reveal.reveal--left { transform: translateX(-36px); }
+.reveal.reveal--right { transform: translateX(36px); }
+.reveal.reveal--zoom { transform: scale(.94); }
+.reveal.is-in { opacity: 1; transform: none; }
+.pagehero__body > * { animation: heroUp .9s cubic-bezier(.2,.7,.2,1) both; }
+.pagehero__body > *:nth-child(2) { animation-delay: .12s; }
+.pagehero__body > *:nth-child(3) { animation-delay: .24s; }
+.pagehero > img { animation: heroZoom 9s ease-out both; }
+@keyframes heroUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+@keyframes heroZoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+.tile img, .gallery a img, .inv-card__img img { transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.tile:hover img, .gallery a:hover img, .inv-card:hover .inv-card__img img { transform: scale(1.06); }
+.btn { transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(9,4,2,.14); }
+.step { transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease, opacity .7s ease; }
+.step:hover { transform: translateY(-6px); box-shadow: 0 18px 36px rgba(9,4,2,.1); border-color: transparent; }
+.step__no { transition: color .3s ease; }
+.step:hover .step__no { color: var(--accent-text); }
+
+/* ---------- Dla Inwestora: symulacja domu ---------- */
+.split--inv { align-items: start; }
+.inv-house { margin: 0; position: sticky; top: calc(var(--nav-h) + 24px); }
+.inv-house svg { width: 100%; height: auto; display: block; border-radius: 16px; box-shadow: 0 30px 60px rgba(9,4,2,.12); background: #f6f8fa; }
+.inv-house figcaption { margin-top: 12px; font-size: 13px; color: var(--muted); text-align: center; }
+.ih-el { opacity: 0; transform-box: fill-box; transform-origin: 50% 100%; transition: filter .25s ease; }
+.inv-house.is-in .ih-el { animation: ihIn .7s cubic-bezier(.3,1.4,.5,1) forwards; animation-delay: calc(.35s + var(--i) * .45s); }
+@keyframes ihIn { from { opacity: 0; transform: translateY(18px) scale(.92); } to { opacity: 1; transform: none; } }
+.ih-rol { animation: ihRol 6s ease-in-out 4.5s infinite; transform: translateY(-96px); }
+@keyframes ihRol { 0%, 15% { transform: translateY(-96px); } 45%, 65% { transform: translateY(-30px); } 95%, 100% { transform: translateY(-96px); } }
+.ih-fasad { transform-box: fill-box; transform-origin: top; animation: ihFas 7s ease-in-out 5s infinite; transform: scaleY(.15); }
+@keyframes ihFas { 0%, 12% { transform: scaleY(.15); } 45%, 70% { transform: scaleY(1); } 100% { transform: scaleY(.15); } }
+.ih-sun { animation: ihSun 4s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+@keyframes ihSun { to { transform: scale(1.12); opacity: 1; } }
+.ih-el.is-hl { filter: drop-shadow(0 0 10px rgba(68,96,123,.9)) brightness(1.08); }
+.inv-house.has-hl .ih-el:not(.is-hl) { opacity: .25 !important; }
+.inv-list li { cursor: default; border-radius: 8px; padding: 4px 8px; margin-left: -8px; transition: background .2s ease, transform .2s ease; }
+.inv-list li:hover { background: #e6edf3; transform: translateX(6px); }
+.split--inv.is-play .inv-list li { animation: invLi .9s ease both; animation-delay: calc(.35s + var(--i) * .45s); }
+@keyframes invLi { 0% { background: transparent; } 40% { background: #e6edf3; transform: translateX(6px); } 100% { background: transparent; } }
+.inv-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.inv-card { background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); transition: transform .3s ease, box-shadow .3s ease, opacity .7s ease; }
+.inv-card:hover { transform: translateY(-6px); box-shadow: 0 24px 44px rgba(9,4,2,.1); }
+.inv-card__img { position: relative; aspect-ratio: 4/3; overflow: hidden; }
+.inv-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.inv-card__no { position: absolute; left: 14px; bottom: 12px; font-weight: 800; font-size: 28px; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,.45); }
+.inv-card__body { padding: 20px 22px 24px; }
+.inv-card__body h3 { font-size: 18px; margin: 0 0 8px; }
+.inv-card__body p { margin: 0; font-size: 14.5px; color: #4b5157; line-height: 1.6; }
+@media (max-width: 1100px) { .inv-flow { grid-template-columns: 1fr 1fr; } .inv-house { position: static; } }
+@media (max-width: 620px) { .inv-flow { grid-template-columns: 1fr; } }
+
+/* ---------- galeria / kontakt ---------- */
+.gal-social { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-left: 12px; vertical-align: middle; }
+.btn--ig { color: #fff; background: linear-gradient(45deg, #f09433, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888); border: 0; }
+.btn--ig svg { width: 18px; height: 18px; }
+@media (max-width: 780px) { .gal-social { margin: 12px 0 0; } }
+.contact-quick--3 { grid-template-columns: repeat(3, 1fr); }
+.contact-quick--3 .contact-quick__item strong { font-size: 21px; }
+.contact-intro { text-align: center; margin-top: 44px; }
+.contact-intro h1 { font-size: 28px; font-weight: 800; margin: 0 0 6px; }
+.contact-intro p { margin: 0; color: var(--muted); font-size: 16px; }
+@media (max-width: 1024px) { .contact-quick--3 { grid-template-columns: 1fr; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .pagehero__body > *, .pagehero > img, .ih-el, .ih-rol, .ih-fasad, .ih-sun, .inv-list li { animation: none !important; opacity: 1 !important; }
+}
