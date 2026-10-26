@@ -1374,3 +1374,4 @@ img[src$="onas/promyk-firma.jpg"] { border-radius: 0 !important; box-shadow: non
   .nav__links > a, .nav__links .has-drop > a { font-size: 14px; padding-inline: 10px; }
   .logo img { height: 38px; }
 }
+.img-cover-r { width: 100%; height: auto; display: block; border-radius: var(--r-lg); }
