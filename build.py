@@ -8,7 +8,7 @@ import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RECAPTCHA_SITE_KEY = "6LdhtAEuAAAAAC3IzsS68Em1eNHp8RCzggeY40Ep"   # klucz witryny reCAPTCHA v3 (sekretny wpisujemy w kontakt.php)
-ASSET_VER = "90"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "91"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -108,9 +108,9 @@ def head(title, desc, extra=""):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="icon" href="favicon.ico?v={ASSET_VER}" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png?v={ASSET_VER}">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png?v={ASSET_VER}">
 <link rel="manifest" href="site.webmanifest">
 <meta name="google-site-verification" content="4jqvcOpuaRZRfzvcKTuv_5nmHOc8wB8WUMg3QTJxtfo">
 <meta property="og:type" content="website">

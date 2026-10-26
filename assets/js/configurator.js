@@ -35,17 +35,18 @@
     'RU/RU': 'RU + RU', 'RU+FIX': 'RU + FIX', 'FIX/FIX': 'FIX + FIX', 'HS': 'Skrzydło przesuwne + FIX'
   };
   var OPEN_BY_TYPE = { jedno: ['RU', 'R', 'U', 'FIX'], dwa: ['RU/RU', 'RU+FIX', 'FIX/FIX'], hst: ['HS'] };
-  function pane(x, y, w, h, kind) {
+  function pane(x, y, w, h, kind, mirror) {   // mirror: zawiasy po drugiej stronie (linie zbiegają się po prawej)
     var r = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="none" stroke="currentColor" stroke-width="2.2"/>';
     var d = 'stroke="currentColor" stroke-width="1.3" fill="none" stroke-dasharray="3 2"';
-    if (kind === 'RU' || kind === 'R') r += '<path d="M' + (x + w) + ' ' + y + ' L' + x + ' ' + (y + h / 2) + ' L' + (x + w) + ' ' + (y + h) + '" ' + d + '/>';
+    var a = mirror ? x : x + w, b = mirror ? x + w : x;
+    if (kind === 'RU' || kind === 'R') r += '<path d="M' + a + ' ' + y + ' L' + b + ' ' + (y + h / 2) + ' L' + a + ' ' + (y + h) + '" ' + d + '/>';
     if (kind === 'RU' || kind === 'U') r += '<path d="M' + x + ' ' + (y + h) + ' L' + (x + w / 2) + ' ' + y + ' L' + (x + w) + ' ' + (y + h) + '" ' + d + '/>';
     if (kind === 'FIX') r += '<path d="M' + (x + w / 2 - 5) + ' ' + (y + h / 2) + 'h10M' + (x + w / 2) + ' ' + (y + h / 2 - 5) + 'v10" stroke="currentColor" stroke-width="2"/>';
     return r;
   }
   function openIcon(k) {
     var svg = '<svg viewBox="0 0 64 44">';
-    if (k === 'RU/RU') svg += pane(6, 4, 26, 36, 'RU') + pane(32, 4, 26, 36, 'RU');
+    if (k === 'RU/RU') svg += pane(6, 4, 26, 36, 'RU', true) + pane(32, 4, 26, 36, 'RU');
     else if (k === 'RU+FIX') svg += pane(6, 4, 26, 36, 'RU') + pane(32, 4, 26, 36, 'FIX');
     else if (k === 'FIX/FIX') svg += pane(6, 4, 26, 36, 'FIX') + pane(32, 4, 26, 36, 'FIX');
     else if (k === 'HS') svg += pane(4, 8, 28, 28, 'NONE') + pane(32, 8, 28, 28, 'NONE') + '<path d="M10 22h14m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/>';
