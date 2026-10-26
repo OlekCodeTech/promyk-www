@@ -485,7 +485,7 @@
   }
   function updateCta() {
     root.querySelectorAll('[data-cta]').forEach(function (cta) {
-      cta.href = 'kontakt.html?konfiguracja=' + encodeURIComponent(requestText());
+      cta.href = 'kontakt?konfiguracja=' + encodeURIComponent(requestText());
     });
   }
 

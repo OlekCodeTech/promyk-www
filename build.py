@@ -8,7 +8,7 @@ import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RECAPTCHA_SITE_KEY = ""   # klucz witryny reCAPTCHA v3 (sekretny wpisujemy w kontakt.php)
-ASSET_VER = "84"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "87"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -369,7 +369,7 @@ SEO = {
 def _seo(name, content):
     """Wstawia tytuł, opis, adres kanoniczny i og:url dla danej strony."""
     if name == "404.html":
-        return content.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="robots" content="noindex">', 1)
+        return content.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="robots" content="noindex">\n<base href="/">', 1)
     if name not in SEO:
         return content
     t, d = SEO[name]
@@ -378,7 +378,7 @@ def _seo(name, content):
     content = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="' + esc(d) + '">', content, count=1)
     content = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="' + esc(t) + '">', content, count=1)
     content = re.sub(r'<meta property="og:description" content="[^"]*">', '<meta property="og:description" content="' + esc(d) + '">', content, count=1)
-    url = SITE + "/" + ("" if name == "index.html" else name)
+    url = SITE + "/" + ("" if name == "index.html" else name[:-5])
     content = content.replace("<meta property=\"og:type\"", f'<link rel="canonical" href="{url}">\n<meta property="og:url" content="{url}">\n<meta property="og:type"', 1)
     if name == "index.html":
         content = content.replace("</head>", LOCAL_BUSINESS + "\n</head>", 1)
@@ -408,8 +408,14 @@ LOCAL_BUSINESS = """<script type="application/ld+json">
 </script>"""
 
 
+def _clean_links(content):
+    """Linki wewnętrzne bez .html (index.html -> ./, okna.html -> okna); serwer dopisuje .html sam."""
+    content = re.sub(r'href="index\.html(?=["#?])', 'href="./', content)
+    return re.sub(r'href="([a-z0-9][a-z0-9-]*)\.html(?=["#?])', r'href="\1', content)
+
+
 def write(name, content):
-    content = _seo(name, content)
+    content = _clean_links(_seo(name, content))
     with io.open(os.path.join(ROOT, name), "w", encoding="utf-8", newline="\n") as f:
         f.write(content)
     print("  ->", name)
@@ -991,7 +997,7 @@ def build_kontakt():
           <div class="field"><label for="f-cat">Kategoria zapytania</label><select id="f-cat" name="kategoria">{opts}</select></div>
           <div class="field field--full"><label for="f-msg">Treść wiadomości *</label><textarea id="f-msg" name="message" placeholder="Opisz swój projekt, wymiary lub zadaj pytanie..." required></textarea></div>
           <div class="field field--full">
-            <label class="consent"><input type="checkbox" name="zgoda" value="1" required> Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z <a href="polityka-prywatnosci.html" target="_blank">polityką prywatności</a> w celu obsługi zapytania. *</label>
+            <label class="consent"><input type="checkbox" name="zgoda" value="1" required> <span>Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z <a href="polityka-prywatnosci.html" target="_blank">polityką prywatności</a> w celu obsługi zapytania. *</span></label>
           </div>
         </div>
         <button class="btn btn--primary" style="width:100%;justify-content:center;margin-top:24px" type="submit">Wyślij zapytanie {I['arrow']}</button>
@@ -4526,7 +4532,9 @@ if __name__ == "__main__":
   <div class="container" style="text-align:center;max-width:720px;padding-block:60px">
     <p class="tag" style="margin:0 auto 16px">Błąd 404</p>
     <h1 class="h-sec">Nie znaleźliśmy tej strony</h1>
-    <p class="lead" style="margin:16px auto 32px">Mogła zostać przeniesiona po zmianie wyglądu naszej strony. Zajrzyj do oferty albo skontaktuj się z nami.</p>
+    <p class="lead" style="margin:16px auto 12px">Mogła zostać przeniesiona po zmianie wyglądu naszej strony. Zajrzyj do oferty albo skontaktuj się z nami.</p>
+    <p class="lead" style="margin:0 auto 32px;font-size:15px">Za <strong data-count>8</strong> s przeniesiemy Cię na stronę główną.</p>
+    <script>(function(){{var n=8,el=document.querySelector('[data-count]');var t=setInterval(function(){{n--;if(el)el.textContent=n;if(n<=0){{clearInterval(t);location.href='/';}}}},1000);}})();</script>
     <a class="btn btn--primary" href="index.html">Strona główna {I['arrow']}</a>
     <a class="btn btn--outline" href="oferta.html" style="margin-left:12px">Oferta</a>
   </div>

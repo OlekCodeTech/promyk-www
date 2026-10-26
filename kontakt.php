@@ -4,7 +4,7 @@
 
 $TO   = 'info@promyk.wielun.pl';
 $FROM = 'formularz@promyk.wielun.pl';
-$BACK = 'kontakt.html';
+$BACK = 'kontakt';
 // reCAPTCHA v3 — wpisz klucz tajny z konta Google klienta (pusty = wyłączona; działa wtedy pułapka + kontrola czasu)
 $RECAPTCHA_SECRET = '';
 

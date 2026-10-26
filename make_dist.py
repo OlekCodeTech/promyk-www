@@ -18,7 +18,7 @@ urls = []
 for p in pages:
     if p == "404.html" or p.startswith("google"):
         continue
-    loc = DOMAIN + "/" + ("" if p == "index.html" else p)
+    loc = DOMAIN + "/" + ("" if p == "index.html" else p[:-5])
     prio = "1.0" if p == "index.html" else ("0.3" if p.startswith("polityka") else "0.8")
     urls.append(f"  <url><loc>{loc}</loc><lastmod>{today}</lastmod><priority>{prio}</priority></url>")
 with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8", newline="\n") as f:

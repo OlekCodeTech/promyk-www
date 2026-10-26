@@ -265,7 +265,7 @@ document.querySelectorAll('[data-filter-grid]').forEach(function (grid) {
   bar.setAttribute('aria-label', 'Zgoda na pliki cookies');
   bar.innerHTML = '<div class="cookie-bar__text"><strong>Szanujemy Twoją prywatność</strong>' +
     '<p>Strona korzysta z pamięci przeglądarki, aby działała poprawnie (np. konfigurator). Za Twoją zgodą wczytamy też treści zewnętrzne — mapę Google, która może zapisywać własne pliki cookies. ' +
-    'Szczegóły w <a href="polityka-prywatnosci.html">polityce prywatności</a>.</p></div>' +
+    'Szczegóły w <a href="polityka-prywatnosci">polityce prywatności</a>.</p></div>' +
     '<div class="cookie-bar__btns"><button type="button" class="btn btn--outline" data-c="necessary">Tylko niezbędne</button>' +
     '<button type="button" class="btn btn--primary" data-c="all">Akceptuję wszystkie</button></div>';
   var fab = document.createElement('button');
