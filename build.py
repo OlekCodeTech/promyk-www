@@ -8,7 +8,7 @@ import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RECAPTCHA_SITE_KEY = ""   # klucz witryny reCAPTCHA v3 (sekretny wpisujemy w kontakt.php)
-ASSET_VER = "78"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "79"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -71,11 +71,9 @@ PRODUCTS = [
 PROD_LABEL = {s: t for s, t, _b, _i in PRODUCTS}
 PROD_IMG = {s: i for s, _t, _b, i in PRODUCTS}
 
-REVIEWS = [
-    ("M", "Mariusz Kowalski", "Pełen profesjonalizm! Montaż okien VEKA wykonany bezbłędnie. Doradztwo techniczne na najwyższym poziomie, ekipa czysta i dokładna. Z czystym sumieniem polecam firmę Promyk z Wielunia."),
-    ("A", "Anna Wiśniewska", "Zakupiliśmy u nich drzwi Wikęd oraz bramę garażową Nice. Wszystko działa bez zarzutu, pomiar i montaż przebiegły niezwykle sprawnie. Świetny kontakt z biurem obsługi."),
-    ("T", "Tomasz Nowak", "Zleciłem montaż rolet zewnętrznych i pergoli tarasowej. Efekt przerósł moje oczekiwania, jakość materiałów i wykonania to absolutne premium. Bardzo rzetelny montaż."),
-]
+# Opinie klientów — wpisujemy WYŁĄCZNIE prawdziwe opinie z Google (inicjał, imię i nazwisko, treść).
+# Przykładowe teksty z projektu zostały usunięte przed publikacją; pusta lista = sam link do ocen Google.
+REVIEWS = []
 PARTNERS = [
     ("veka", "VEKA", "https://www.veka.pl"),
     ("aluprof", "Aluprof", "https://aluprof.com"),
@@ -294,7 +292,7 @@ def reviews():
         <h2 class="h-sec">Zaufanie budowane przez dekady</h2>
       </div>
     </div>
-    <div class="grid-3">{cards}</div>
+    {f'<div class="grid-3">{cards}</div>' if cards else ''}
     <a class="rating rating--below" href="{GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener">
       <span class="rating__num">4,6</span>
       <span class="rating__meta"><span class="stars">{I['star'] * 4}<span class="halfstar">{I['star']}{I['star']}</span></span><small class="lead">średnia ocena Google — zobacz więcej opinii</small></span>
