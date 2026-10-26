@@ -1379,3 +1379,26 @@ img[src$="onas/promyk-firma.jpg"] { border-radius: 0 !important; box-shadow: non
 @media (max-width: 900px) { .logo img { height: 36px; } }
 @media (max-width: 640px) { .logo img { height: 28px; } .logo { flex-shrink: 1; min-width: 0; } .nav__right .btn { display: none; } .nav .container { padding-inline: 16px; } }
 img.img-cover-r { height: auto !important; object-fit: contain !important; }
+
+.hp { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; opacity: 0; }
+.consent a, .footer__bottom a { text-decoration: underline; }
+.policy { display: flex; flex-direction: column; gap: 14px; padding-left: 22px; line-height: 1.7; color: #3a3f45; }
+
+/* ---------- baner cookies ---------- */
+.cookie-bar { position: fixed; left: 20px; right: 20px; bottom: 20px; z-index: 200; max-width: 980px; margin: 0 auto;
+  display: flex; gap: 24px; align-items: center; justify-content: space-between; padding: 20px 24px;
+  background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 24px 60px rgba(9,4,2,.22);
+  transform: translateY(30px); opacity: 0; transition: transform .35s ease, opacity .35s ease; }
+.cookie-bar.is-on { transform: none; opacity: 1; }
+.cookie-bar__text strong { display: block; font-size: 16px; margin-bottom: 4px; }
+.cookie-bar__text p { margin: 0; font-size: 14px; line-height: 1.55; color: #4b5157; }
+.cookie-bar__text a { text-decoration: underline; }
+.cookie-bar__btns { display: flex; gap: 10px; flex: none; }
+@media (max-width: 760px) { .cookie-bar { flex-direction: column; align-items: stretch; left: 12px; right: 12px; bottom: 12px; padding: 18px; }
+  .cookie-bar__btns { flex-direction: column-reverse; } .cookie-bar__btns .btn { justify-content: center; } }
+.map-consent { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center;
+  min-height: 320px; padding: 24px; background: var(--soft); border-radius: var(--r-lg); }
+.map-consent p { margin: 0; color: #4b5157; }
+.map-consent .btn { margin-top: 6px; }
+.policy-ul { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+body:has(.cookie-bar.is-on) .floating { opacity: 0; pointer-events: none; }

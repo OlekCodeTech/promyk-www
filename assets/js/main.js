@@ -96,17 +96,16 @@
     if (msg) msg.scrollIntoView({ block: 'center' });
   }
 
-  /* ---------- formularze (demo, bez backendu) ---------- */
-  document.querySelectorAll('form[data-demo]').forEach(function (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var box = form.querySelector('[data-formmsg]');
-      if (box) {
-        box.textContent = 'Dziękujemy! Zapytanie zostało przygotowane do wysyłki — podłącz obsługę formularza po stronie serwera.';
-        box.style.display = 'block';
-      }
-    });
-  });
+  /* ---------- formularz kontaktowy: komunikat po wysłaniu (kontakt.php) ---------- */
+  var sent = params.get('wyslano'), err = params.get('blad');
+  var box = document.querySelector('[data-formmsg]');
+  if (box && (sent || err)) {
+    box.textContent = sent ? 'Dziękujemy! Wiadomość została wysłana — odpowiemy najszybciej, jak to możliwe.'
+                           : 'Nie udało się wysłać wiadomości. Sprawdź wymagane pola albo zadzwoń: 607 941 499.';
+    box.style.display = 'block';
+    box.style.color = sent ? '#1f7a3f' : '#b3261e';
+    box.scrollIntoView({ block: 'center' });
+  }
 })();
 
 // powiększenie zdjęć z galerii — strzałki, klawiatura i przesuwanie palcem (np. „Inspiracje” na podstronie Okna)
@@ -243,6 +242,64 @@ document.querySelectorAll('[data-filter-grid]').forEach(function (grid) {
     li.addEventListener('mouseleave', function () {
       house.classList.remove('has-hl');
       house.querySelectorAll('.ih-el').forEach(function (g) { g.classList.remove('is-hl'); });
+    });
+  });
+})();
+
+// baner cookies (zgoda zapisywana w przeglądarce) + mapa Google dopiero po zgodzie
+(function () {
+  var KEY = 'promykCookies';
+  function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+  function set(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+  function loadMaps() {
+    document.querySelectorAll('iframe[data-src]').forEach(function (f) {
+      if (!f.src) f.src = f.getAttribute('data-src');
+      f.hidden = false;
+      var ph = f.parentElement.querySelector('[data-map-consent]');
+      if (ph) ph.hidden = true;
+    });
+  }
+  var bar = document.createElement('div');
+  bar.className = 'cookie-bar';
+  bar.setAttribute('role', 'dialog');
+  bar.setAttribute('aria-label', 'Zgoda na pliki cookies');
+  bar.innerHTML = '<div class="cookie-bar__text"><strong>Szanujemy Twoją prywatność</strong>' +
+    '<p>Strona korzysta z pamięci przeglądarki, aby działała poprawnie (np. konfigurator). Za Twoją zgodą wczytamy też treści zewnętrzne — mapę Google, która może zapisywać własne pliki cookies. ' +
+    'Szczegóły w <a href="polityka-prywatnosci.html">polityce prywatności</a>.</p></div>' +
+    '<div class="cookie-bar__btns"><button type="button" class="btn btn--outline" data-c="necessary">Tylko niezbędne</button>' +
+    '<button type="button" class="btn btn--primary" data-c="all">Akceptuję wszystkie</button></div>';
+  function show() { document.body.appendChild(bar); requestAnimationFrame(function () { bar.classList.add('is-on'); }); }
+  function hide() { bar.classList.remove('is-on'); setTimeout(function () { if (bar.parentNode) bar.parentNode.removeChild(bar); }, 300); }
+  bar.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-c]'); if (!b) return;
+    set(b.getAttribute('data-c'));
+    if (b.getAttribute('data-c') === 'all') loadMaps();
+    hide();
+  });
+  var c = get();
+  if (!c) show(); else if (c === 'all') loadMaps();
+  document.querySelectorAll('[data-map-load]').forEach(function (b) { b.addEventListener('click', loadMaps); });
+  document.querySelectorAll('[data-cookie-settings]').forEach(function (a) {
+    a.addEventListener('click', function (e) { e.preventDefault(); if (!bar.parentNode) show(); });
+  });
+})();
+
+// formularz: czas wypełnienia (antyspam) + token reCAPTCHA v3, jeśli włączona
+(function () {
+  var form = document.querySelector('form[data-contact]');
+  if (!form) return;
+  var ts = form.querySelector('[data-ts]');
+  if (ts) ts.value = String(Date.now());
+  form.addEventListener('submit', function (e) {
+    var key = window.PROMYK_RECAPTCHA;
+    if (!key || !window.grecaptcha || form.dataset.ok) return;
+    e.preventDefault();
+    window.grecaptcha.ready(function () {
+      window.grecaptcha.execute(key, { action: 'kontakt' }).then(function (token) {
+        form.querySelector('[data-recaptcha]').value = token;
+        form.dataset.ok = '1';
+        form.submit();
+      });
     });
   });
 })();

@@ -7,7 +7,8 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "75"  # podbij przy zmianach css/js (cache-busting)
+RECAPTCHA_SITE_KEY = ""   # klucz witryny reCAPTCHA v3 (sekretny wpisujemy w kontakt.php)
+ASSET_VER = "78"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -108,9 +109,14 @@ def head(title, desc, extra=""):
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <link rel="icon" href="assets/img/logo-promyk.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PROMYK Wieluń">
+<meta property="og:title" content="{title.replace(chr(34), '&quot;')}">
+<meta property="og:description" content="{desc.replace(chr(34), '&quot;')}">
+<meta property="og:image" content="https://promyk.wielun.pl/assets/img/onas/promyk-firma.jpg">
+<meta property="og:locale" content="pl_PL">
+<meta name="theme-color" content="#232529">
+<link rel="stylesheet" href="assets/css/fonts.css?v={ASSET_VER}">
 <link rel="stylesheet" href="assets/css/style.css?v={ASSET_VER}">
 {extra}</head>
 <body>
@@ -209,7 +215,7 @@ def footer():
       </div>
     </div>
     <div class="footer__bottom">
-      <span>© 1997-2026 Promyk Wieluń. Wszelkie prawa zastrzeżone.</span>
+      <span>© 1997-2026 Promyk Wieluń. Wszelkie prawa zastrzeżone. · <a href="polityka-prywatnosci.html">Polityka prywatności i cookies</a> · <a href="#" data-cookie-settings>Ustawienia cookies</a></span>
       <span>Realizacja: OlekCodeTech</span>
     </div>
   </div>
@@ -868,7 +874,10 @@ def build_kontakt():
   <div class="container contact-grid">
     <div class="panel">
       <h2>Napisz do nas</h2>
-      <form data-demo>
+      <form id="formularz" action="kontakt.php" method="post" data-contact>
+        <input type="text" name="www" value="" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+        <input type="hidden" name="ts" value="" data-ts>
+        <input type="hidden" name="g-recaptcha-response" value="" data-recaptcha>
         <div class="form-grid">
           <div class="field"><label for="f-name">Imię i nazwisko *</label><input id="f-name" name="name" placeholder="np. Jan Kowalski" required></div>
           <div class="field"><label for="f-tel">Telefon komórkowy *</label><input id="f-tel" name="tel" type="tel" placeholder="np. +48 {PHONE}" required></div>
@@ -876,7 +885,7 @@ def build_kontakt():
           <div class="field"><label for="f-cat">Kategoria zapytania</label><select id="f-cat" name="kategoria">{opts}</select></div>
           <div class="field field--full"><label for="f-msg">Treść wiadomości *</label><textarea id="f-msg" name="message" placeholder="Opisz swój projekt, wymiary lub zadaj pytanie..." required></textarea></div>
           <div class="field field--full">
-            <label class="consent"><input type="checkbox" required> Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z polityką prywatności w celu obsługi zapytania. *</label>
+            <label class="consent"><input type="checkbox" name="zgoda" value="1" required> Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z <a href="polityka-prywatnosci.html" target="_blank">polityką prywatności</a> w celu obsługi zapytania. *</label>
           </div>
         </div>
         <button class="btn btn--primary" style="width:100%;justify-content:center;margin-top:24px" type="submit">Wyślij zapytanie {I['arrow']}</button>
@@ -903,8 +912,14 @@ def build_kontakt():
 <section class="section" style="padding-top:0">
   <div class="container">
     <div class="map">
-      <iframe title="Mapa dojazdu do PROMYK Wieluń" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps?q={ADDR1.replace(' ', '+')},+{ADDR2.replace(' ', '+')}&amp;output=embed"></iframe>
+      <div class="map-consent" data-map-consent>
+        <p><strong>Mapa dojazdu (Google Maps)</strong></p>
+        <p>Mapa ładuje się z serwerów Google, które mogą zapisywać pliki cookies.</p>
+        <button type="button" class="btn btn--primary" data-map-load>Pokaż mapę</button>
+        <a class="btn btn--outline" href="https://www.google.com/maps/search/?api=1&amp;query=PROMYK+Wołodyjowskiego+15+Wieluń" target="_blank" rel="noopener">Otwórz w Google Maps</a>
+      </div>
+      <iframe title="Mapa dojazdu do PROMYK Wieluń" loading="lazy" referrerpolicy="no-referrer-when-downgrade" hidden
+        data-src="https://www.google.com/maps?q={ADDR1.replace(' ', '+')},+{ADDR2.replace(' ', '+')}&amp;output=embed"></iframe>
     </div>
   </div>
 </section>
@@ -912,7 +927,9 @@ def build_kontakt():
     write("kontakt.html",
           head("Kontakt — PROMYK Wieluń | okna, drzwi, bramy, osłony",
                f"Skontaktuj się z PROMYK: {ADDR1}, {ADDR2}, tel. {PHONE}. Wycena i doradztwo w zakresie stolarki otworowej.")
-          + nav("kontakt") + body + footer())
+          + nav("kontakt") + body
+          + (f'<script>window.PROMYK_RECAPTCHA="{RECAPTCHA_SITE_KEY}";</script><script src="https://www.google.com/recaptcha/api.js?render={RECAPTCHA_SITE_KEY}" async defer></script>' if RECAPTCHA_SITE_KEY else "")
+          + footer())
 
 # ================================================================ KONFIGURATOR ----
 def build_konfigurator():
@@ -4321,6 +4338,48 @@ def build_moskitiery():
     write("moskitiery.html", head(meta["title"], meta["desc"]) + nav("moskitiery") + body + footer())
 
 
+
+POLITYKA = [
+    "Administratorem Pani/Pana danych osobowych jest Z.P.H.U. „PROMYK” K. i G. Czyż S.C. z siedzibą w Wieluniu, ul. M. Wołodyjowskiego 15, adres e-mail: info@promyk.wielun.pl (dalej jako „ADO”).",
+    "ADO wyznaczył Inspektora Ochrony Danych, z którym można się skontaktować pod adresem ul. M. Wołodyjowskiego 15, 98-300 Wieluń, adresem mailowym info@promyk.wielun.pl, numerem telefonu 43 843 65 43.",
+    "Pani/Pana dane osobowe w zakresie imienia i nazwiska oraz numeru telefonu i adresu poczty mailowej zostały pozyskane za pomocą naszej strony internetowej, wysłania do nas korespondencji mailowej, papierowej lub w skutek bezpośredniego kontaktu telefonicznego.",
+    "Pani/Pana dane osobowe przetwarzane będą w celu niezbędnym do wykonania umowy lub podjęcia działań do jej zawarcia. W przypadku udzielenia zgody na przetwarzanie danych osobowych w jednej lub większej liczbie stosownie do określonych celów, w których została wyrażona zgoda, to jest w szczególności cele marketingowe (maile i telefony) i informacyjne (newsletter), podstawą prawną przetwarzania danych jest art. 6 ust. 1 lit. b, art. 6 ust. 1 lit. c oraz art. 6 ust. 1 lit. f RODO.",
+    "Pozyskane od Pani/Pana dane osobowe mogą być udostępniane innym odbiorcom lub kategoriom odbiorców danych osobowych. Odbiorcami Pani/Pana danych mogą być przede wszystkim spółki i inne podmioty powiązane kapitałowo. Dane osobowe przekazane będą tylko w celu określonym w pkt 3 i 4.",
+    "Pani/Pana dane osobowe będą przechowywane przez okres 10 lat.",
+    "Przysługuje Pani/Panu prawo dostępu do swoich danych osobowych, prawo do żądania poprawienia, usunięcia lub ograniczenia przetwarzania tych danych, prawo do przenoszenia danych.",
+    "Z przyczyn związanych z Pani/Pana szczególną sytuacją przysługuje Pani/Panu prawo wniesienia sprzeciwu przeciwko przetwarzaniu danych. Bez podania przyczyny jest Pan/Pani uprawniona do wniesienia sprzeciwu, gdy dane wykorzystywane są do celów marketingu bezpośredniego.",
+    "W dowolnym momencie ma Pan/Pani prawo cofnąć udzieloną zgodę, co pozostanie jednak bez wpływu na zgodność z prawem przetwarzania, którego dokonano na podstawie zgody przed jej cofnięciem.",
+    "Ma Pan/Pani prawo wniesienia skargi do organu nadzoru, gdy uzna Pani/Pan, iż przetwarzanie danych osobowych Pani/Pana dotyczących narusza przepisy.",
+    "Podanie przez Pana/Panią danych osobowych jest dobrowolne; jeżeli zostało podane w celu zawarcia umowy, jest warunkiem jej zawarcia.",
+    "Pani/Pana dane nie będą przetwarzane w sposób zautomatyzowany, w tym również w formie profilowania.",
+]
+
+def build_polityka():
+    li = "".join(f"<li>{t}</li>" for t in POLITYKA)
+    body = f"""<section class="section">
+  <div class="container" style="max-width:900px">
+    <h1 class="h-sec" style="margin-bottom:24px">Polityka prywatności</h1>
+    <p class="lead">Zgodnie z art. 13 ust. 1 i ust. 2 ogólnego rozporządzenia o ochronie danych osobowych z dnia 27 kwietnia 2016 r. (RODO) informujemy, że:</p>
+    <ol class="policy">{li}</ol>
+    <h2 class="h-sec" style="font-size:28px;margin:48px 0 16px">Pliki cookies i podobne technologie</h2>
+    <div class="prose">
+      <p>Strona promyk.wielun.pl nie używa plików cookies do celów reklamowych ani statystycznych. Korzystamy wyłącznie z pamięci przeglądarki (localStorage), aby:</p>
+      <ul class="policy-ul">
+        <li>zapamiętać Twój wybór w banerze cookies,</li>
+        <li>przechować pozycje dodane w konfiguratorze okien — dane zostają tylko na Twoim urządzeniu i nie są do nas wysyłane, dopóki sam nie wyślesz zapytania.</li>
+      </ul>
+      <p><strong>Treści zewnętrzne.</strong> Mapa dojazdu na stronie Kontakt pochodzi z Google Maps (Google Ireland Ltd.) i ładuje się dopiero po Twojej zgodzie — wtedy Google może zapisać własne pliki cookies zgodnie ze swoją polityką prywatności. Formularz kontaktowy może być chroniony usługą Google reCAPTCHA, która analizuje sposób korzystania ze strony, aby odróżnić ludzi od automatów (spamu).</p>
+      <p><strong>Linki do serwisów społecznościowych</strong> (Facebook, Instagram) to zwykłe odnośniki — dane są przekazywane tym serwisom dopiero po kliknięciu.</p>
+      <p>Zgodę możesz w każdej chwili zmienić, klikając „Ustawienia cookies” w stopce strony, a zapisane dane usunąć w ustawieniach przeglądarki.</p>
+    </div>
+  </div>
+</section>
+"""
+    write("polityka-prywatnosci.html",
+          head("Polityka prywatności | PROMYK Wieluń", "Informacja o przetwarzaniu danych osobowych — Z.P.H.U. PROMYK K. i G. Czyż s.c., Wieluń.")
+          + nav("") + body + footer())
+
+
 if __name__ == "__main__":
     print("Generuję strony PROMYK...")
     build_index()
@@ -4356,4 +4415,15 @@ if __name__ == "__main__":
     build_parapety()
     build_zaluzje_fasadowe()
     build_subpages()
+    build_polityka()
+    write("404.html", head("Nie znaleziono strony | PROMYK Wieluń", "Strona nie istnieje.") + nav("") + f"""<section class="section">
+  <div class="container" style="text-align:center;max-width:720px;padding-block:60px">
+    <p class="tag" style="margin:0 auto 16px">Błąd 404</p>
+    <h1 class="h-sec">Nie znaleźliśmy tej strony</h1>
+    <p class="lead" style="margin:16px auto 32px">Mogła zostać przeniesiona po zmianie wyglądu naszej strony. Zajrzyj do oferty albo skontaktuj się z nami.</p>
+    <a class="btn btn--primary" href="index.html">Strona główna {I['arrow']}</a>
+    <a class="btn btn--outline" href="oferta.html" style="margin-left:12px">Oferta</a>
+  </div>
+</section>
+""" + footer())
     print("Gotowe.")

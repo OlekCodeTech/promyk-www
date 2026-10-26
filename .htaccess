@@ -1,0 +1,61 @@
+# PROMYK — statyczna strona (home.pl / LiteSpeed)
+Options -Indexes
+DirectoryIndex index.html
+AddDefaultCharset UTF-8
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+
+# wymuszenie HTTPS i domeny bez www
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^(.*)$ https://promyk.wielun.pl/$1 [R=301,L]
+
+# --- przekierowania ze starych adresów WordPressa (SEO) ---
+RewriteRule ^oslony-zewnetrzne/refleksole/?$ /oslony-zewnetrzne--refleksole-ziiip-120.html [R=301,L]
+RewriteRule ^oslony-zewnetrzne/zaluzje-fasadowe/?$ /zaluzje-fasadowe.html [R=301,L]
+RewriteRule ^oslony-zewnetrzne/sunbreaker[^/]*/?$ /oslony-zewnetrzne--sunbreaker-210.html [R=301,L]
+RewriteRule ^oslony-zewnetrzne/moskitiery/?$ /moskitiery.html [R=301,L]
+RewriteRule ^oslony-zewnetrzne/?$ /oslony-zewnetrzne.html [R=301,L]
+RewriteRule ^oslony-wewnetrzne(/.*)?$ /oslony-wewnetrzne.html [R=301,L]
+RewriteRule ^markizy/markizy-tarasowe/?$ /markizy--markizy-tarasowe.html [R=301,L]
+RewriteRule ^markizy/markizy-balkonowe/?$ /markizy--markizy-balkonowe.html [R=301,L]
+RewriteRule ^markizy/?$ /markizy.html [R=301,L]
+RewriteRule ^bramy-garazowe/segmentowe/?$ /bramy-garazowe--bramy-segmentowe.html [R=301,L]
+RewriteRule ^bramy-garazowe/rolowane/?$ /bramy-garazowe--bramy-rolowane.html [R=301,L]
+RewriteRule ^bramy-garazowe/?$ /bramy-garazowe.html [R=301,L]
+RewriteRule ^pergole(/.*)?$ /pergole.html [R=301,L]
+RewriteRule ^rolety-zewnetrzne(/.*)?$ /rolety-zewnetrzne.html [R=301,L]
+RewriteRule ^drzwi/drzwi-wewnetrzne/?$ /drzwi-wewnetrzne.html [R=301,L]
+RewriteRule ^drzwi/drzwi-zewnetrzne/?$ /drzwi-zewnetrzne.html [R=301,L]
+RewriteRule ^drzwi/?$ /drzwi-zewnetrzne.html [R=301,L]
+RewriteRule ^okna/parapety/?$ /parapety.html [R=301,L]
+RewriteRule ^okna(/.*)?$ /okna.html [R=301,L]
+RewriteRule ^category/okna/?$ /okna.html [R=301,L]
+RewriteRule ^category/drzwi/?$ /oferta.html [R=301,L]
+RewriteRule ^category/(rolety-zewnetrzne|pergole|bramy-garazowe|markizy|oslony-wewnetrzne|oslony-zewnetrzne)/?$ /$1.html [R=301,L]
+RewriteRule ^category/.*$ /oferta.html [R=301,L]
+RewriteRule ^(galeria|dla-inwestora|kontakt|polityka-prywatnosci|o-nas|oferta|konfigurator)/?$ /$1.html [R=301,L]
+RewriteRule ^(author|wp-admin|wp-login\.php|wp-content|wp-includes|feed|comments)(/.*)?$ / [R=301,L]
+RewriteCond %{QUERY_STRING} (^|&)(da_image|p|page_id)= [NC]
+RewriteRule ^$ /? [R=301,L]
+
+# --- cache przeglądarki (CSS/JS mają wersję ?v=, obrazy rzadko się zmieniają)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml
+</IfModule>
+
+# nie udostępniaj plików roboczych
+<FilesMatch "\.(py|md|zip)$">
+  Require all denied
+</FilesMatch>

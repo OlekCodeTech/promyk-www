@@ -6,10 +6,15 @@
 <title>Kontakt — PROMYK Wieluń | okna, drzwi, bramy, osłony</title>
 <meta name="description" content="Skontaktuj się z PROMYK: ul. M. Wołodyjowskiego 15, 98-300 Wieluń, tel. 607 941 499. Wycena i doradztwo w zakresie stolarki otworowej.">
 <link rel="icon" href="assets/img/logo-promyk.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=75">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PROMYK Wieluń">
+<meta property="og:title" content="Kontakt — PROMYK Wieluń | okna, drzwi, bramy, osłony">
+<meta property="og:description" content="Skontaktuj się z PROMYK: ul. M. Wołodyjowskiego 15, 98-300 Wieluń, tel. 607 941 499. Wycena i doradztwo w zakresie stolarki otworowej.">
+<meta property="og:image" content="https://promyk.wielun.pl/assets/img/onas/promyk-firma.jpg">
+<meta property="og:locale" content="pl_PL">
+<meta name="theme-color" content="#232529">
+<link rel="stylesheet" href="assets/css/fonts.css?v=78">
+<link rel="stylesheet" href="assets/css/style.css?v=78">
 </head>
 <body>
 <div class="topbar">
@@ -65,7 +70,10 @@
   <div class="container contact-grid">
     <div class="panel">
       <h2>Napisz do nas</h2>
-      <form data-demo>
+      <form id="formularz" action="kontakt.php" method="post" data-contact>
+        <input type="text" name="www" value="" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+        <input type="hidden" name="ts" value="" data-ts>
+        <input type="hidden" name="g-recaptcha-response" value="" data-recaptcha>
         <div class="form-grid">
           <div class="field"><label for="f-name">Imię i nazwisko *</label><input id="f-name" name="name" placeholder="np. Jan Kowalski" required></div>
           <div class="field"><label for="f-tel">Telefon komórkowy *</label><input id="f-tel" name="tel" type="tel" placeholder="np. +48 607 941 499" required></div>
@@ -73,7 +81,7 @@
           <div class="field"><label for="f-cat">Kategoria zapytania</label><select id="f-cat" name="kategoria"><option>Wycena stolarki okiennej</option><option>Drzwi zewnętrzne</option><option>Drzwi wewnętrzne</option><option>Bramy garażowe</option><option>Rolety i osłony</option><option>Pergole i markizy</option><option>Moskitiery</option><option>Serwis i reklamacja</option><option>Inne pytanie</option></select></div>
           <div class="field field--full"><label for="f-msg">Treść wiadomości *</label><textarea id="f-msg" name="message" placeholder="Opisz swój projekt, wymiary lub zadaj pytanie..." required></textarea></div>
           <div class="field field--full">
-            <label class="consent"><input type="checkbox" required> Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z polityką prywatności w celu obsługi zapytania. *</label>
+            <label class="consent"><input type="checkbox" name="zgoda" value="1" required> Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z <a href="polityka-prywatnosci.html" target="_blank">polityką prywatności</a> w celu obsługi zapytania. *</label>
           </div>
         </div>
         <button class="btn btn--primary" style="width:100%;justify-content:center;margin-top:24px" type="submit">Wyślij zapytanie <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -100,8 +108,14 @@
 <section class="section" style="padding-top:0">
   <div class="container">
     <div class="map">
-      <iframe title="Mapa dojazdu do PROMYK Wieluń" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps?q=ul.+M.+Wołodyjowskiego+15,+98-300+Wieluń&amp;output=embed"></iframe>
+      <div class="map-consent" data-map-consent>
+        <p><strong>Mapa dojazdu (Google Maps)</strong></p>
+        <p>Mapa ładuje się z serwerów Google, które mogą zapisywać pliki cookies.</p>
+        <button type="button" class="btn btn--primary" data-map-load>Pokaż mapę</button>
+        <a class="btn btn--outline" href="https://www.google.com/maps/search/?api=1&amp;query=PROMYK+Wołodyjowskiego+15+Wieluń" target="_blank" rel="noopener">Otwórz w Google Maps</a>
+      </div>
+      <iframe title="Mapa dojazdu do PROMYK Wieluń" loading="lazy" referrerpolicy="no-referrer-when-downgrade" hidden
+        data-src="https://www.google.com/maps?q=ul.+M.+Wołodyjowskiego+15,+98-300+Wieluń&amp;output=embed"></iframe>
     </div>
   </div>
 </section>
@@ -134,7 +148,7 @@
       </div>
     </div>
     <div class="footer__bottom">
-      <span>© 1997-2026 Promyk Wieluń. Wszelkie prawa zastrzeżone.</span>
+      <span>© 1997-2026 Promyk Wieluń. Wszelkie prawa zastrzeżone. · <a href="polityka-prywatnosci.html">Polityka prywatności i cookies</a> · <a href="#" data-cookie-settings>Ustawienia cookies</a></span>
       <span>Realizacja: OlekCodeTech</span>
     </div>
   </div>
@@ -142,6 +156,6 @@
 
 <a class="floating" href="tel:+48607941499"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span><small>Zadzwoń teraz</small><strong>607 941 499</strong></span></a>
 
-<script src="assets/js/main.js?v=75"></script>
+<script src="assets/js/main.js?v=78"></script>
 </body>
 </html>
