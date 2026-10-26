@@ -7,8 +7,8 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-RECAPTCHA_SITE_KEY = ""   # klucz witryny reCAPTCHA v3 (sekretny wpisujemy w kontakt.php)
-ASSET_VER = "87"  # podbij przy zmianach css/js (cache-busting)
+RECAPTCHA_SITE_KEY = "6LdhtAEuAAAAAC3IzsS68Em1eNHp8RCzggeY40Ep"   # klucz witryny reCAPTCHA v3 (sekretny wpisujemy w kontakt.php)
+ASSET_VER = "88"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -1001,6 +1001,7 @@ def build_kontakt():
           </div>
         </div>
         <button class="btn btn--primary" style="width:100%;justify-content:center;margin-top:24px" type="submit">Wyślij zapytanie {I['arrow']}</button>
+        <p class="recaptcha-note">Formularz jest chroniony przez reCAPTCHA. Obowiązują <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Polityka prywatności</a> i <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Warunki korzystania</a> Google.</p>
         <p data-formmsg style="display:none;margin-top:16px;font-size:14px;color:var(--accent)"></p>
       </form>
     </div>
