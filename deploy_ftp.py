@@ -6,12 +6,29 @@
 Hasło wpisujesz sam w terminalu (nie jest nigdzie zapisywane).
 Cofnięcie: w Menedżerze plików DirectAdmin zmień nazwę public_html -> public_html-nowa, a stary-wp-RRRRMMDD -> public_html.
 """
-import ftplib, getpass, os, sys, datetime, posixpath
+import ftplib, getpass, os, sys, datetime, posixpath, ssl
 
-HOST = "promyk.wielun.pl"
-USER = os.environ.get("PROMYK_FTP_USER", "promyk")
+HOST = "s139.cyber-folks.pl"   # serwer cyber_Folks (certyfikat *.cyber-folks.pl)
+USER = os.environ.get("PROMYK_FTP_USER", "wdrozenie@promyk.wielun.pl")
 DOMAIN_DIR = "domains/promyk.wielun.pl"
 ROOT = os.path.dirname(os.path.abspath(__file__))
+
+
+def make_ctx():
+    # TLS 1.2 + sesje po ID (bez biletów) - ProFTPD akceptuje wtedy wznowienie sesji na kanale danych
+    ctx = ssl.create_default_context()
+    ctx.maximum_version = ssl.TLSVersion.TLSv1_2
+    ctx.options |= ssl.OP_NO_TICKET
+    return ctx
+
+
+class ReusedSessionFTP_TLS(ftplib.FTP_TLS):
+    """ProFTPD na cyber_Folks wymaga, by kanał danych używał tej samej sesji TLS co kanał sterujący."""
+    def ntransfercmd(self, cmd, rest=None):
+        conn, size = ftplib.FTP.ntransfercmd(self, cmd, rest)
+        if self._prot_p:
+            conn = self.context.wrap_socket(conn, server_hostname=self.host, session=self.sock.session)
+        return conn, size
 
 
 def files_to_upload():
@@ -33,16 +50,39 @@ def exists(ftp, path):
 
 def main():
     only_files = "--tylko-pliki" in sys.argv
-    print(f"Serwer: {HOST}, użytkownik: {USER}")
-    pwd = getpass.getpass("Hasło FTP (nie będzie widoczne): ")
-    ftp = ftplib.FTP_TLS(HOST, timeout=60)
-    ftp.login(USER, pwd)
+    folder = sys.argv[sys.argv.index("--do") + 1] if "--do" in sys.argv else "public_html"
+    if folder != "public_html":
+        only_files = True   # wgrywanie do osobnego folderu nie rusza dzialajacej strony
+    print(f"Serwer: {HOST}")
+    ftp = None
+    for attempt in range(3):
+        user = input(f"Użytkownik FTP [{USER}]: ").strip() or USER
+        pwd = getpass.getpass("Hasło FTP (nie będzie widoczne; wklejaj prawym przyciskiem myszy): ")
+        print(f"  (wpisano {len(pwd)} znaków)")
+        if not pwd or len(pwd) > 40 or any(ch in pwd for ch in " \t\r\n\x16"):
+            print("  To nie wygląda na hasło (pewnie wkleił się inny tekst ze schowka). Nie wysyłam — spróbuj jeszcze raz.")
+            continue
+        if any(ch in user for ch in " \t\"'()"):
+            print("  Dziwna nazwa użytkownika — nie wysyłam. Spróbuj jeszcze raz."); continue
+        ftp = ReusedSessionFTP_TLS(HOST, timeout=60, context=make_ctx())
+        try:
+            ftp.login(user, pwd)
+            break
+        except (ftplib.error_perm, EOFError, OSError) as e:
+            print("  Nie udało się zalogować:", e)
+            try: ftp.close()
+            except Exception: pass
+            ftp = None
+    if ftp is None:
+        print("Logowanie nieudane. Sprawdź login/hasło w DirectAdmin -> Zarządzanie FTP."); return
     ftp.prot_p()
     ftp.encoding = "utf-8"
     print("Zalogowano. Katalog domowy:", ftp.pwd())
 
     base = DOMAIN_DIR if exists(ftp, "/" + DOMAIN_DIR) else ""
-    target = posixpath.join("/", base, "public_html")
+    target = posixpath.join("/", base, folder)
+    if not exists(ftp, target):
+        ftp.mkd(target)
     print("Docelowy katalog strony:", target)
 
     if not only_files:
@@ -75,7 +115,7 @@ def main():
         if i % 50 == 0 or i == len(files):
             print(f"  wgrano {i}/{len(files)}")
     ftp.quit()
-    print("\nGotowe! Sprawdź: https://promyk.wielun.pl (odśwież Ctrl+F5).")
+    print("\nGotowe! Wgrano do " + target + ".")
 
 
 if __name__ == "__main__":
