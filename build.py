@@ -8,7 +8,7 @@ import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RECAPTCHA_SITE_KEY = ""   # klucz witryny reCAPTCHA v3 (sekretny wpisujemy w kontakt.php)
-ASSET_VER = "80"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "83"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -108,7 +108,10 @@ def head(title, desc, extra=""):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-<link rel="icon" href="assets/img/logo-promyk.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PROMYK Wieluń">
 <meta property="og:title" content="{title.replace(chr(34), '&quot;')}">
@@ -204,9 +207,9 @@ def footer():
       <div>
         <h4>Godziny otwarcia</h4>
         <ul>
-          <li class="footer__row"><span>Poniedziałek – Piątek</span><span>8:00 – 17:00</span></li>
+          <li class="footer__row"><span>Pon. – Pt.</span><span>8:00 – 17:00</span></li>
           <li class="footer__row"><span>Sobota</span><span>9:00 – 13:00</span></li>
-          <li class="footer__row"><span>Niedziela</span><span>Zamknięte</span></li>
+          <li class="footer__row"><span>Niedziela</span><span>zamknięte</span></li>
         </ul>
       </div>
       <div>
@@ -303,7 +306,109 @@ def reviews():
 </section>
 """
 
+
+# --- SEO: tytuły (do ~60 znaków) i opisy (do ~155 znaków) — nadpisują wartości z head() ---
+SITE = "https://promyk.wielun.pl"
+SEO = {
+    "index.html": ("Okna, drzwi i bramy garażowe Wieluń | PROMYK od 1997",
+                   "Okna VEKA i Aluprof, drzwi Wikęd i DRE, bramy garażowe, rolety, pergole i moskitiery. Rodzinna firma z Wielunia od 1997 r. — doradztwo, pomiar i montaż."),
+    "o-nas.html": ("O nas — rodzinna firma od 1997 r. | PROMYK Wieluń",
+                   "Poznaj PROMYK z Wielunia: od montażu żaluzji w 1997 roku po kompleksową stolarkę otworową, własną produkcję osłon i nowoczesny showroom."),
+    "oferta.html": ("Oferta: okna, drzwi, bramy, rolety, osłony | PROMYK",
+                    "Okna PVC i aluminiowe, drzwi zewnętrzne i wewnętrzne, bramy garażowe, rolety, pergole, markizy, parapety i moskitiery — wszystko w PROMYK Wieluń."),
+    "konfigurator.html": ("Konfigurator okien online | PROMYK Wieluń",
+                          "Skonfiguruj okno: typ, sposób otwierania, wymiary, pakiet szybowy, kolory VEKA, klamkę i szprosy. Zobacz efekt na żywo i wyślij zapytanie o wycenę."),
+    "dla-inwestora.html": ("Dla inwestora — stolarka do nowego domu | PROMYK",
+                           "Budujesz dom? Okna, drzwi, bramy, rolety, żaluzje fasadowe i parapety zamówisz w jednym miejscu. Konsultacja projektu, pomiar na budowie i montaż."),
+    "galeria.html": ("Galeria realizacji — okna, drzwi, osłony | PROMYK",
+                     "Zobacz nasze realizacje z Wielunia i okolic: okna, drzwi zewnętrzne i wewnętrzne, bramy garażowe, rolety, markizy, pergole, żaluzje i moskitiery."),
+    "kontakt.html": ("Kontakt — salon PROMYK, Wieluń, Wołodyjowskiego 15",
+                     "Salon PROMYK: ul. Michała Wołodyjowskiego 15, 98-300 Wieluń. Tel. 607 941 499, 43 843 65 43, info@promyk.wielun.pl. Pn–Pt 8–17, sob. 9–13."),
+    "okna.html": ("Okna PCV VEKA i aluminiowe Aluprof Wieluń | PROMYK",
+                  "Okna PCV VEKA Softline 82 MD i Perfectline, drzwi przesuwne HST oraz okna aluminiowe Aluprof. Doradztwo, pomiar i montaż — PROMYK Wieluń."),
+    "parapety.html": ("Parapety wewnętrzne i zewnętrzne Jaro-Max | PROMYK",
+                      "Parapety Jaro-Max: konglomerat, marmur, granit, MDF, PCV, stalowe i aluminiowe. Kolory i wymiary na zamówienie, montaż razem z oknami — PROMYK Wieluń."),
+    "drzwi-zewnetrzne.html": ("Drzwi zewnętrzne Wikęd i Erkado Wieluń | PROMYK",
+                              "Drzwi zewnętrzne Wikęd i Erkado: ciepłe, antywłamaniowe, z przeszkleniami i drzwi SMART. Kolekcje, kolory, pochwyty i montaż — PROMYK Wieluń."),
+    "drzwi-wewnetrzne.html": ("Drzwi wewnętrzne DRE, Porta, Erkado | PROMYK Wieluń",
+                              "Drzwi wewnętrzne DRE, Porta i Erkado: przylgowe, bezprzylgowe, ukryte, przesuwne, szklane i loftowe. Dobór, pomiar i montaż — PROMYK Wieluń."),
+    "rolety-zewnetrzne.html": ("Rolety zewnętrzne Aluprof Wieluń | PROMYK",
+                               "Rolety zewnętrzne Aluprof adaptacyjne i podtynkowe z napędem ręcznym, elektrycznym lub Somfy TaHoma. Produkcja na wymiar i montaż — PROMYK Wieluń."),
+    "pergole.html": ("Pergole lamelowe Aluprof SB400, SB350 | PROMYK Wieluń",
+                     "Pergole lamelowe Aluprof: SB400, SB350 i SB400R. Obrotowe lamele, odprowadzenie wody, oświetlenie LED i sterowanie smart home. Montaż — PROMYK Wieluń."),
+    "bramy-garazowe.html": ("Bramy garażowe segmentowe i rolowane | PROMYK Wieluń",
+                            "Bramy garażowe segmentowe AVO i rolowane Aluprof. Panele 40 i 60 mm, kolory RAL i drewnopodobne, napędy i smart home. Pomiar i montaż — PROMYK Wieluń."),
+    "bramy-garazowe--bramy-segmentowe.html": ("Bramy segmentowe AVO — panele 40 i 60 mm | PROMYK",
+                                              "Bramy segmentowe AVO: panele 40 lub 60 mm z pianką PU, przetłoczenia, kolory RAL i okleiny, przeszklenia oraz napęd z pilotem lub smart home."),
+    "bramy-garazowe--bramy-rolowane.html": ("Bramy rolowane Aluprof — skrzynka 250/300 mm | PROMYK",
+                                            "Bramy rolowane Aluprof z pancerzem PA 77 wypełnionym pianką PU, skrzynka 250 lub 300 mm, napęd z awaryjną korbą. Oszczędność miejsca w garażu."),
+    "markizy.html": ("Markizy tarasowe i balkonowe Aluprof | PROMYK Wieluń",
+                     "Markizy Aluprof: tarasowe bez kasety, w półkasecie i pełnej kasecie oraz balkonowe. Szeroki wybór tkanin, automatyka Somfy z czujnikiem wiatru."),
+    "markizy--markizy-tarasowe.html": ("Markizy tarasowe Aluprof: Australia, Palladio | PROMYK",
+                                       "Markizy tarasowe Aluprof Australia, Palladio i Dakar — bez kasety, w półkasecie lub pełnej kasecie. Szerokość do 7 m, wysięg do 3,6 m."),
+    "markizy--markizy-balkonowe.html": ("Markizy balkonowe Aluprof Italia | PROMYK Wieluń",
+                                        "Markiza balkonowa Aluprof Italia poręczowa: montaż do balustrady, regulacja kąta do 90°, obsługa korbą, szerokość do 5 m. Pomiar i montaż."),
+    "oslony-wewnetrzne.html": ("Rolety, plisy i żaluzje wewnętrzne | PROMYK Wieluń",
+                               "Osłony wewnętrzne z własnej produkcji: rolety materiałowe i dzień-noc, plisy, rolety rzymskie, żaluzje aluminiowe i drewniane, verticale."),
+    "oslony-zewnetrzne.html": ("Refleksole i Sunbreakery Aluprof | PROMYK Wieluń",
+                               "Osłony zewnętrzne Aluprof: refleksole ZIIIP 120 z tkaniną screen i ruchome Sunbreakery 210. Ochrona przed słońcem przy przeszkleniach i pergolach."),
+    "oslony-zewnetrzne--refleksole-ziiip-120.html": ("Refleksole ZIIIP 120 Aluprof | PROMYK Wieluń",
+                                                    "Refleksole ZIIIP 120: tkanina screen Serge 600 w prowadnicach ZIP, szerokość do 7 m, wysokość do 4 m, 33 kolory konstrukcji. Pomiar i montaż."),
+    "oslony-zewnetrzne--sunbreaker-210.html": ("Sunbreaker 210 Aluprof — ruchome pióra | PROMYK",
+                                              "Ruchomy Sunbreaker 210 Aluprof: pióra 210 mm z regulacją kąta do 90°, montaż poziomy lub pionowy, szerokość do 4 m, kolory RAL i drewnopodobne."),
+    "zaluzje-fasadowe.html": ("Żaluzje fasadowe Aluprof Wieluń | PROMYK",
+                              "Żaluzje fasadowe Aluprof z lamelami C80 i Z90 — adaptacyjne i podtynkowe. Sterowanie włącznikiem, pilotem Somfy lub z telefonu. Pomiar i montaż."),
+    "moskitiery.html": ("Moskitiery na wymiar — plisowane, rolowane | PROMYK",
+                        "Moskitiery z własnej produkcji: ramkowe, drzwiowe, rolowane i plisowane do drzwi HST. Wymiar na zamówienie, kolory profili, montaż — PROMYK Wieluń."),
+    "polityka-prywatnosci.html": ("Polityka prywatności i cookies | PROMYK Wieluń",
+                                  "Informacja o przetwarzaniu danych osobowych i plikach cookies na stronie Z.P.H.U. PROMYK Krystyna i Grzegorz Czyż s.c. w Wieluniu."),
+}
+
+
+def _seo(name, content):
+    """Wstawia tytuł, opis, adres kanoniczny i og:url dla danej strony."""
+    if name == "404.html":
+        return content.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="robots" content="noindex">', 1)
+    if name not in SEO:
+        return content
+    t, d = SEO[name]
+    esc = lambda x: x.replace("&", "&amp;").replace('"', "&quot;")
+    content = re.sub(r"<title>.*?</title>", "<title>" + esc(t) + "</title>", content, count=1, flags=re.S)
+    content = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="' + esc(d) + '">', content, count=1)
+    content = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="' + esc(t) + '">', content, count=1)
+    content = re.sub(r'<meta property="og:description" content="[^"]*">', '<meta property="og:description" content="' + esc(d) + '">', content, count=1)
+    url = SITE + "/" + ("" if name == "index.html" else name)
+    content = content.replace("<meta property=\"og:type\"", f'<link rel="canonical" href="{url}">\n<meta property="og:url" content="{url}">\n<meta property="og:type"', 1)
+    if name == "index.html":
+        content = content.replace("</head>", LOCAL_BUSINESS + "\n</head>", 1)
+    return content
+
+
+LOCAL_BUSINESS = """<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "name": "PROMYK — okna, drzwi, bramy, osłony",
+  "legalName": "Z.P.H.U. PROMYK Krystyna i Grzegorz Czyż s.c.",
+  "url": "https://promyk.wielun.pl/",
+  "logo": "https://promyk.wielun.pl/assets/img/logo-promyk.png",
+  "image": "https://promyk.wielun.pl/assets/img/onas/promyk-firma.jpg",
+  "telephone": ["+48607941499", "+48438436543"],
+  "email": "info@promyk.wielun.pl",
+  "foundingDate": "1997",
+  "address": {"@type": "PostalAddress", "streetAddress": "ul. Michała Wołodyjowskiego 15", "addressLocality": "Wieluń", "postalCode": "98-300", "addressCountry": "PL"},
+  "areaServed": ["Wieluń", "województwo łódzkie"],
+  "openingHoursSpecification": [
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "08:00", "closes": "17:00"},
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "13:00"}
+  ],
+  "sameAs": ["https://www.facebook.com/PromykWielun", "https://www.instagram.com/Promyk_Wielun"]
+}
+</script>"""
+
+
 def write(name, content):
+    content = _seo(name, content)
     with io.open(os.path.join(ROOT, name), "w", encoding="utf-8", newline="\n") as f:
         f.write(content)
     print("  ->", name)

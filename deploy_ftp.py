@@ -34,7 +34,7 @@ class ReusedSessionFTP_TLS(ftplib.FTP_TLS):
 def files_to_upload():
     import glob
     out = sorted(os.path.basename(p) for p in glob.glob(os.path.join(ROOT, "*.html")))
-    out += ["kontakt.php", ".htaccess", "sitemap.xml", "robots.txt"]
+    out += ["kontakt.php", ".htaccess", "sitemap.xml", "robots.txt", "favicon.ico", "site.webmanifest"]
     for base, _d, fns in os.walk(os.path.join(ROOT, "assets")):
         for fn in sorted(fns):
             out.append(os.path.relpath(os.path.join(base, fn), ROOT).replace(os.sep, "/"))

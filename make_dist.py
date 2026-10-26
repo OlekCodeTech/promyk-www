@@ -27,7 +27,7 @@ with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8", newline="\n"
 with open(os.path.join(ROOT, "robots.txt"), "w", encoding="utf-8", newline="\n") as f:
     f.write(f"User-agent: *\nAllow: /\n\nSitemap: {DOMAIN}/sitemap.xml\n")
 
-files = pages + ["kontakt.php", ".htaccess", "sitemap.xml", "robots.txt"]
+files = pages + ["kontakt.php", ".htaccess", "sitemap.xml", "robots.txt", "favicon.ico", "site.webmanifest"]
 for base, _dirs, fns in os.walk(os.path.join(ROOT, "assets")):
     for fn in fns:
         files.append(os.path.relpath(os.path.join(base, fn), ROOT).replace(os.sep, "/"))

@@ -268,8 +268,18 @@ document.querySelectorAll('[data-filter-grid]').forEach(function (grid) {
     'Szczegóły w <a href="polityka-prywatnosci.html">polityce prywatności</a>.</p></div>' +
     '<div class="cookie-bar__btns"><button type="button" class="btn btn--outline" data-c="necessary">Tylko niezbędne</button>' +
     '<button type="button" class="btn btn--primary" data-c="all">Akceptuję wszystkie</button></div>';
-  function show() { document.body.appendChild(bar); requestAnimationFrame(function () { bar.classList.add('is-on'); }); }
-  function hide() { bar.classList.remove('is-on'); setTimeout(function () { if (bar.parentNode) bar.parentNode.removeChild(bar); }, 300); }
+  var fab = document.createElement('button');
+  fab.type = 'button';
+  fab.className = 'cookie-fab';
+  fab.setAttribute('aria-label', 'Ustawienia plików cookies');
+  fab.title = 'Ustawienia cookies';
+  fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><circle cx="8.5" cy="8.5" r="1" fill="currentColor"/>' +
+    '<circle cx="16" cy="15.5" r="1" fill="currentColor"/><circle cx="11" cy="17" r="1" fill="currentColor"/><circle cx="7" cy="13" r="1" fill="currentColor"/></svg>';
+  fab.addEventListener('click', function () { if (!bar.parentNode) show(); });
+  document.body.appendChild(fab);
+  function show() { fab.classList.remove('is-on'); document.body.appendChild(bar); requestAnimationFrame(function () { bar.classList.add('is-on'); }); }
+  function hide() { bar.classList.remove('is-on'); fab.classList.add('is-on'); setTimeout(function () { if (bar.parentNode) bar.parentNode.removeChild(bar); }, 300); }
   bar.addEventListener('click', function (e) {
     var b = e.target.closest('[data-c]'); if (!b) return;
     set(b.getAttribute('data-c'));
@@ -277,7 +287,7 @@ document.querySelectorAll('[data-filter-grid]').forEach(function (grid) {
     hide();
   });
   var c = get();
-  if (!c) show(); else if (c === 'all') loadMaps();
+  if (!c) show(); else { fab.classList.add('is-on'); if (c === 'all') loadMaps(); }
   document.querySelectorAll('[data-map-load]').forEach(function (b) { b.addEventListener('click', loadMaps); });
   document.querySelectorAll('[data-cookie-settings]').forEach(function (a) {
     a.addEventListener('click', function (e) { e.preventDefault(); if (!bar.parentNode) show(); });

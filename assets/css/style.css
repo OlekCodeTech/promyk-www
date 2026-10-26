@@ -1402,3 +1402,15 @@ img.img-cover-r { height: auto !important; object-fit: contain !important; }
 .map-consent .btn { margin-top: 6px; }
 .policy-ul { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
 body:has(.cookie-bar.is-on) .floating { opacity: 0; pointer-events: none; }
+/* stopka: godziny w jednej linii */
+.footer__cols { grid-template-columns: minmax(250px,1.3fr) minmax(190px,1fr) minmax(220px,1fr) minmax(160px,.8fr); }
+.footer__row span { white-space: nowrap; }
+
+/* pływająca ikonka cookies (lewy dolny róg) */
+.cookie-fab { position: fixed; left: 20px; bottom: 20px; z-index: 150; width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center; border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer;
+  box-shadow: 0 10px 26px rgba(9,4,2,.18); opacity: 0; transform: scale(.8); pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
+.cookie-fab.is-on { opacity: 1; transform: none; pointer-events: auto; }
+.cookie-fab:hover { transform: rotate(-12deg) scale(1.06); }
+.cookie-fab svg { width: 24px; height: 24px; }
+@media (max-width: 760px) { .cookie-fab { left: 12px; bottom: 12px; width: 44px; height: 44px; } }
