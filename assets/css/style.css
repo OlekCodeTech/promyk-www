@@ -1403,7 +1403,7 @@ img.img-cover-r { height: auto !important; object-fit: contain !important; }
 .policy-ul { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
 body:has(.cookie-bar.is-on) .floating { opacity: 0; pointer-events: none; }
 /* stopka: godziny w jednej linii */
-.footer__cols { grid-template-columns: minmax(250px,1.3fr) minmax(190px,1fr) minmax(220px,1fr) minmax(160px,.8fr); }
+@media (min-width: 1201px) { .footer__cols { grid-template-columns: minmax(250px,1.3fr) minmax(190px,1fr) minmax(220px,1fr) minmax(160px,.8fr); } }
 .footer__row span { white-space: nowrap; }
 
 /* pływająca ikonka cookies (lewy dolny róg) */
@@ -1417,3 +1417,7 @@ body:has(.cookie-bar.is-on) .floating { opacity: 0; pointer-events: none; }
 .grecaptcha-badge { visibility: hidden !important; }
 .recaptcha-note { margin: 14px 0 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
 .recaptcha-note a { text-decoration: underline; }
+
+/* telefon: nic nie może wystawać poza ekran (animacje wjazdu z boku, siatki) */
+html, body { overflow-x: clip; }
+.config > *, .split > *, .subrow > *, .footer__cols > * { min-width: 0; }

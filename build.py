@@ -8,7 +8,7 @@ import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RECAPTCHA_SITE_KEY = "6LdhtAEuAAAAAC3IzsS68Em1eNHp8RCzggeY40Ep"   # klucz witryny reCAPTCHA v3 (sekretny wpisujemy w kontakt.php)
-ASSET_VER = "88"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "89"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
