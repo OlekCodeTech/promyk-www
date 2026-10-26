@@ -63,6 +63,12 @@
           if (item.classList.contains('is-hidden') && cat === 'all') { item.style.display = 'none'; return; }
           item.style.display = match ? '' : 'none';
         });
+        // mniej niż 4 zdjęcia w kategorii — rozciągnij je na cały rząd, żeby nie zostawały „wypierdki”
+        var grid = document.querySelector('.gallery');
+        var n = Array.prototype.filter.call(grid.children, function (a) { return a.style.display !== 'none'; }).length;
+        grid.style.gridTemplateColumns = (n > 0 && n < 4 && window.innerWidth > 900) ? 'repeat(' + n + ', 1fr)' : '';
+        var moreBtn = document.querySelector('[data-more]');
+        if (moreBtn) moreBtn.style.display = (cat === 'all' && document.querySelector('.gallery .is-hidden')) ? '' : 'none';
       });
     });
   }

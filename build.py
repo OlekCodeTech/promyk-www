@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "68"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "70"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -96,7 +96,7 @@ HOME_REALIZACJE = [  # kolejność wg klienta: okna, drzwi, bramy, pergola/refle
     ("realizacje/pergola", "Pergola z lamelami"),
 ]
 
-GALLERY = [('gal/r01', 'Pergola lamelowa w ogrodzie', 'pergole'), ('gal/r02', 'Markiza tarasowa przy domu', 'markizy'), ('gal/r03', 'Drzwi wewnętrzne białe z czarną klamką', 'drzwi-wewnetrzne'), ('gal/r04', 'Żaluzje drewniane w salonie', 'oslony-wewnetrzne'), ('gal/r05', 'Okna w domu parterowym', 'okna'), ('gal/r06', 'Rolety zewnętrzne przy tarasie', 'rolety-zewnetrzne'), ('gal/r07', 'Drzwi zewnętrzne', 'drzwi-zewnetrzne'), ('gal/r08', 'Refleksol przy tarasie', 'oslony-zewnetrzne'), ('gal/r09', 'Żaluzje fasadowe na elewacji', 'zaluzje-fasadowe'), ('gal/r10', 'Moskitiera plisowana do drzwi tarasowych', 'moskitiery'), ('gal/r11', 'Brama garażowa antracytowa', 'bramy-garazowe'), ('gal/r12', 'Pergola nad strefą wypoczynku', 'pergole'), ('gal/r13', 'Markiza nad tarasem', 'markizy'), ('gal/r14', 'Drzwi wewnętrzne w czerni', 'drzwi-wewnetrzne'), ('gal/r15', 'Roleta rzymska w kuchni', 'oslony-wewnetrzne'), ('gal/r16', 'Okna i balkon', 'okna'), ('gal/r17', 'Rolety zewnętrzne', 'rolety-zewnetrzne'), ('gal/r18', 'Drzwi zewnętrzne drewnopodobne', 'drzwi-zewnetrzne'), ('gal/r19', 'Refleksole na elewacji', 'oslony-zewnetrzne'), ('gal/r20', 'Żaluzja fasadowa w oknie tarasowym', 'zaluzje-fasadowe'), ('gal/r21', 'Moskitiera plisowana', 'moskitiery'), ('gal/r22', 'Brama garażowa biała', 'bramy-garazowe'), ('gal/r23', 'Pergola — widok na lamele', 'pergole'), ('gal/r24', 'Markiza i strefa wypoczynku', 'markizy'), ('gal/r25', 'Drzwi wewnętrzne białe', 'drzwi-wewnetrzne'), ('gal/r26', 'Roleta materiałowa', 'oslony-wewnetrzne'), ('gal/r27', 'Przeszklenia od strony ogrodu', 'okna'), ('gal/r28', 'Rolety zewnętrzne na elewacji', 'rolety-zewnetrzne'), ('gal/r29', 'Drzwi zewnętrzne z przeszkleniem', 'drzwi-zewnetrzne'), ('gal/r30', 'Żaluzje fasadowe — widok od wewnątrz', 'zaluzje-fasadowe'), ('gal/r31', 'Moskitiera drzwiowa', 'moskitiery'), ('gal/r32', 'Brama garażowa segmentowa', 'bramy-garazowe'), ('gal/r33', 'Dach lamelowy pergoli', 'pergole'), ('gal/r34', 'Markiza nad tarasem — widok spod', 'markizy'), ('gal/r35', 'Drzwi wewnętrzne w korytarzu', 'drzwi-wewnetrzne'), ('gal/r36', 'Żaluzje drewnopodobne w narożnym oknie', 'oslony-wewnetrzne'), ('gal/r37', 'Przeszklenie w szczycie domu', 'okna'), ('gal/r38', 'Rolety zewnętrzne w domu jednorodzinnym', 'rolety-zewnetrzne'), ('gal/r39', 'Drzwi zewnętrzne antracyt + drewno', 'drzwi-zewnetrzne'), ('gal/r40', 'Brama garażowa w kolorze czerwonym', 'bramy-garazowe'), ('gal/r41', 'Markiza nad tarasem z zielenią', 'markizy'), ('gal/r42', 'Drzwi wewnętrzne w jasnym wnętrzu', 'drzwi-wewnetrzne'), ('gal/r43', 'Rolety dzień-noc', 'oslony-wewnetrzne'), ('gal/r44', 'Okna łukowe w nowym domu', 'okna'), ('gal/r45', 'Rolety zewnętrzne przy balkonie', 'rolety-zewnetrzne'), ('gal/r46', 'Drzwi zewnętrzne antracytowe', 'drzwi-zewnetrzne'), ('gal/r47', 'Brama garażowa w nowym domu', 'bramy-garazowe'), ('gal/r48', 'Markiza kasetowa na elewacji', 'markizy'), ('gal/r49', 'Drzwi wewnętrzne drewnopodobne', 'drzwi-wewnetrzne'), ('gal/r50', 'Rolety rzymskie w kuchni', 'oslony-wewnetrzne'), ('gal/r51', 'Okna łukowe — montaż', 'okna'), ('gal/r52', 'Roleta zewnętrzna w oknie', 'rolety-zewnetrzne'), ('gal/r53', 'Drzwi zewnętrzne zielone', 'drzwi-zewnetrzne'), ('gal/r54', 'Markiza tarasowa — widok z boku', 'markizy'), ('gal/r55', 'Drzwi wewnętrzne do łazienki', 'drzwi-wewnetrzne'), ('gal/r56', 'Żaluzje w jadalni', 'oslony-wewnetrzne'), ('gal/r57', 'Duże przeszklenie w szczycie', 'okna'), ('gal/r58', 'Drzwi zewnętrzne białe', 'drzwi-zewnetrzne'), ('gal/r59', 'Drzwi wewnętrzne frezowane', 'drzwi-wewnetrzne'), ('gal/r60', 'Rolety dzień-noc w salonie', 'oslony-wewnetrzne'), ('gal/r61', 'Okna w domu parterowym — montaż', 'okna'), ('gal/r62', 'Drzwi zewnętrzne z doświetlem', 'drzwi-zewnetrzne'), ('gal/r63', 'Roleta rzymska', 'oslony-wewnetrzne'), ('gal/r64', 'Drzwi zewnętrzne złoty dąb', 'drzwi-zewnetrzne'), ('gal/r65', 'Żaluzje w kuchni', 'oslony-wewnetrzne'), ('gal/r66', 'Drzwi zewnętrzne z przeszkleniami', 'drzwi-zewnetrzne'), ('gal/r67', 'Rolety rzymskie', 'oslony-wewnetrzne'), ('gal/r68', 'Żaluzje drewnopodobne', 'oslony-wewnetrzne'), ('gal/r69', 'Żaluzje przy drzwiach tarasowych', 'oslony-wewnetrzne'), ('gal/r70', 'Roleta rzymska w oknie', 'oslony-wewnetrzne'), ('gal/r71', 'Roleta rzymska — tkanina', 'oslony-wewnetrzne'), ('gal/r72', 'Żaluzje przy drzwiach balkonowych', 'oslony-wewnetrzne'), ('gal/r73', 'Żaluzje drewniane w kuchni', 'oslony-wewnetrzne'), ('gal/r74', 'Żaluzje aluminiowe w dużym oknie', 'oslony-wewnetrzne'), ('gal/r75', 'Żaluzje drewniane nad zlewem', 'oslony-wewnetrzne'), ('gal/r76', 'Żaluzje w ciemnym kolorze', 'oslony-wewnetrzne'), ('gal/r77', 'Żaluzje drewniane w oknie tarasowym', 'oslony-wewnetrzne'), ('gal/r78', 'Żaluzje aluminiowe w jadalni', 'oslony-wewnetrzne'), ('gal/r79', 'Żaluzje aluminiowe w oknie', 'oslony-wewnetrzne'), ('gal/r80', 'Żaluzje drewniane w narożnej kuchni', 'oslony-wewnetrzne')]
+GALLERY = [('gal/r01', 'Pergola lamelowa w ogrodzie', 'pergole'), ('gal/r02', 'Markiza tarasowa przy domu', 'markizy'), ('gal/r03', 'Drzwi wewnętrzne białe z czarną klamką', 'drzwi-wewnetrzne'), ('gal/r04', 'Żaluzje drewniane w salonie', 'oslony-wewnetrzne'), ('gal/r05', 'Okna w domu parterowym', 'okna'), ('gal/r06', 'Rolety zewnętrzne przy tarasie', 'rolety-zewnetrzne'), ('gal/r07', 'Drzwi zewnętrzne', 'drzwi-zewnetrzne'), ('gal/r08', 'Refleksol przy tarasie', 'oslony-zewnetrzne'), ('gal/r09', 'Żaluzje fasadowe na elewacji', 'zaluzje-fasadowe'), ('gal/r10', 'Moskitiera plisowana do drzwi tarasowych', 'moskitiery'), ('gal/r11', 'Brama garażowa antracytowa', 'bramy-garazowe'), ('gal/r12', 'Pergola nad strefą wypoczynku', 'pergole'), ('gal/r13', 'Markiza nad tarasem', 'markizy'), ('gal/r14', 'Drzwi wewnętrzne w czerni', 'drzwi-wewnetrzne'), ('gal/r15', 'Roleta rzymska w kuchni', 'oslony-wewnetrzne'), ('gal/r16', 'Okna i balkon', 'okna'), ('gal/r17', 'Rolety zewnętrzne', 'rolety-zewnetrzne'), ('gal/r18', 'Drzwi zewnętrzne drewnopodobne', 'drzwi-zewnetrzne'), ('gal/r19', 'Refleksole na elewacji', 'oslony-zewnetrzne'), ('gal/r20', 'Żaluzja fasadowa w oknie tarasowym', 'zaluzje-fasadowe'), ('gal/r21', 'Moskitiera plisowana', 'moskitiery'), ('gal/r22', 'Brama garażowa biała', 'bramy-garazowe'), ('gal/r23', 'Pergola — widok na lamele', 'pergole'), ('gal/r24', 'Markiza i strefa wypoczynku', 'markizy'), ('gal/r25', 'Drzwi wewnętrzne białe', 'drzwi-wewnetrzne'), ('gal/r26', 'Roleta materiałowa', 'oslony-wewnetrzne'), ('gal/r27', 'Przeszklenia od strony ogrodu', 'okna'), ('gal/r28', 'Rolety zewnętrzne na elewacji', 'rolety-zewnetrzne'), ('gal/r29', 'Drzwi zewnętrzne z przeszkleniem', 'drzwi-zewnetrzne'), ('gal/r30', 'Żaluzje fasadowe — widok od wewnątrz', 'zaluzje-fasadowe'), ('gal/r31', 'Moskitiera drzwiowa', 'moskitiery'), ('gal/r32', 'Brama garażowa segmentowa', 'bramy-garazowe'), ('gal/r33', 'Dach lamelowy pergoli', 'pergole'), ('gal/r34', 'Markiza nad tarasem z zielenią', 'markizy'), ('gal/r35', 'Drzwi wewnętrzne w korytarzu', 'drzwi-wewnetrzne'), ('gal/r36', 'Żaluzje drewnopodobne w narożnym oknie', 'oslony-wewnetrzne'), ('gal/r37', 'Przeszklenie w szczycie domu', 'okna'), ('gal/r38', 'Rolety zewnętrzne w domu jednorodzinnym', 'rolety-zewnetrzne'), ('gal/r39', 'Drzwi zewnętrzne antracyt + drewno', 'drzwi-zewnetrzne'), ('gal/r40', 'Brama garażowa w kolorze czerwonym', 'bramy-garazowe'), ('gal/r41', 'Drzwi wewnętrzne w jasnym wnętrzu', 'drzwi-wewnetrzne'), ('gal/r42', 'Rolety dzień-noc', 'oslony-wewnetrzne'), ('gal/r43', 'Okna łukowe w nowym domu', 'okna'), ('gal/r44', 'Drzwi zewnętrzne antracytowe', 'drzwi-zewnetrzne'), ('gal/r45', 'Drzwi wewnętrzne drewnopodobne', 'drzwi-wewnetrzne'), ('gal/r46', 'Rolety rzymskie w kuchni', 'oslony-wewnetrzne'), ('gal/r47', 'Okna łukowe — montaż', 'okna'), ('gal/r48', 'Drzwi zewnętrzne zielone', 'drzwi-zewnetrzne'), ('gal/r49', 'Drzwi wewnętrzne do łazienki', 'drzwi-wewnetrzne'), ('gal/r50', 'Żaluzje w jadalni', 'oslony-wewnetrzne'), ('gal/r51', 'Duże przeszklenie w szczycie', 'okna'), ('gal/r52', 'Drzwi zewnętrzne białe', 'drzwi-zewnetrzne'), ('gal/r53', 'Drzwi wewnętrzne frezowane', 'drzwi-wewnetrzne'), ('gal/r54', 'Rolety dzień-noc w salonie', 'oslony-wewnetrzne'), ('gal/r55', 'Okna w domu parterowym — montaż', 'okna'), ('gal/r56', 'Drzwi zewnętrzne złoty dąb', 'drzwi-zewnetrzne'), ('gal/r57', 'Roleta rzymska', 'oslony-wewnetrzne'), ('gal/r58', 'Żaluzje w kuchni', 'oslony-wewnetrzne'), ('gal/r59', 'Rolety rzymskie', 'oslony-wewnetrzne'), ('gal/r60', 'Żaluzje drewnopodobne', 'oslony-wewnetrzne'), ('gal/r61', 'Żaluzje przy drzwiach tarasowych', 'oslony-wewnetrzne'), ('gal/r62', 'Roleta rzymska w oknie', 'oslony-wewnetrzne'), ('gal/r63', 'Roleta rzymska — tkanina', 'oslony-wewnetrzne'), ('gal/r64', 'Żaluzje przy drzwiach balkonowych', 'oslony-wewnetrzne'), ('gal/r65', 'Żaluzje drewniane w kuchni', 'oslony-wewnetrzne'), ('gal/r66', 'Żaluzje aluminiowe w dużym oknie', 'oslony-wewnetrzne'), ('gal/r67', 'Żaluzje drewniane nad zlewem', 'oslony-wewnetrzne'), ('gal/r68', 'Żaluzje w ciemnym kolorze', 'oslony-wewnetrzne'), ('gal/r69', 'Żaluzje drewniane w oknie tarasowym', 'oslony-wewnetrzne'), ('gal/r70', 'Żaluzje aluminiowe w jadalni', 'oslony-wewnetrzne'), ('gal/r71', 'Żaluzje aluminiowe w oknie', 'oslony-wewnetrzne'), ('gal/r72', 'Żaluzje drewniane w narożnej kuchni', 'oslony-wewnetrzne')]
 
 # ---------------------------------------------------------------- szkielet ----
 def head(title, desc, extra=""):
@@ -405,7 +405,7 @@ def build_onas():
     body += stats()
 
     body += f"""<section class="section">
-  <div class="container split">
+  <div class="container split split--onas">
     <div class="split__text">
       <h2 class="h-sec">Od rodzinnego rzemiosła do pozycji eksperta</h2>
       <div class="prose">
@@ -735,8 +735,8 @@ def build_inwestor():
          "Stolarkę zamawiamy u sprawdzonych producentów (VEKA, Wikęd, DRE, Aluprof), a rolety, moskitiery i osłony wykonujemy w naszej pracowni. Termin dostawy dopasowujemy do harmonogramu Twojej budowy."),
         (["inw/montaz"], "Montaż",
          "Montaż wykonują nasze doświadczone ekipy — starannie, czysto i zgodnie ze sztuką. Po zakończeniu prac sprawdzamy działanie każdego elementu, regulujemy okucia i pokazujemy, jak dbać o nowe okna i drzwi."),
-        (["gal/" + GAL_BY_CAP["Pergola lamelowa w ogrodzie"], "gal/" + GAL_BY_CAP["Żaluzje drewniane w salonie"]], "Zapraszamy ponownie",
-         "Gdy dom jest już gotowy, nadal jesteśmy do Twojej dyspozycji: urządzimy wnętrza osłonami — roletami, żaluzjami i plisami — a ogród i taras pergolą, markizą, refleksolami lub sunbreakerem."),
+        (["perg/sb400"], "Zapraszamy ponownie",
+         "Nasza oferta nie kończy się na stolarce otworowej. Zadbamy również o odpowiednie osłony wewnętrzne — rolety, żaluzje i plisy — oraz rozwiązania do ogrodu i na taras, takie jak pergole, markizy, refleksole i sunbreakery."),
     ]
     def _imgs(ims, t):
         return "".join(f'<img src="assets/img/{im}.jpg" alt="{t}" loading="lazy">' for im in ims)
@@ -862,9 +862,6 @@ def build_kontakt():
     <a class="contact-quick__item" href="tel:{PHONE2_TEL}"><span class="contact-quick__icon">{I['phone']}</span><span><small>Zadzwoń — biuro</small><strong>{PHONE2}</strong></span></a>
     <a class="contact-quick__item" href="mailto:{MAIL}"><span class="contact-quick__icon">{I['mail']}</span><span><small>Napisz e-mail</small><strong>{MAIL}</strong></span></a>
   </div>
-  <div class="container contact-intro">
-    <h2>Zapraszamy do kontaktu</h2>
-  </div>
 </section>
 
 <section class="section">
@@ -892,7 +889,7 @@ def build_kontakt():
         <p>ul. Michała Wołodyjowskiego 15</p>
         <p>{ADDR2}</p>
       </div>
-      <figure class="contact-photo"><img src="assets/img/onas/promyk-firma.jpg" alt="Siedziba PROMYK w Wieluniu" loading="lazy"><figcaption>Nasza siedziba w Wieluniu</figcaption></figure>
+      <figure class="contact-photo"><img src="assets/img/onas/promyk-firma.jpg" alt="Siedziba PROMYK w Wieluniu" loading="lazy"></figure>
       <div class="info-block">
         <h3>Godziny pracy salonu</h3>
         <p>Poniedziałek – Piątek: 8:00 – 17:00</p>
@@ -2151,6 +2148,7 @@ def build_okna():
 </section>
 <section class="advantages"><div class="container advantages__inner">{adv_html(OKNA_ADV_ALUPROF)}</div></section>
 {_anim_section(_okno_anim(), "Jak działa okno rozwierno-uchylne?", "Jedno skrzydło, dwie funkcje: klamka ustawiona poziomo pozwala otworzyć okno na całą szerokość, a skierowana do góry — uchylić je do wietrzenia. Okucia obwiedniowe dociskają skrzydło do ramy w wielu punktach, dzięki czemu okno pozostaje szczelne i bezpieczne.")}
+{_anim_section(_hst_anim(), "Jak działają drzwi tarasowe HST?", "HST to drzwi podnoszono-przesuwne do dużych przeszkleń. Po obróceniu klamki w dół skrzydło unosi się na wózkach jezdnych i przesuwa lekko jak szuflada — nawet przy bardzo dużym ciężarze. Klamka w górę opuszcza skrzydło na uszczelki, dzięki czemu drzwi są szczelne, a otwarte pozostają stabilnie w wybranym miejscu. Niski próg ułatwia wychodzenie na taras.", True)}
 <section class="section section--soft">
   <div class="container">
     <div class="section-header"><div class="section-header__left"><h2 class="h-sec">Porównanie systemów okiennych</h2></div></div>
@@ -3227,6 +3225,31 @@ def _okno_anim():
   <text x="480" y="190" class="ga-label ga-label--sm">klamka w górę:</text>
   <text x="480" y="206" class="ga-label ga-label--sm">uchył</text>
   <text x="40" y="345" class="ga-label">widok od wewnątrz</text>
+</svg>"""
+
+
+def _hst_anim():
+    """Drzwi HST: klamka w dół — skrzydło unosi się, przesuwa za stałą część i opada (SVG/SMIL)."""
+    kt = "0;0.08;0.14;0.36;0.42;0.56;0.62;0.68;0.9;0.96;1"
+    tr = "0 0;0 0;0 -7;236 -7;236 0;236 0;236 0;236 -7;0 -7;0 0;0 0"
+    rot = ";".join(f"{a} 104 190" for a in [0, 180, 180, 180, 0, 0, 180, 180, 180, 0, 0])
+    lab = lambda vals: ";".join(vals)
+    return f"""<svg class="garage-anim" viewBox="0 0 640 360" role="img" aria-label="Animacja: drzwi podnoszono-przesuwne HST — podniesienie, przesunięcie i opuszczenie skrzydła">
+  <rect x="66" y="50" width="508" height="262" rx="3" class="ow-frame"/>
+  <rect x="80" y="64" width="480" height="240" class="ow-hole"/>
+  <rect x="322" y="64" width="238" height="240" class="hs-fix"/>
+  <path d="M441 64v240" stroke="#2f3237" stroke-width="3" opacity=".25"/>
+  <g><animateTransform attributeName="transform" type="translate" values="{tr}" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/>
+    <rect x="82" y="66" width="238" height="236" class="hs-sash"/>
+    <g><animateTransform attributeName="transform" type="rotate" values="{rot}" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/>
+      <rect x="100" y="184" width="8" height="12" rx="2" class="ow-handle"/><rect x="101" y="190" width="6" height="40" rx="3" class="ow-handle"/>
+    </g>
+  </g>
+  <rect x="60" y="312" width="520" height="10" rx="2" class="ga-wall"/>
+  <path d="M120 336h400" stroke="#c9ced4" stroke-width="3" stroke-dasharray="6 5"/>
+  <text x="40" y="32" class="ga-label ga-label--sm">1. klamka w dół — skrzydło lekko się unosi<animate attributeName="opacity" values="{lab(['1','1','1','.35','.35','.35','.35','1','.35','.35','1'])}" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/></text>
+  <text x="330" y="32" class="ga-label ga-label--sm">2. przesuwa się lekko i płynnie<animate attributeName="opacity" values="{lab(['.35','.35','1','1','.35','.35','.35','.35','1','.35','.35'])}" keyTimes="{kt}" dur="12s" repeatCount="indefinite"/></text>
+  <text x="40" y="352" class="ga-label ga-label--sm">3. klamka w górę — skrzydło opada na uszczelki i stoi szczelnie w każdej pozycji</text>
 </svg>"""
 
 

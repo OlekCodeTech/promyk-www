@@ -1357,3 +1357,20 @@ h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; line-height: 1.15; }
 .contact-quick--3 .contact-quick__item { padding: 22px 22px; gap: 14px; }
 .contact-quick--3 .contact-quick__item strong { font-size: clamp(16px, 1.45vw, 21px); white-space: nowrap; word-break: normal; }
 img[src$="onas/promyk-firma.jpg"] { border-radius: 0 !important; box-shadow: none !important; object-fit: contain !important; }
+
+/* ---------- runda 4 ---------- */
+.nav .container { max-width: 1480px; padding-inline: 28px; }
+.logo { flex-shrink: 0; }
+.nav__links { flex-shrink: 0; }
+@media (max-width: 1600px) { .nav__phone { display: none; } }
+.split--onas { grid-template-columns: .85fr 1.15fr; }
+.split--onas .about__fig img { width: 112%; max-width: none; margin-left: -4%; }
+@media (max-width: 1024px) { .split--onas { grid-template-columns: 1fr; } .split--onas .about__fig img { width: 100%; margin: 0; } }
+.garage-anim .hs-fix { fill: rgba(176,204,224,.55); stroke: #2f3237; stroke-width: 7; }
+.garage-anim .hs-sash { fill: rgba(150,186,212,.9); stroke: #2f3237; stroke-width: 8; }
+@media (max-width: 1360px) and (min-width: 1241px) {
+  .nav .container { padding-inline: 20px; }
+  .nav__inner { gap: 14px; }
+  .nav__links > a, .nav__links .has-drop > a { font-size: 14px; padding-inline: 10px; }
+  .logo img { height: 38px; }
+}
