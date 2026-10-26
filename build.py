@@ -2005,7 +2005,7 @@ OKNA_VEKA = [
       "Uw od 0,74 W/m²K (pakiet 3-szybowy, ciepła ramka)",
       "3 płaszczyzny uszczelnienia z uszczelką środkową (MD)",
       "Sprawdza się zarówno w nowym budownictwie, jak i podczas modernizacji istniejących budynków"],
-     "okna/softline82-v2"),
+     "okna/softline82-v3"),
     ("VEKA PERFECTLINE",
      ["Głębokość zabudowy 70 mm, 5 komór, profil klasy A",
       "Uw od 0,83 W/m²K",
