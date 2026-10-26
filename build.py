@@ -3523,7 +3523,7 @@ def build_bramy():
         <p>Pancerz wykonany jest z aluminiowych profili PA 77 o wysokości 77 mm, wypełnionych pianką poliuretanową. W zależności od wymiarów i konfiguracji bramy można zastosować skrzynkę o wysokości 250 lub 300 mm. Standardowo bramy rolowane Aluprof wyposażone są w napęd rurowy z awaryjnym otwieraniem za pomocą korby. Dzięki temu bramę można obsługiwać elektrycznie na co dzień, a w przypadku braku zasilania otworzyć ją ręcznie. To praktyczne rozwiązanie, które zwiększa wygodę użytkowania i zapewnia możliwość korzystania z bramy również w awaryjnych sytuacjach.</p>
         <a class="btn btn--primary btn--sm" href="kontakt.html">Zapytaj o wycenę {I['arrow']}</a>
       </div>
-      <div><img class="img-cover-r" src="assets/img/bramy/rolowane-dom.jpg" alt="Brama rolowana na budynku — pancerz i skrzynka nad otworem" loading="lazy"></div>
+      <div><img class="img-cover-r" src="assets/img/bramy/rolowane-skrzynka-braz.jpg" alt="Brama rolowana na budynku — pancerz i skrzynka nad otworem" loading="lazy"></div>
     </div>
   </div>
 </section>
