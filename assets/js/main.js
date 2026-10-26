@@ -131,7 +131,7 @@ document.querySelectorAll('[data-lightbox]').forEach(function (gal) {
   }
   function open(i) { show(i); box.classList.add('is-open'); document.body.style.overflow = 'hidden'; }
   function close() { box.classList.remove('is-open'); document.body.style.overflow = ''; }
-  function visible() { return items.filter(function (a) { return !a.hidden; }); }
+  function visible() { return items.filter(function (a) { return !a.hidden && a.style.display !== 'none'; }); }
   items.forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); var v = visible(); list = v; open(v.indexOf(a)); }); });
   box.querySelector('.lightbox__prev').addEventListener('click', function (e) { e.stopPropagation(); show(cur - 1); });
   box.querySelector('.lightbox__next').addEventListener('click', function (e) { e.stopPropagation(); show(cur + 1); });
