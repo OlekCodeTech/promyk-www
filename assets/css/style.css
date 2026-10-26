@@ -1378,3 +1378,4 @@ img[src$="onas/promyk-firma.jpg"] { border-radius: 0 !important; box-shadow: non
 .pagehero > img[src*="rolowane-skrzynka"] { object-position: 50% 12%; }
 @media (max-width: 900px) { .logo img { height: 36px; } }
 @media (max-width: 640px) { .logo img { height: 28px; } .logo { flex-shrink: 1; min-width: 0; } .nav__right .btn { display: none; } .nav .container { padding-inline: 16px; } }
+img.img-cover-r { height: auto !important; object-fit: contain !important; }
