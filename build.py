@@ -7,7 +7,7 @@ Wynik: pliki .html w katalogu projektu (assets/ pozostają bez zmian).
 import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-ASSET_VER = "72"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "74"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -3152,7 +3152,7 @@ BR_ROWS = [
      ["Pancerz aluminiowy z pianką PU nawijany na wał w skrzynce",
       "Możliwość montażu skrzynki z pancerzem po wewnętrznej lub zewnętrznej stronie garażu",
       "Napęd rurowy z awaryjnym otwieraniem korbą w standardzie",
-      "Brak prowadnic pod sufitem sprawia, że brama sprawdza się w garażach z ograniczoną przestrzenią."], "bramy/rolowane-aluprof", "bramy-garazowe--bramy-rolowane"),
+      "Brak prowadnic pod sufitem sprawia, że brama sprawdza się w garażach z ograniczoną przestrzenią."], "bramy/rolowane-skrzynka", "bramy-garazowe--bramy-rolowane"),
 ]
 BR_ADV = [("Ciepło i komfort", "Panele i pancerze wypełnione pianką poliuretanową", "thermo"),
           ("Bezpieczeństwo", "Solidna konstrukcja i zabezpieczenia na co dzień", "lock"),
@@ -3355,7 +3355,7 @@ def _bramy_anim():
 def _br_related(cur):
     out = ""
     for slug, title, img in [("bramy-garazowe--bramy-segmentowe", "Bramy segmentowe", "brama_antracyt_lampy"),
-                             ("bramy-garazowe--bramy-rolowane", "Bramy rolowane", "bramy/rolowane-aluprof"),
+                             ("bramy-garazowe--bramy-rolowane", "Bramy rolowane", "bramy/rolowane-skrzynka"),
                              ("bramy-garazowe", "Wszystkie bramy garażowe", "bramy/hero")]:
         if slug == cur: continue
         out += f"""<a href="{slug}.html"><article class="card">
@@ -3513,7 +3513,7 @@ def build_bramy():
     rk = '<div class="swatches-grid">' + "".join(
         f'<figure><img src="assets/img/rol/kolor-{f}.jpg" alt="{n}" loading="lazy"><figcaption>{n}</figcaption></figure>'
         for f, n in BR_ROL_KOLORY) + "</div>"
-    body = pagehero("bramy/rolowane-aluprof", "Bramy rolowane",
+    body = pagehero("bramy/rolowane-skrzynka", "Bramy rolowane",
                     "Oszczędność miejsca, wygodna obsługa i funkcjonalne rozwiązania dopasowane do różnych rodzajów garaży.", None)
     body += f"""<section class="section">
   <div class="container">
