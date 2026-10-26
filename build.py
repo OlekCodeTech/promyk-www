@@ -8,7 +8,7 @@ import os, io, html, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RECAPTCHA_SITE_KEY = ""   # klucz witryny reCAPTCHA v3 (sekretny wpisujemy w kontakt.php)
-ASSET_VER = "83"  # podbij przy zmianach css/js (cache-busting)
+ASSET_VER = "84"  # podbij przy zmianach css/js (cache-busting)
 
 PHONE = "607 941 499"
 PHONE_TEL = "+48607941499"
@@ -112,6 +112,7 @@ def head(title, desc, extra=""):
 <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
+<meta name="google-site-verification" content="4jqvcOpuaRZRfzvcKTuv_5nmHOc8wB8WUMg3QTJxtfo">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PROMYK Wieluń">
 <meta property="og:title" content="{title.replace(chr(34), '&quot;')}">

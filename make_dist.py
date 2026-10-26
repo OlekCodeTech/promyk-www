@@ -16,7 +16,7 @@ pages = sorted(os.path.basename(p) for p in glob.glob(os.path.join(ROOT, "*.html
 today = datetime.date.today().isoformat()
 urls = []
 for p in pages:
-    if p == "404.html":
+    if p == "404.html" or p.startswith("google"):
         continue
     loc = DOMAIN + "/" + ("" if p == "index.html" else p)
     prio = "1.0" if p == "index.html" else ("0.3" if p.startswith("polityka") else "0.8")
